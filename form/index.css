@@ -24,7 +24,14 @@ body {
     padding-right: 30px; 
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 18px;
+}
+
+.inputs{
+    border: none;
+    border-radius: 1px;
+    background-color: whitesmoke;
+    padding: 5px;
 }
 
 .button {
