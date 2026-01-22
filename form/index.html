@@ -8,20 +8,27 @@
 </head>
 <body>
 
-        <form action="" id="formPage">
+        <form action="index.php" method="POST" id="formPage">
+            
             <h1 class="title">Registration Form</h1>
+
             <div class="container">
+
             <Label class="labels">Title</Label>
-            <input type="text" placeholder="Enter title" required>
+            <input type="text" placeholder="Enter title" required name="title"> 
+            
             <Label class="labels">Desciption</Label>
-            <input type="text" placeholder="Enter desciption" required>
+            <input type="text" placeholder="Enter desciption" required name="desciption">
+            
             <Label class="labels">Start Date </Label>
-            <input type="date" required>
+            <input type="date" required name="start_date">
+           
             <Label class="labels">End Date</Label>
-            <input type="date" required>
+            <input type="date" required name="end_date">
+
             </div>
 
-            <button class="button">Register</button>
+            <button class="button">Submit</button>
 
         </form>
     
