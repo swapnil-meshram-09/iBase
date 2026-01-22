@@ -1,17 +1,18 @@
 body {
-    background: #eef2f7;
-    font-family: Arial;
+    background: #dde3ea;
+    font-family: Arial, sans-serif;
 }
 
 .box {
     width: 400px;
     background: white;
+    margin: 70px auto;
     padding: 20px;
-    margin: 80px auto;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px gray;
+    box-shadow: 0px 0px 10px #aaa;
 }
 
 h1 {
     text-align: center;
+    margin-bottom: 20px;
 }
