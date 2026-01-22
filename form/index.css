@@ -2,11 +2,10 @@
     position: relative;
     border: 1px solid black;
     border-radius: 20px;
-    height: 400px;
+    height: 480px;
     width: 500px;
-    top: 50px;
+    top: 40px;
     left: 500px;
-
 }
 
 .title{
@@ -14,15 +13,24 @@
 }
 
 .container{
-    padding: 10px;
-    top: 60px;
+    padding: 30px;
     display: flex;
     flex-direction: column;
-    height: auto;
-    gap:15px;
+    gap: 15px;
 }
 
 .button {
   display: block;
   margin: 0 auto;
+  color: black;
+  background-color: rgb(6, 130, 255);
+  padding: 15px;
+  border: none;
+  border-radius: 15px;
+}
+
+.labels{
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
 }
