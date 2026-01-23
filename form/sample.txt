@@ -10,4 +10,7 @@ CREATE TABLE registrations (
     end_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4d3e6c6fa9bb41fd64bf6f147931b7390a98b264
