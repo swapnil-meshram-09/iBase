@@ -1,5 +1,4 @@
 <?php
-<<<<<<< HEAD
 session_start();
 include "db.php";
 
@@ -68,16 +67,3 @@ $end_date = date("d - m - Y", strtotime($data['end_date']));
 
 </body>
 </html>
-=======
-include "fetch.php";
-
-$html = file_get_contents("welcome.html");
-
-$html = str_replace("{{title}}", $data['title'], $html);
-$html = str_replace("{{description}}", $data['description'], $html);
-$html = str_replace("{{start_date}}", $data['start_date'], $html);
-$html = str_replace("{{end_date}}", $data['end_date'], $html);
-
-echo $html;
-?>
->>>>>>> 4d3e6c6fa9bb41fd64bf6f147931b7390a98b264
