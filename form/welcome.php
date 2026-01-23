@@ -18,7 +18,7 @@ if (!$result) {
 
 $data = mysqli_fetch_assoc($result);
 
-// Convert Date Format
+// Format Date
 $start_date = date("d-m-Y", strtotime($data['start_date']));
 $end_date = date("d-m-Y", strtotime($data['end_date']));
 ?>
@@ -62,8 +62,8 @@ p {
 
 <h1>Welcome</h1>
 
-<p><b>Title:</b> <?php echo $data['title']; ?></p>
-<p><b>Description:</b> <?php echo $data['description']; ?></p>
+<p><b>Title:</b> <?php echo htmlspecialchars($data['title']); ?></p>
+<p><b>Description:</b> <?php echo htmlspecialchars($data['description']); ?></p>
 <p><b>Start Date:</b> <?php echo $start_date; ?></p>
 <p><b>End Date:</b> <?php echo $end_date; ?></p>
 

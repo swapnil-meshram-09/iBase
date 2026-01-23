@@ -7,27 +7,36 @@ $error = "";
 // FORM SUBMIT HANDLING
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Secure Inputs
-    $title = mysqli_real_escape_string($conn, trim($_POST['title']));
-    $description = mysqli_real_escape_string($conn, trim($_POST['desciption']));
+    // Get Inputs
+    $title = trim($_POST['title']);
+    $description = trim($_POST['desciption']);
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
 
-    // Validation
+    // Secure inputs
+    $title = mysqli_real_escape_string($conn, $title);
+    $description = mysqli_real_escape_string($conn, $description);
+
+    // ---------------- VALIDATION ----------------
+
     if (empty($title) || empty($description) || empty($start_date) || empty($end_date)) {
         $error = "All fields are required!";
     }
-    // Title should allow only letters and spaces
+
+    // Title only letters and spaces
     else if (!preg_match("/^[A-Za-z ]+$/", $title)) {
         $error = "Title must contain only letters and spaces!";
     }
-    // Date Validation
+
+    // Date validation
     else if (strtotime($start_date) > strtotime($end_date)) {
         $error = "Start date must be less than End date!";
     }
+
+    // ---------------- INSERT ----------------
+
     else {
 
-        // Insert Data
         $sql = "INSERT INTO registrations (title, description, start_date, end_date) 
                 VALUES ('$title', '$description', '$start_date', '$end_date')";
 
@@ -128,11 +137,12 @@ body {
 <div class="container">
 
 <label class="labels">Title</label>
-<input class="inputs" 
-       type="text" 
-       name="title" 
-       placeholder="Enter title" 
-       pattern="[A-Za-z\s]+" 
+<input class="inputs"
+       type="text"
+       name="title"
+       placeholder="Enter title"
+       pattern="[A-Za-z ]+"
+       oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')"
        title="Only letters and spaces allowed"
        required>
 
