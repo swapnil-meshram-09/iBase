@@ -81,7 +81,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .button {
             display: block;
             margin: auto;
-            margin-top: 20px;
             background-color: rgb(6, 130, 255);
             padding: 15px 30px;
             border: none;
