@@ -1,61 +1,72 @@
 <?php
-session_start();
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 include "db.php";
 
 $error = "";
 
-// FORM SUBMIT HANDLING
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Get Inputs
     $title = trim($_POST['title']);
     $description = trim($_POST['desciption']);
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
 
-    // Secure inputs
+    // Escape data
     $title = mysqli_real_escape_string($conn, $title);
     $description = mysqli_real_escape_string($conn, $description);
 
-    // ---------------- VALIDATION ----------------
-
+    // Validation
     if (empty($title) || empty($description) || empty($start_date) || empty($end_date)) {
+
         $error = "All fields are required!";
-    }
 
-    // Title only letters and spaces
-    else if (!preg_match("/^[A-Za-z ]+$/", $title)) {
+    } elseif (!preg_match("/^[A-Za-z ]+$/", $title)) {
+
         $error = "Title must contain only letters and spaces!";
-    }
 
-    // Date validation
-    else if (strtotime($start_date) > strtotime($end_date)) {
-        $error = "Start date must be less than End date!";
-    }
+    } elseif (strtotime($start_date) > strtotime($end_date)) {
 
-    // ---------------- INSERT ----------------
+        $error = "Start Date must be less than End Date!";
 
-    else {
+    } else {
 
-        $sql = "INSERT INTO registrations (title, description, start_date, end_date) 
-                VALUES ('$title', '$description', '$start_date', '$end_date')";
+        // CHECK DUPLICATE TITLE
+        $check = "SELECT id FROM registrations WHERE title='$title'";
+        $checkResult = mysqli_query($conn, $check);
 
-        if (mysqli_query($conn, $sql)) {
-            $_SESSION['last_id'] = mysqli_insert_id($conn);
-            header("Location: welcome.php");
-            exit();
-        } 
-        else {
-            $error = "Database Error: " . mysqli_error($conn);
+        if (mysqli_num_rows($checkResult) > 0) {
+
+            $error = "This Title Already Exists! Duplicate Entry Not Allowed.";
+
+        } else {
+
+            // Insert
+            $sql = "INSERT INTO registrations 
+                    (title, description, start_date, end_date)
+                    VALUES 
+                    ('$title','$description','$start_date','$end_date')";
+
+            if (mysqli_query($conn, $sql)) {
+
+                header("Location: welcome.php");
+                exit();
+
+            } else {
+
+                $error = "Database Error: " . mysqli_error($conn);
+            }
         }
     }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <title>Registration</title>
 
 <style>
@@ -66,58 +77,52 @@ body {
 }
 
 #formPage {
-    border-radius: 20px;
-    height: 500px;
-    width: 500px;
+    width: 520px;
     margin: 40px auto;
+    background: white;
     padding: 10px;
+    border-radius: 15px;
     box-shadow: 0px 0px 10px #aaa;
-    background-color: white;
+    color:black;
 }
 
-.title {
-    text-align: center;
+table {
+    margin-left: 50px;
+    width: 70%;
+    border-spacing: 10px 12px;
 }
 
-.container {
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.inputs {
-    border: none;
-    border-radius: 5px;
-    background-color: whitesmoke;
+input, textarea {
+    width: 100%;
     padding: 10px;
-    font-size: 14px;
+    border-radius: 5px;
+    border: none;
+    background: whitesmoke;
 }
 
-.button {
+td{
+    font-size: 15px;
+    font-weight: 700;
+}
+
+textarea {
+    height: 80px;
+}
+
+button {
+    margin: 20px auto;
     display: block;
-    margin: auto;
-    background-color: rgb(6, 130, 255);
-    padding: 15px 30px;
+    padding: 12px 30px;
+    background: #0682ff;
     border: none;
     border-radius: 15px;
     color: white;
-    font-size: 16px;
     cursor: pointer;
 }
 
-.button:hover {
-    background-color: rgb(0, 110, 220);
-}
-
-.labels {
-    font-size: 16px;
-    font-weight: 600;
-}
-
 .error {
-    text-align: center;
     color: red;
+    text-align: center;
     font-weight: bold;
 }
 
@@ -128,36 +133,45 @@ body {
 
 <form method="POST" id="formPage">
 
-<h1 class="title">Registration Form</h1>
+<h2 align="center">Registration Form</h2>
 
 <?php if($error != "") { ?>
-    <p class="error"><?php echo $error; ?></p>
+<p class="error"><?php echo $error; ?></p>
 <?php } ?>
 
-<div class="container">
+<table>
 
-<label class="labels">Title</label>
-<input class="inputs"
-       type="text"
+<tr>
+<td>Title</td>
+<td>
+<input type="text"
        name="title"
-       placeholder="Enter title"
        pattern="[A-Za-z ]+"
        oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')"
-       title="Only letters and spaces allowed"
        required>
+</td>
+</tr>
 
-<label class="labels">Description</label>
-<input class="inputs" type="text" name="desciption" placeholder="Enter description" required>
+<tr>
+<td>Description</td>
+<td>
+<textarea name="desciption" required></textarea>
+</td>
+</tr>
 
-<label class="labels">Start Date</label>
-<input class="inputs" type="date" name="start_date" required>
+<tr>
+<td>Start Date</td>
+<td><input type="date" name="start_date" required></td>
+</tr>
 
-<label class="labels">End Date</label>
-<input class="inputs" type="date" name="end_date" required>
+<tr>
+<td>End Date</td>
+<td><input type="date" name="end_date" required></td>
+</tr>
 
-</div>
+</table>
 
-<button class="button" type="submit">Submit</button>
+<button type="submit">Submit</button>
 
 </form>
 

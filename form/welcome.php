@@ -1,26 +1,17 @@
 <?php
-session_start();
-include "db.php";
 
-if (!isset($_SESSION['last_id'])) {
-    header("Location: index.php");
-    exit();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
 }
 
-$id = $_SESSION['last_id'];
+include "db.php";
 
-$query = "SELECT * FROM registrations WHERE id = $id";
+$query = "SELECT * FROM registrations ORDER BY id ASC";
 $result = mysqli_query($conn, $query);
 
 if (!$result) {
     die("Fetch Error: " . mysqli_error($conn));
 }
-
-$data = mysqli_fetch_assoc($result);
-
-// Format Date
-$start_date = date("d-m-Y", strtotime($data['start_date']));
-$end_date = date("d-m-Y", strtotime($data['end_date']));
 ?>
 
 <!DOCTYPE html>
@@ -36,21 +27,34 @@ body {
 }
 
 .box {
-    width: 400px;
+    width: 70%;
+    margin: 50px auto;
     background: white;
-    margin: 70px auto;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 15px;
     box-shadow: 0px 0px 10px #aaa;
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
+table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-p {
-    font-size: 15px;
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Header */
+th {
+    background: #0682ff;
+    color: white;
+}
+
+/* Left align specific cells */
+.left-align {
+    /* text-align: left; */
 }
 
 </style>
@@ -60,12 +64,31 @@ p {
 
 <div class="box">
 
-<h1>Welcome</h1>
+<h2 align="center">All Records</h2>
 
-<p><b>Title:</b> <?php echo htmlspecialchars($data['title']); ?></p>
-<p><b>Description:</b> <?php echo htmlspecialchars($data['description']); ?></p>
-<p><b>Start Date:</b> <?php echo $start_date; ?></p>
-<p><b>End Date:</b> <?php echo $end_date; ?></p>
+<table>
+
+<tr>
+<th>ID</th>
+<th>Title</th>
+<th>Description</th>
+<th>Start Date</th>
+<th>End Date</th>
+</tr>
+
+<?php while($row = mysqli_fetch_assoc($result)) { ?>
+
+<tr>
+<td><?php echo $row['id']; ?></td>
+<td class="left-align"><?php echo htmlspecialchars($row['title']); ?></td>
+<td class="left-align"><?php echo nl2br(htmlspecialchars($row['description'])); ?></td>
+<td><?php echo date("d-m-Y", strtotime($row['start_date'])); ?></td>
+<td><?php echo date("d-m-Y", strtotime($row['end_date'])); ?></td>
+</tr>
+
+<?php } ?>
+
+</table>
 
 </div>
 
