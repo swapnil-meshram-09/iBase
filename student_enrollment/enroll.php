@@ -4,15 +4,23 @@ include "db.php";
 
 $error = "";
 
+// SAFE POST FETCH (prevents undefined index warning)
+$name        = $_POST['name'] ?? "";
+$contact     = $_POST['contact'] ?? "";
+$college     = $_POST['college'] ?? "";
+$department  = $_POST['department'] ?? "";
+$year        = $_POST['year'] ?? "";
+$hod_name    = $_POST['hod_name'] ?? "";
+$hod_contact = $_POST['hod_contact'] ?? "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $name = trim($_POST['name']);
-    $contact = trim($_POST['contact']);
-    $college = trim($_POST['college']);
-    $department = $_POST['department'];
-    $year = $_POST['year'];
-    $hod_name = trim($_POST['hod_name']);
-    $hod_contact = trim($_POST['hod_contact']);
+    // Trim data
+    $name = trim($name);
+    $contact = trim($contact);
+    $college = trim($college);
+    $hod_name = trim($hod_name);
+    $hod_contact = trim($hod_contact);
 
     // SERVER SIDE VALIDATION
     if (empty($name) || empty($contact) || empty($college) || empty($department) || empty($year) || empty($hod_name) || empty($hod_contact)) {
@@ -142,7 +150,6 @@ function onlyChar(input) {
        name="name"
        oninput="onlyChar(this)"
        pattern="[A-Za-z ]+"
-       title="Only alphabets allowed"
        placeholder="Enter Student Name"
        required>
 
@@ -153,13 +160,14 @@ function onlyChar(input) {
        maxlength="10"
        inputmode="numeric"
        pattern="[0-9]{10}"
-       title="Enter 10 digit number"
        placeholder="Enter 10-digit Contact Number"
        required>
 
 <label><b>College Name</b></label>
 <input type="text"
        name="college"
+       oninput="onlyChar(this)"
+       pattern="[A-Za-z ]+"
        placeholder="Enter College Name"
        required>
 
@@ -186,7 +194,6 @@ function onlyChar(input) {
        name="hod_name"
        oninput="onlyChar(this)"
        pattern="[A-Za-z ]+"
-       title="Only alphabets allowed"
        placeholder="Enter HOD Name"
        required>
 
@@ -197,7 +204,6 @@ function onlyChar(input) {
        maxlength="10"
        inputmode="numeric"
        pattern="[0-9]{10}"
-       title="Enter 10 digit number"
        placeholder="Enter 10-digit HOD Contact"
        required>
 
