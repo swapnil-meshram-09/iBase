@@ -146,7 +146,7 @@ h2 {
 <input type="text" name="hod_name" id="hod_name" placeholder="Enter HOD Name" required>
 
 <label for="hod_contact"><b>HOD Contact Number</b></label>
-<input type="text" name="hod_contact" id="hod_contact" placeholder="Enter 10-digit HOD Contact" required>
+<input type="text" name="hod_contact" id="hod_contact" pattern="[0-9]{10}" placeholder="Enter 10-digit HOD Contact" required>
 
 </div>
 
