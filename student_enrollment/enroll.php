@@ -100,11 +100,11 @@ body {
 .container {
     display:flex;
     flex-direction:column;
-    gap: 10px;
+    gap: 13px;
 }
 
 input, select {
-    padding:10px;
+    padding: 5px;
     border:none;
     border-radius:6px;
     background:#f2f2f2;
