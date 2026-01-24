@@ -87,9 +87,9 @@ body {
 
 #formBox {
     width:500px;
-    margin: 30px auto;
+    margin: 18px auto;
     background:white;
-    padding-top: 1px;
+    padding-top: 0.5px;
     padding-bottom: 10px;
     padding-left: 30px;
     padding-right: 30px;
@@ -100,7 +100,7 @@ body {
 .container {
     display:flex;
     flex-direction:column;
-    gap: 13px;
+    gap: 15px;
 }
 
 input, select {
@@ -193,6 +193,9 @@ function onlyChar(input) {
 <select name="department" required>
     <option value="">Select Department</option>
     <option value="Computer Science">Computer Science</option>
+    <option value="AI & ML">AI & ML</option>
+    <option value="AI & DS">AI & DS</option>
+    <option value="ETC">ETC</option>
     <option value="Mechanical">Mechanical</option>
     <option value="Civil">Civil</option>
     <option value="Electrical">Electrical</option>
