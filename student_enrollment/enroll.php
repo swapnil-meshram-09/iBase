@@ -4,7 +4,7 @@ include "db.php";
 
 $error = "";
 
-// SAFE POST FETCH
+// SAFE POST FETCH (prevents undefined index warning)
 $name        = $_POST['name'] ?? "";
 $contact     = $_POST['contact'] ?? "";
 $college     = $_POST['college'] ?? "";
@@ -15,17 +15,17 @@ $hod_contact = $_POST['hod_contact'] ?? "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Trim inputs
+    // Trim data
     $name = trim($name);
     $contact = trim($contact);
     $college = trim($college);
     $hod_name = trim($hod_name);
     $hod_contact = trim($hod_contact);
 
-    // SERVER VALIDATION
+    // SERVER SIDE VALIDATION
     if (empty($name) || empty($contact) || empty($college) || empty($department) || empty($year) || empty($hod_name) || empty($hod_contact)) {
         $error = "All fields are required!";
-    }
+    } 
     elseif (!preg_match("/^[A-Za-z ]+$/", $name)) {
         $error = "Student name must contain only letters!";
     }
@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     else {
 
-        // 🔍 STRICT DUPLICATE CHECK (NAME OR CONTACT OR BOTH)
+        // 🔍 DUPLICATE CHECK (NAME OR CONTACT OR BOTH)
         $checkQuery = "SELECT id FROM student_enrollment 
                        WHERE name='$name' OR contact='$contact'";
 
@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         } else {
 
-            // ✅ INSERT DATA
+            // INSERT DATA
             $sql = "INSERT INTO student_enrollment 
             (name, contact, college_name, department, year, hod_name, hod_contact) 
             VALUES 
@@ -133,12 +133,12 @@ h2 {
 </style>
 
 <script>
-// Only Numbers
+// Allow only numbers
 function onlyNumber(input) {
     input.value = input.value.replace(/[^0-9]/g, '');
 }
 
-// Only Characters
+// Allow only letters
 function onlyChar(input) {
     input.value = input.value.replace(/[^A-Za-z ]/g, '');
 }
@@ -158,26 +158,33 @@ function onlyChar(input) {
 
 <div class="container">
 
-<label>Student Name</label>
-<input type="text" name="name" 
-       value="<?php echo $name; ?>"
-       oninput="onlyChar(this)" 
+<label><b>Student Name</b></label>
+<input type="text"
+       name="name"
+       oninput="onlyChar(this)"
+       pattern="[A-Za-z ]+"
+       placeholder="Enter Student Name"
        required>
 
-<label>Student Contact Number</label>
-<input type="text" name="contact" 
-       value="<?php echo $contact; ?>"
-       maxlength="10" 
-       oninput="onlyNumber(this)" 
+<label><b>Student Contact Number</b></label>
+<input type="text"
+       name="contact"
+       oninput="onlyNumber(this)"
+       maxlength="10"
+       inputmode="numeric"
+       pattern="[0-9]{10}"
+       placeholder="Enter 10-digit Contact Number"
        required>
 
-<label>College Name</label>
-<input type="text" name="college" 
-       value="<?php echo $college; ?>"
-       oninput="onlyChar(this)" 
+<label><b>College Name</b></label>
+<input type="text"
+       name="college"
+       oninput="onlyChar(this)"
+       pattern="[A-Za-z ]+"
+       placeholder="Enter College Name"
        required>
 
-<label>Department</label>
+<label><b>Department</b></label>
 <select name="department" required>
     <option value="">Select Department</option>
     <option value="Computer Science">Computer Science</option>
@@ -186,7 +193,7 @@ function onlyChar(input) {
     <option value="Electrical">Electrical</option>
 </select>
 
-<label>Year</label>
+<label><b>Year</b></label>
 <select name="year" required>
     <option value="">Select Year</option>
     <option value="First Year">First Year</option>
@@ -195,17 +202,22 @@ function onlyChar(input) {
     <option value="Final Year">Final Year</option>
 </select>
 
-<label>HOD Name</label>
-<input type="text" name="hod_name" 
-       value="<?php echo $hod_name; ?>"
-       oninput="onlyChar(this)" 
+<label><b>HOD Name</b></label>
+<input type="text"
+       name="hod_name"
+       oninput="onlyChar(this)"
+       pattern="[A-Za-z ]+"
+       placeholder="Enter HOD Name"
        required>
 
-<label>HOD Contact Number</label>
-<input type="text" name="hod_contact" 
-       value="<?php echo $hod_contact; ?>"
-       maxlength="10" 
-       oninput="onlyNumber(this)" 
+<label><b>HOD Contact Number</b></label>
+<input type="text"
+       name="hod_contact"
+       oninput="onlyNumber(this)"
+       maxlength="10"
+       inputmode="numeric"
+       pattern="[0-9]{10}"
+       placeholder="Enter 10-digit HOD Contact"
        required>
 
 </div>
