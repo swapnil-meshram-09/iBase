@@ -92,7 +92,6 @@ th {
 
 <!-- NAVBAR -->
 <div class="navbar">
-    <h2>Registration System</h2>
     <div class="nav-links">
         <a href="index.php">Registration</a>
         <a href="welcome.php">View Records</a>

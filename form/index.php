@@ -8,6 +8,7 @@ include "db.php";
 
 $error = "";
 
+// FORM SUBMISSION
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $title = trim($_POST['title']);
@@ -44,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         } else {
 
-            // Insert
+            // INSERT
             $sql = "INSERT INTO registrations 
                     (title, description, start_date, end_date)
                     VALUES 
@@ -52,7 +53,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if (mysqli_query($conn, $sql)) {
 
-                header("Location: welcome.php");
+                // SUCCESS MESSAGE USING SESSION
+                $_SESSION['success'] = "Registration Successful!";
+                header("Location: index.php");
                 exit();
 
             } else {
@@ -156,6 +159,14 @@ button {
     font-weight: bold;
 }
 
+.success {
+    color: green;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
 </style>
 </head>
 
@@ -170,13 +181,26 @@ button {
     </div>
 </div>
 
-<form method="POST" id="formPage">
+<!-- SUCCESS MESSAGE -->
+<?php if(isset($_SESSION['success'])) { ?>
+    <p class="success">
+        <?php 
+            echo $_SESSION['success']; 
+            unset($_SESSION['success']); 
+        ?>
+    </p>
+<?php } ?>
 
-<h2 align="center">Registration Form</h2>
-
+<!-- ERROR MESSAGE -->
 <?php if($error != "") { ?>
 <p class="error"><?php echo $error; ?></p>
 <?php } ?>
+
+<!-- FORM (HIDE AFTER SUCCESS) -->
+<?php if(!isset($_SESSION['success'])) { ?>
+<form method="POST" id="formPage">
+
+<h2 align="center">Registration Form</h2>
 
 <table>
 
@@ -213,6 +237,7 @@ button {
 <button type="submit">Submit</button>
 
 </form>
+<?php } ?>
 
 </body>
 </html>
