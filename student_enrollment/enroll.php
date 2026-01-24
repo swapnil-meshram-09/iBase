@@ -42,13 +42,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // 🔍 DUPLICATE CHECK (NAME OR CONTACT OR BOTH)
         $checkQuery = "SELECT id FROM student_enrollment 
-                       WHERE name='$name' OR contact='$contact'";
+                       WHERE name='$name' ";
+                       //OR contact='$contact'";
 
         $checkResult = mysqli_query($conn, $checkQuery);
 
         if (mysqli_num_rows($checkResult) > 0) {
 
-            $error = "Student Name OR Contact Number already exists!";
+            $error = "Student already exists!";
 
         } else {
 
@@ -86,9 +87,12 @@ body {
 
 #formBox {
     width:500px;
-    margin:40px auto;
+    margin: 30px auto;
     background:white;
-    padding:20px;
+    padding-top: 1px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
     border-radius:15px;
     box-shadow:0px 0px 10px #aaa;
 }
@@ -96,7 +100,7 @@ body {
 .container {
     display:flex;
     flex-direction:column;
-    gap:12px;
+    gap: 10px;
 }
 
 input, select {
@@ -108,6 +112,7 @@ input, select {
 
 button {
     margin-top:15px;
+    margin-left:180px;
     padding:12px;
     background:#007bff;
     border:none;
