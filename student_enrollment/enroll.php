@@ -3,8 +3,9 @@ session_start();
 include "db.php";
 
 $error = "";
+$success = "";
 
-// SAFE POST FETCH (prevents undefined index warning)
+// SAFE FETCH
 $name        = $_POST['name'] ?? "";
 $contact     = $_POST['contact'] ?? "";
 $college     = $_POST['college'] ?? "";
@@ -15,14 +16,15 @@ $hod_contact = $_POST['hod_contact'] ?? "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Trim data
+    // Trim inputs
     $name = trim($name);
     $contact = trim($contact);
     $college = trim($college);
     $hod_name = trim($hod_name);
     $hod_contact = trim($hod_contact);
 
-    // SERVER SIDE VALIDATION
+    // ---------------- VALIDATION ----------------
+
     if (empty($name) || empty($contact) || empty($college) || empty($department) || empty($year) || empty($hod_name) || empty($hod_contact)) {
         $error = "All fields are required!";
     } 
@@ -40,20 +42,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     else {
 
-        // INSERT DATA
-        $sql = "INSERT INTO student_enrollment 
-        (name, contact, college_name, department, year, hod_name, hod_contact) 
-        VALUES 
-        ('$name','$contact','$college','$department','$year','$hod_name','$hod_contact')";
+        // -------- DUPLICATE CONTACT CHECK --------
 
-        if (mysqli_query($conn, $sql)) {
+        $check = "SELECT id FROM student_enrollment WHERE contact='$contact'";
+        $result = mysqli_query($conn, $check);
 
-            $_SESSION['last_id'] = mysqli_insert_id($conn);
-            header("Location: success.php");
-            exit();
+        if (mysqli_num_rows($result) > 0) {
+
+            $error = "This contact number is already registered!";
 
         } else {
-            $error = "Database Error: " . mysqli_error($conn);
+
+            // -------- INSERT DATA --------
+
+            $sql = "INSERT INTO student_enrollment 
+            (name, contact, college_name, department, year, hod_name, hod_contact) 
+            VALUES 
+            ('$name','$contact','$college','$department','$year','$hod_name','$hod_contact')";
+
+            if (mysqli_query($conn, $sql)) {
+
+                $success = "Enrollment Successful!";
+                
+                // Clear form after success
+                $name = $contact = $college = $department = $year = $hod_name = $hod_contact = "";
+
+            } else {
+
+                $error = "Database Error: " . mysqli_error($conn);
+
+            }
         }
     }
 }
@@ -113,6 +131,12 @@ button:hover {
     font-weight:bold;
 }
 
+.success {
+    color:green;
+    text-align:center;
+    font-weight:bold;
+}
+
 h2 {
     text-align:center;
 }
@@ -120,12 +144,12 @@ h2 {
 </style>
 
 <script>
-// Allow only numbers
+// Only numbers
 function onlyNumber(input) {
     input.value = input.value.replace(/[^0-9]/g, '');
 }
 
-// Allow only letters
+// Only letters
 function onlyChar(input) {
     input.value = input.value.replace(/[^A-Za-z ]/g, '');
 }
@@ -139,39 +163,38 @@ function onlyChar(input) {
 
 <h2>Student Enrollment Form</h2>
 
-<?php if($error != "") { ?>
-<p class="error"><?php echo $error; ?></p>
+<?php if($error!=""){ ?>
+<p class="error"><?= $error ?></p>
+<?php } ?>
+
+<?php if($success!=""){ ?>
+<p class="success"><?= $success ?></p>
 <?php } ?>
 
 <div class="container">
 
-<label><b>Student Name</b></label>
+<label>Student Name</label>
 <input type="text"
        name="name"
+       value="<?= htmlspecialchars($name) ?>"
        oninput="onlyChar(this)"
-       pattern="[A-Za-z ]+"
-       placeholder="Enter Student Name"
        required>
 
-<label><b>Student Contact Number</b></label>
+<label>Student Contact</label>
 <input type="text"
        name="contact"
+       value="<?= htmlspecialchars($contact) ?>"
        oninput="onlyNumber(this)"
        maxlength="10"
-       inputmode="numeric"
-       pattern="[0-9]{10}"
-       placeholder="Enter 10-digit Contact Number"
        required>
 
-<label><b>College Name</b></label>
+<label>College Name</label>
 <input type="text"
        name="college"
-       oninput="onlyChar(this)"
-       pattern="[A-Za-z ]+"
-       placeholder="Enter College Name"
+       value="<?= htmlspecialchars($college) ?>"
        required>
 
-<label><b>Department</b></label>
+<label>Department</label>
 <select name="department" required>
     <option value="">Select Department</option>
     <option value="Computer Science">Computer Science</option>
@@ -180,7 +203,7 @@ function onlyChar(input) {
     <option value="Electrical">Electrical</option>
 </select>
 
-<label><b>Year</b></label>
+<label>Year</label>
 <select name="year" required>
     <option value="">Select Year</option>
     <option value="First Year">First Year</option>
@@ -189,22 +212,19 @@ function onlyChar(input) {
     <option value="Final Year">Final Year</option>
 </select>
 
-<label><b>HOD Name</b></label>
+<label>HOD Name</label>
 <input type="text"
        name="hod_name"
+       value="<?= htmlspecialchars($hod_name) ?>"
        oninput="onlyChar(this)"
-       pattern="[A-Za-z ]+"
-       placeholder="Enter HOD Name"
        required>
 
-<label><b>HOD Contact Number</b></label>
+<label>HOD Contact</label>
 <input type="text"
        name="hod_contact"
+       value="<?= htmlspecialchars($hod_contact) ?>"
        oninput="onlyNumber(this)"
        maxlength="10"
-       inputmode="numeric"
-       pattern="[0-9]{10}"
-       placeholder="Enter 10-digit HOD Contact"
        required>
 
 </div>
