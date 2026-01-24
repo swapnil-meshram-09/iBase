@@ -71,14 +71,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <style>
 
+/* NAVBAR */
+.navbar {
+    background: #0682ff;
+    padding: 12px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar h2 {
+    color: white;
+    margin: 0;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.nav-links a:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* FORM STYLE */
+
 body {
     background: #dde3ea;
     font-family: Arial, sans-serif;
+    margin: 0;
 }
 
 #formPage {
     width: 520px;
-    margin: 40px auto;
+    margin: 90px auto;
     background: white;
     padding: 10px;
     border-radius: 15px;
@@ -130,6 +160,15 @@ button {
 </head>
 
 <body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h2>Registration System</h2>
+    <div class="nav-links">
+        <a href="index.php">Registration</a>
+        <a href="welcome.php">View Records</a>
+    </div>
+</div>
 
 <form method="POST" id="formPage">
 
