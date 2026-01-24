@@ -53,8 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if (mysqli_query($conn, $sql)) {
 
-                // SUCCESS MESSAGE USING SESSION
-                $_SESSION['success'] = "Registration Successful!";
+                $_SESSION['success'] = "Registration completed successfully! 🎉";
                 header("Location: index.php");
                 exit();
 
@@ -65,6 +64,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+
+// Determine if form should be shown
+$showForm = true;
+if (isset($_SESSION['success']) && !isset($_GET['action'])) {
+    $showForm = false;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -76,17 +82,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 /* NAVBAR */
 .navbar {
-    background: #0682ff;
-    padding: 12px 30px;
+    margin-top: 30px;
+    background: #92a3b3;
+    padding: 10px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.navbar h2 {
-    color: white;
-    margin: 0;
-}
+
 
 .nav-links a {
     color: white;
@@ -102,7 +106,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 /* FORM STYLE */
-
 body {
     background: #dde3ea;
     font-family: Arial, sans-serif;
@@ -111,7 +114,7 @@ body {
 
 #formPage {
     width: 520px;
-    margin: 90px auto;
+    margin: 40px auto;
     background: white;
     padding: 10px;
     border-radius: 15px;
@@ -154,17 +157,46 @@ button {
 }
 
 .error {
+    margin-top: 30px;
     color: red;
     text-align: center;
     font-weight: bold;
 }
 
-.success {
-    color: green;
+.success-box {
+    width: 500px;
+    margin: 150px auto;
+    background: #e6f4ea;
+    border-left: 6px solid #28a745;
+    padding: 30px;
+    border-radius: 10px;
     text-align: center;
-    font-weight: bold;
+    box-shadow: 0px 0px 10px #aaa;
+    color: #155724;
+}
+
+.success-box h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.success-box p {
     font-size: 18px;
-    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.success-box a {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #0682ff;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.success-box a:hover {
+    background: #0056b3;
 }
 
 </style>
@@ -174,30 +206,36 @@ button {
 
 <!-- NAVBAR -->
 <div class="navbar">
-    <h2>Registration System</h2>
     <div class="nav-links">
         <a href="index.php">Registration</a>
         <a href="welcome.php">View Records</a>
     </div>
 </div>
 
-<!-- SUCCESS MESSAGE -->
-<?php if(isset($_SESSION['success'])) { ?>
-    <p class="success">
-        <?php 
-            echo $_SESSION['success']; 
-            unset($_SESSION['success']); 
-        ?>
-    </p>
-<?php } ?>
+<?php 
+// SHOW SUCCESS MESSAGE IF FORM SUBMITTED
+if (!$showForm && isset($_SESSION['success'])) { 
+?>
+<div class="success-box">
+    <h2>🎉 <?php echo $_SESSION['success']; ?></h2>
+    <p>Your data has been saved successfully.</p>
+    <a href="index.php?action=retry">Register Another Entry</a>
+</div>
+<?php 
+} 
+?>
 
 <!-- ERROR MESSAGE -->
-<?php if($error != "") { ?>
-<p class="error"><?php echo $error; ?></p>
-<?php } ?>
+<?php 
+if ($error != "") { 
+    echo '<p class="error">'.$error.'</p>'; 
+} 
+?>
 
-<!-- FORM (HIDE AFTER SUCCESS) -->
-<?php if(!isset($_SESSION['success'])) { ?>
+<!-- FORM -->
+<?php 
+if ($showForm) { 
+?>
 <form method="POST" id="formPage">
 
 <h2 align="center">Registration Form</h2>
@@ -237,7 +275,12 @@ button {
 <button type="submit">Submit</button>
 
 </form>
-<?php } ?>
+
+<?php 
+// Clear success message when showing form
+unset($_SESSION['success']);
+} 
+?>
 
 </body>
 </html>

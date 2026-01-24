@@ -23,16 +23,12 @@ if (!$result) {
 
 /* NAVBAR */
 .navbar {
-    background: #0682ff;
-    padding: 12px 30px;
+    margin-top: 30px;
+    background: #92a3b3;
+    padding: 10px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.navbar h2 {
-    color: white;
-    margin: 0;
 }
 
 .nav-links a {
@@ -58,7 +54,7 @@ body {
 
 .box {
     width: 70%;
-    margin: 100px auto;
+    margin: 40px auto;
     background: white;
     padding: 20px;
     border-radius: 15px;
