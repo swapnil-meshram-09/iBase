@@ -116,13 +116,13 @@ h2 {
 <div class="container">
 
 <label for="name"><b>Student Name</b></label>
-<input type="text" name="name" id="name" placeholder="Enter Student Name" required>
+<input type="text" pattern="[A-Za-z ]+" name="name" id="name" placeholder="Enter Student Name" required>
 
 <label for="contact"><b>Student Contact Number</b></label>
-<input type="text" name="contact" id="contact" placeholder="Enter 10-digit Contact Number" required>
+<input type="text" pattern="[A-Za-z ]+" name="contact" id="contact" placeholder="Enter 10-digit Contact Number" required>
 
 <label for="college"><b>College Name</b></label>
-<input type="text" name="college" id="college" placeholder="Enter College Name" required>
+<input type="text" pattern="[A-Za-z ]+" name="college" id="college" placeholder="Enter College Name" required>
 
 <label for="department"><b>Department</b></label>
 <select name="department" id="department" required>
@@ -143,7 +143,7 @@ h2 {
 </select>
 
 <label for="hod_name"><b>HOD Name</b></label>
-<input type="text" name="hod_name" id="hod_name" placeholder="Enter HOD Name" required>
+<input type="text"  pattern="[A-Za-z ]+" name="hod_name" id="hod_name" placeholder="Enter HOD Name" required>
 
 <label for="hod_contact"><b>HOD Contact Number</b></label>
 <input type="text" name="hod_contact" id="hod_contact" pattern="[0-9]{10}" placeholder="Enter 10-digit HOD Contact" required>
