@@ -14,18 +14,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hod_name = trim($_POST['hod_name']);
     $hod_contact = trim($_POST['hod_contact']);
 
-    // Validation
+    // SERVER SIDE VALIDATION
     if (empty($name) || empty($contact) || empty($college) || empty($department) || empty($year) || empty($hod_name) || empty($hod_contact)) {
         $error = "All fields are required!";
     } 
-    elseif (!preg_match('/^[0-9]{10}$/', $contact) || !preg_match('/^[0-9]{10}$/', $hod_contact)) {
-        $error = "Contact numbers must be 10 digits!";
+    elseif (!preg_match("/^[A-Za-z ]+$/", $name)) {
+        $error = "Student name must contain only letters!";
+    }
+    elseif (!preg_match("/^[A-Za-z ]+$/", $hod_name)) {
+        $error = "HOD name must contain only letters!";
+    }
+    elseif (!preg_match("/^[0-9]{10}$/", $contact)) {
+        $error = "Student contact must be exactly 10 digits!";
+    }
+    elseif (!preg_match("/^[0-9]{10}$/", $hod_contact)) {
+        $error = "HOD contact must be exactly 10 digits!";
     }
     else {
 
-        // Insert Data
-        $sql = "INSERT INTO student_enrollment
-        (name, contact, college_name, department, year, hod_name, hod_contact)
+        // INSERT DATA
+        $sql = "INSERT INTO student_enrollment 
+        (name, contact, college_name, department, year, hod_name, hod_contact) 
         VALUES 
         ('$name','$contact','$college','$department','$year','$hod_name','$hod_contact')";
 
@@ -36,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
 
         } else {
-            $error = "Database Error : " . mysqli_error($conn);
+            $error = "Database Error: " . mysqli_error($conn);
         }
     }
 }
@@ -102,9 +111,22 @@ h2 {
 
 </style>
 
+<script>
+// Allow only numbers
+function onlyNumber(input) {
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
+
+// Allow only letters
+function onlyChar(input) {
+    input.value = input.value.replace(/[^A-Za-z ]/g, '');
+}
+</script>
+
 </head>
 
 <body>
+
 <form method="POST" id="formBox">
 
 <h2>Student Enrollment Form</h2>
@@ -115,17 +137,34 @@ h2 {
 
 <div class="container">
 
-<label for="name"><b>Student Name</b></label>
-<input type="text" pattern="[A-Za-z ]+" name="name" id="name" placeholder="Enter Student Name" required>
+<label><b>Student Name</b></label>
+<input type="text"
+       name="name"
+       oninput="onlyChar(this)"
+       pattern="[A-Za-z ]+"
+       title="Only alphabets allowed"
+       placeholder="Enter Student Name"
+       required>
 
-<label for="contact"><b>Student Contact Number</b></label>
-<input type="text" pattern="[A-Za-z ]+" name="contact" id="contact" placeholder="Enter 10-digit Contact Number" required>
+<label><b>Student Contact Number</b></label>
+<input type="text"
+       name="contact"
+       oninput="onlyNumber(this)"
+       maxlength="10"
+       inputmode="numeric"
+       pattern="[0-9]{10}"
+       title="Enter 10 digit number"
+       placeholder="Enter 10-digit Contact Number"
+       required>
 
-<label for="college"><b>College Name</b></label>
-<input type="text" pattern="[A-Za-z ]+" name="college" id="college" placeholder="Enter College Name" required>
+<label><b>College Name</b></label>
+<input type="text"
+       name="college"
+       placeholder="Enter College Name"
+       required>
 
-<label for="department"><b>Department</b></label>
-<select name="department" id="department" required>
+<label><b>Department</b></label>
+<select name="department" required>
     <option value="">Select Department</option>
     <option value="Computer Science">Computer Science</option>
     <option value="Mechanical">Mechanical</option>
@@ -133,8 +172,8 @@ h2 {
     <option value="Electrical">Electrical</option>
 </select>
 
-<label for="year"><b>Year</b></label>
-<select name="year" id="year" required>
+<label><b>Year</b></label>
+<select name="year" required>
     <option value="">Select Year</option>
     <option value="First Year">First Year</option>
     <option value="Second Year">Second Year</option>
@@ -142,19 +181,31 @@ h2 {
     <option value="Final Year">Final Year</option>
 </select>
 
-<label for="hod_name"><b>HOD Name</b></label>
-<input type="text"  pattern="[A-Za-z ]+" name="hod_name" id="hod_name" placeholder="Enter HOD Name" required>
+<label><b>HOD Name</b></label>
+<input type="text"
+       name="hod_name"
+       oninput="onlyChar(this)"
+       pattern="[A-Za-z ]+"
+       title="Only alphabets allowed"
+       placeholder="Enter HOD Name"
+       required>
 
-<label for="hod_contact"><b>HOD Contact Number</b></label>
-<input type="text" name="hod_contact" id="hod_contact" pattern="[0-9]{10}" placeholder="Enter 10-digit HOD Contact" required>
+<label><b>HOD Contact Number</b></label>
+<input type="text"
+       name="hod_contact"
+       oninput="onlyNumber(this)"
+       maxlength="10"
+       inputmode="numeric"
+       pattern="[0-9]{10}"
+       title="Enter 10 digit number"
+       placeholder="Enter 10-digit HOD Contact"
+       required>
 
 </div>
 
 <button type="submit">Submit Enrollment</button>
 
 </form>
-
-
 
 </body>
 </html>
