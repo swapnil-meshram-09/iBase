@@ -21,14 +21,44 @@ if (!$result) {
 
 <style>
 
+/* NAVBAR */
+.navbar {
+    background: #0682ff;
+    padding: 12px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar h2 {
+    color: white;
+    margin: 0;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.nav-links a:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* TABLE STYLE */
+
 body {
     background: #dde3ea;
     font-family: Arial, sans-serif;
+    margin: 0;
 }
 
 .box {
     width: 70%;
-    margin: 50px auto;
+    margin: 100px auto;
     background: white;
     padding: 20px;
     border-radius: 15px;
@@ -46,21 +76,28 @@ th, td {
     text-align: center;
 }
 
-/* Header */
 th {
     background: #0682ff;
     color: white;
 }
 
-/* Left align specific cells */
 .left-align {
-    /* text-align: left; */
+    text-align: left;
 }
 
 </style>
 </head>
 
 <body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h2>Registration System</h2>
+    <div class="nav-links">
+        <a href="index.php">Registration</a>
+        <a href="welcome.php">View Records</a>
+    </div>
+</div>
 
 <div class="box">
 
