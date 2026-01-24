@@ -105,7 +105,6 @@ h2 {
 </head>
 
 <body>
-
 <form method="POST" id="formBox">
 
 <h2>Student Enrollment Form</h2>
@@ -116,13 +115,17 @@ h2 {
 
 <div class="container">
 
-<input type="text" name="name" placeholder="Student Name" required>
+<label for="name"><b>Student Name</b></label>
+<input type="text" name="name" id="name" placeholder="Enter Student Name" required>
 
-<input type="text" name="contact" placeholder="Student Contact Number" required>
+<label for="contact"><b>Student Contact Number</b></label>
+<input type="text" name="contact" id="contact" placeholder="Enter 10-digit Contact Number" required>
 
-<input type="text" name="college" placeholder="College Name" required>
+<label for="college"><b>College Name</b></label>
+<input type="text" name="college" id="college" placeholder="Enter College Name" required>
 
-<select name="department" required>
+<label for="department"><b>Department</b></label>
+<select name="department" id="department" required>
     <option value="">Select Department</option>
     <option value="Computer Science">Computer Science</option>
     <option value="Mechanical">Mechanical</option>
@@ -130,7 +133,8 @@ h2 {
     <option value="Electrical">Electrical</option>
 </select>
 
-<select name="year" required>
+<label for="year"><b>Year</b></label>
+<select name="year" id="year" required>
     <option value="">Select Year</option>
     <option value="First Year">First Year</option>
     <option value="Second Year">Second Year</option>
@@ -138,15 +142,19 @@ h2 {
     <option value="Final Year">Final Year</option>
 </select>
 
-<input type="text" name="hod_name" placeholder="HOD Name" required>
+<label for="hod_name"><b>HOD Name</b></label>
+<input type="text" name="hod_name" id="hod_name" placeholder="Enter HOD Name" required>
 
-<input type="text" name="hod_contact" placeholder="HOD Contact Number" required>
+<label for="hod_contact"><b>HOD Contact Number</b></label>
+<input type="text" name="hod_contact" id="hod_contact" placeholder="Enter 10-digit HOD Contact" required>
 
 </div>
 
 <button type="submit">Submit Enrollment</button>
 
 </form>
+
+
 
 </body>
 </html>
