@@ -1,6 +1,9 @@
 <?php 
-    $course_name=$_POST['course_name']
-    $course_amount=$_POST['course_amount']
+   session_start();
+   include "db.php";
+   
+   $course_name=$_POST['course_name']
+   $course_amount=$_POST['course_amount']
 ?>
 
 
