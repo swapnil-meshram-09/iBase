@@ -1,70 +1,139 @@
 <?php
 include "db.php";
 
-$query = "SELECT * FROM page1_data ORDER BY id DESC LIMIT 1";
-$result = mysqli_query($conn,$query);
-$data = mysqli_fetch_assoc($result);
+/* FETCH LEFT SIDE DATA */
+$query1 = "SELECT * FROM page1_data ORDER BY id DESC LIMIT 1";
+$res1 = mysqli_query($conn,$query1);
+$page1 = mysqli_fetch_assoc($res1);
+
+/* INSERT RIGHT SIDE DATA */
+$msg = "";
+
+if(isset($_POST['save'])){
+
+$field1 = $_POST['field1'];
+$field2 = $_POST['field2'];
+$field3 = $_POST['field3'];
+$field4 = $_POST['field4'];
+$field5 = $_POST['field5'];
+
+if(empty($field1) || empty($field2)){
+
+    $msg = "Please Fill Required Fields";
+
+}else{
+
+$insert = "INSERT INTO page2_data (field1,field2,field3,field4,field5) 
+VALUES ('$field1','$field2','$field3','$field4','$field5')";
+
+mysqli_query($conn,$insert);
+
+$msg = "Data Saved Successfully";
+
+}
+
+}
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Two Page Layout</title>
+<title>Learning Dashboard</title>
 
 <style>
 
-body {
-    background:#ddd;
-    font-family:Arial;
+/* BODY */
+body{
+    background:#eef1f5;
+    font-family:Segoe UI;
+    margin:0;
 }
 
-/* MAIN */
-.container {
-    width:850px;
+/* CONTAINER */
+.container{
+    width:90%;
+    max-width:1300px;
+    height:600px;
     background:white;
     margin:40px auto;
-    border:3px solid black;
     display:flex;
+    border-radius:10px;
+    box-shadow:0 0 15px rgba(0,0,0,0.2);
 }
 
-/* LEFT SIDE */
-.left {
+/* LEFT PANEL */
+.left{
     width:50%;
+    padding:30px;
+    background:#f9f9f9;
+    border-right:2px solid #ddd;
+}
+
+.left h2{
+    margin-bottom:15px;
+}
+
+.left-box{
+    border:2px solid black;
     padding:20px;
-    border-right:3px solid black;
+    height:450px;
+    font-size:18px;
 }
 
-.left-box {
-    border:3px solid black;
-    padding:15px;
-    height:300px;
-}
-
-/* RIGHT SIDE */
-.right {
+/* RIGHT PANEL */
+.right{
     width:50%;
-    padding:20px;
+    padding:30px;
 }
 
-.right h3 {
-    margin-bottom:10px;
+.right h2{
+    margin-bottom:20px;
 }
 
 /* INPUT */
-input {
+input{
     width:100%;
-    padding:8px;
-    margin-bottom:12px;
-    border:2px solid black;
+    padding:12px;
+    margin-bottom:15px;
+    font-size:16px;
+    border:2px solid #333;
+    border-radius:6px;
 }
 
 /* BUTTON */
-button {
-    padding:10px 15px;
-    background:black;
+button{
+    padding:12px 30px;
+    font-size:16px;
+    background:#007bff;
     color:white;
     border:none;
+    border-radius:6px;
     cursor:pointer;
+}
+
+button:hover{
+    background:#0056b3;
+}
+
+/* MESSAGE */
+.msg{
+    margin-bottom:10px;
+    color:green;
+    font-weight:bold;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+
+.container{
+    flex-direction:column;
+    height:auto;
+}
+
+.left,.right{
+    width:100%;
+}
+
 }
 
 </style>
@@ -74,75 +143,46 @@ button {
 
 <div class="container">
 
-<!-- LEFT SIDE (BACKEND DATA) -->
+<!-- LEFT SIDE -->
 <div class="left">
 
-    <div class="left-box">
+<h2>Course Details</h2>
 
-        <p><b>Aim:</b> <?php echo $data['aim']; ?></p>
-        <p><b>Topic:</b> <?php echo $data['topic']; ?></p>
-        <p><b>Duration:</b> <?php echo $data['duration']; ?></p>
+<div class="left-box">
 
-    </div>
+<p><b>Aim:</b> <?php echo $page1['aim']; ?></p><br>
+
+<p><b>Topic:</b> <?php echo $page1['topic']; ?></p><br>
+
+<p><b>Duration:</b> <?php echo $page1['duration']; ?></p>
+
+</div>
 
 </div>
 
 
-<!-- RIGHT SIDE (FRONTEND STORE) -->
+<!-- RIGHT SIDE -->
 <div class="right">
 
-<h3>Python</h3>
+<h2>Python Module Entry</h2>
 
-<input type="text" id="f1" placeholder="Enter Field 1">
-<input type="text" id="f2" placeholder="Enter Field 2">
-<input type="text" id="f3" placeholder="Enter Field 3">
-<input type="text" id="f4" placeholder="Enter Field 4">
-<input type="text" id="f5" placeholder="Enter Field 5">
+<div class="msg"><?php echo $msg; ?></div>
 
-<button onclick="saveData()">Save</button>
+<form method="POST">
+
+<input type="text" name="field1" placeholder="Module Name" required>
+<input type="text" name="field2" placeholder="Trainer Name" required>
+<input type="text" name="field3" placeholder="Batch Time">
+<input type="text" name="field4" placeholder="Lab Room">
+<input type="text" name="field5" placeholder="Notes Link">
+
+<button type="submit" name="save">Save Data</button>
+
+</form>
 
 </div>
 
 </div>
-
-
-<script>
-
-// SAVE TO FRONTEND (LocalStorage)
-function saveData() {
-
-    let data = {
-        field1: document.getElementById("f1").value,
-        field2: document.getElementById("f2").value,
-        field3: document.getElementById("f3").value,
-        field4: document.getElementById("f4").value,
-        field5: document.getElementById("f5").value
-    };
-
-    localStorage.setItem("page2Data", JSON.stringify(data));
-
-    alert("Data Saved In Browser Successfully!");
-}
-
-
-// LOAD SAVED DATA
-window.onload = function(){
-
-    let saved = localStorage.getItem("page2Data");
-
-    if(saved){
-        let obj = JSON.parse(saved);
-
-        document.getElementById("f1").value = obj.field1;
-        document.getElementById("f2").value = obj.field2;
-        document.getElementById("f3").value = obj.field3;
-        document.getElementById("f4").value = obj.field4;
-        document.getElementById("f5").value = obj.field5;
-    }
-
-}
-
-</script>
 
 </body>
 </html>
