@@ -170,11 +170,11 @@ button:hover{
 
 <form method="POST">
 
-<input type="text" name="field1" placeholder="Module Name" required>
-<input type="text" name="field2" placeholder="Trainer Name" required>
-<input type="text" name="field3" placeholder="Batch Time">
-<input type="text" name="field4" placeholder="Lab Room">
-<input type="text" name="field5" placeholder="Notes Link">
+<input type="text" name="field1" placeholder="" required>
+<input type="text" name="field2" placeholder="" required>
+<input type="text" name="field3" placeholder="">
+<input type="text" name="field4" placeholder="">
+<input type="text" name="field5" placeholder="">
 
 <button type="submit" name="save">Save Data</button>
 
