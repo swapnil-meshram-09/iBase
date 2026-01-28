@@ -1,41 +1,39 @@
-<?php 
-   session_start();
-   include "db.php";
-   
-   $course_name=$_POST['course_name']
-   $course_amount=$_POST['course_amount']
-?>
+<?php
+require __DIR__ . '/Instamojo.php'; // Your SDK
 
+session_start();
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+// Get payment details from QR code URL
+$payment_id = $_GET['id'] ?? '';
+$course_name = $_GET['course'] ?? '';
+$course_amount = $_GET['amount'] ?? '';
 
-    <form action="pay.php" method='post'>
-        <select name="course_name" id="" required>
-            <option value="">Select Department</option>
-            <option value="">Python</option>
-            <option value="">Java</option>
-            <option value="">JavaScript</option>
-            <option value="">PHP</option>
-        </select>
+if(!$payment_id || !$course_name || !$course_amount){
+    die("Invalid payment details.");
+}
 
-        <input type="text" 
-               name='course_amount'       
-               oninput="onlyNumber(this)"
-               maxlength="2"
-               inputmode="numeric"
-               pattern="[0-9]{10}"
-               placeholder="Enter Amount"
-               required>
+// Initialize Instamojo API
+$api = new Instamojo\Instamojo(
+    'YOUR_API_KEY',           // Replace with your API Key
+    'YOUR_AUTH_TOKEN',        // Replace with your Auth Token
+    'https://test.instamojo.com/api/1.1/' // Sandbox for testing
+);
 
-    </form>
-    
-</body>
-</html> 
+try {
+    // Create a payment request
+    $response = $api->paymentRequestCreate(array(
+        "purpose" => "Payment for $course_name",
+        "amount" => $course_amount,
+        "buyer_name" => "Student",           // optional
+        "email" => "student@example.com",    // optional
+        "phone" => "9999999999",             // optional
+        "redirect_url" => "https://yourdomain.com/payment-success.php?payment_id=$payment_id"
+    ));
 
+    // Redirect user to Instamojo checkout
+    header("Location: " . $response['longurl']);
+    exit;
+
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+}
