@@ -1,7 +1,7 @@
 <?php
 session_start();
-include __DIR__ . "/db.php";                     // Database connection
-include __DIR__ . "/phpqrcode/qrlib.php";       // Include QR code library
+include __DIR__ . "/db.php";                     
+include __DIR__ . "/phpqrcode/qrlib.php";       
 
 // Redirect if payment session not found
 if(!isset($_SESSION['payment_id'], $_SESSION['course_name'], $_SESSION['course_amount'])){
@@ -20,13 +20,11 @@ if(!file_exists($qr_folder)){
     mkdir($qr_folder, 0777, true);
 }
 
-// Generate QR code file path
+// Generate payment URL for QR code (points to pay.php)
+$payment_url = "https://yourdomain.com/pay.php?id=$payment_id&course=" . urlencode($course_name) . "&amount=$course_amount";
+
+// Generate QR code if it does not exist yet
 $qr_file = $qr_folder . "/payment_" . $payment_id . ".png";
-
-// Payment URL (replace with your real payment gateway)
-$payment_url = "https://yourpaymentgateway.com/pay?amount=$course_amount&course=$course_name&id=$payment_id";
-
-// Generate QR code if file does not exist yet
 if(!file_exists($qr_file)){
     QRcode::png($payment_url, $qr_file, 'L', 6, 2);
 }
@@ -36,39 +34,11 @@ if(!file_exists($qr_file)){
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QR Code Payment</title>
 <style>
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin-top: 50px;
-    background-color: #f5f5f5;
-}
-.qr-container {
-    display: inline-block;
-    padding: 20px;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-}
-.qr-container img {
-    width: 200px;
-    height: 200px;
-}
-button {
-    padding: 10px 25px;
-    font-size: 16px;
-    margin-top: 20px;
-    cursor: pointer;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-}
-button:hover {
-    background-color: #0056b3;
-}
+body { font-family: Arial, sans-serif; text-align:center; background:#f5f5f5; margin-top:50px;}
+.qr-container { display:inline-block; padding:20px; background:#fff; border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.1);}
+.qr-container img { width:200px; height:200px;}
 </style>
 </head>
 <body>
@@ -76,7 +46,6 @@ button:hover {
 <div class="qr-container">
     <h2>Scan QR to Pay for <?php echo htmlspecialchars($course_name); ?></h2>
     <img src="<?php echo 'qrcodes/payment_' . $payment_id . '.png'; ?>" alt="QR Code">
-    <br>
 </div>
 
 </body>
