@@ -1,4 +1,4 @@
-<!-- <?php 
+<?php 
    session_start();
    include "db.php";
    
@@ -37,5 +37,5 @@
     </form>
     
 </body>
-</html> -->
+</html> 
 

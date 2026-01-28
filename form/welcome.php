@@ -101,21 +101,15 @@ th {
 <table>
 
 <tr>
-<th>ID</th>
 <th>Title</th>
 <th>Description</th>
-<th>Start Date</th>
-<th>End Date</th>
 </tr>
 
 <?php while($row = mysqli_fetch_assoc($result)) { ?>
 
 <tr>
-<td><?php echo $row['id']; ?></td>
 <td class="left-align"><?php echo htmlspecialchars($row['title']); ?></td>
 <td class="left-align"><?php echo nl2br(htmlspecialchars($row['description'])); ?></td>
-<td><?php echo date("d-m-Y", strtotime($row['start_date'])); ?></td>
-<td><?php echo date("d-m-Y", strtotime($row['end_date'])); ?></td>
 </tr>
 
 <?php } ?>
