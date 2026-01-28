@@ -77,7 +77,6 @@ button:hover {
     <h2>Scan QR to Pay for <?php echo htmlspecialchars($course_name); ?></h2>
     <img src="<?php echo 'qrcodes/payment_' . $payment_id . '.png'; ?>" alt="QR Code">
     <br>
-    <a href="<?php echo $payment_url; ?>"><button>Pay Online</button></a>
 </div>
 
 </body>
