@@ -5,7 +5,7 @@ include __DIR__ . "/phpqrcode/qrlib.php";
 
 // Redirect if payment session not found
 if(!isset($_SESSION['payment_id'], $_SESSION['course_name'], $_SESSION['course_amount'])){
-    header("Location: index.php");
+    header("Location: .php");
     exit;
 }
 
@@ -44,7 +44,7 @@ body { font-family: Arial, sans-serif; text-align:center; background:#f5f5f5; ma
 <body>
 
 <div class="qr-container">
-    <h2>Scan QR to Pay for <?php echo htmlspecialchars($course_name); ?></h2>
+    <h2>Scan QR to Pay <?php ?></h2>
     <img src="<?php echo 'qrcodes/payment_' . $payment_id . '.png'; ?>" alt="QR Code">
 </div>
 
