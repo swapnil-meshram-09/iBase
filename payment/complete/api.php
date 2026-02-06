@@ -4,7 +4,51 @@ include "db.php";
 
 $error = "";
 $success = "";
-$whatsappLink = "";
+
+
+// META WHATSAPP SETTINGS
+
+
+$ACCESS_TOKEN = "EAArr6hAkNxMBQuqbDXYrzloIv31sW5Jrfm1bJYfrI2XYpeDEfed83Bqr0MsZB7uveMbBV1EwZAXzbu8g2JBtm3wFgv4Ukzu7NRYikaqvOHiCnreeFukd1kJgikFlHc9RfKusaMMBV7TJrYM1WJ8kIj8XQZCfwVRMbgAAwRSnUmWVUwq869hYdHrm77HI5Ligoru2qKoTPLlDsZB2omeu14u3VPA5vS9MnZCHYzs6nFsNl0HW3UiZBNiy0IJjIvKY2cf6i3Hox8wGQqnGozISwbU0lvLsjvao9VDEKfZCRkZD";
+$PHONE_NUMBER_ID = "1019412521247202";
+
+// ======================
+
+function sendWhatsAppMessage($to, $message, $token, $phoneId){
+
+    $url = "https://graph.facebook.com/v18.0/$phoneId/messages";
+
+    $data = [
+        "messaging_product" => "whatsapp",
+        "to" => $to,
+        "type" => "text",
+        "text" => [
+            "body" => $message
+        ]
+    ];
+
+    $headers = [
+        "Authorization: Bearer $token",
+        "Content-Type: application/json"
+    ];
+
+    $ch = curl_init($url);
+
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+    $response = curl_exec($ch);
+
+    curl_close($ch);
+
+    return $response;
+}
+
+// ======================
+// FORM SUBMIT
+// ======================
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -24,26 +68,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } 
     else {
 
-        // SECURITY
+        // SANITIZE
         $course_name_safe = mysqli_real_escape_string($conn, $course_name);
         $course_amount_safe = mysqli_real_escape_string($conn, $course_amount);
         $phone_safe = mysqli_real_escape_string($conn, $phone);
 
-        // INSERT DATA
+        // SAVE PAYMENT
         $sql = "INSERT INTO payments (course_name, course_amount, phone) 
                 VALUES ('$course_name_safe', '$course_amount_safe', '$phone_safe')";
 
         if(mysqli_query($conn, $sql)){
+            
+            // SEND WHATSAPP MESSAGE
 
-            // WHATSAPP MESSAGE
+            $countryCode = "91";
+            $fullNumber = $countryCode.$phone;
+
             $message = "Hello! Your payment for $course_name course of ₹$course_amount is received successfully. Thank you!";
 
-            $countryCode = "91"; // India
-            $fullNumber = $countryCode . $phone;
+            sendWhatsAppMessage($fullNumber, $message, $ACCESS_TOKEN, $PHONE_NUMBER_ID);
 
-            $whatsappLink = "https://wa.me/$fullNumber?text=" . urlencode($message);
-
-            $success = "Payment successful! Opening WhatsApp...";
+            $success = "Payment saved & WhatsApp message sent successfully!";
 
         } else {
             $error = "Database Error: " . mysqli_error($conn);
@@ -141,14 +186,6 @@ function onlyNumber(input){
 
 <?php if($success){ ?>
     <div class="success"><?= $success ?></div>
-
-    <!-- AUTO WHATSAPP REDIRECT -->
-    <script>
-        setTimeout(function(){
-            window.location.href = "<?= $whatsappLink ?>";
-        }, 1500);
-    </script>
-
 <?php } ?>
 
 <form method="POST">
@@ -161,11 +198,9 @@ function onlyNumber(input){
     <option value="JavaScript">JavaScript</option>
 </select>
 
-<input type="text" name="phone" placeholder="Enter Number" maxlength="10" oninput="onlyNumber(this)" required>
-
-
 <input type="text" name="course_amount" placeholder="Enter Amount" maxlength="6" oninput="onlyNumber(this)" required>
 
+<input type="text" name="phone" placeholder="Enter WhatsApp Number" maxlength="10" oninput="onlyNumber(this)" required>
 
 <button type="submit">Submit Payment</button>
 
