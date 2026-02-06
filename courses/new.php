@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $message = "Hello! Your payment for $course_name course of ₹$course_amount is received successfully. Thank you!";
             $_SESSION['whatsapp'] = "https://wa.me/91$phone?text=" . urlencode($message);
-            $_SESSION['success']  = "Payment successful! Redirecting to WhatsApp...";
+            $_SESSION['success']  = "Redirecting to WhatsApp...";
         }
         else {
             $_SESSION['error'] = "Database Error: " . mysqli_error($conn);
@@ -195,7 +195,7 @@ function onlyNumber(input){
     <input type="text" name="course_amount" placeholder="Enter Amount"
            maxlength="6" oninput="onlyNumber(this)" required>
 
-    <button type="submit">Pay & Send WhatsApp</button>
+    <button type="submit">Send WhatsApp</button>
 
 </form>
 </div>
