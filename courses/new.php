@@ -7,25 +7,28 @@ $query1 = "SELECT * FROM page1_data ORDER BY id DESC LIMIT 1";
 $res1 = mysqli_query($conn,$query1);
 $page1 = mysqli_fetch_assoc($res1);
 
-/* ================= RIGHT SIDE PAYMENT ================= */
-$error = "";
-$success = "";
-$whatsappLink = "";
+/* ================= MESSAGE HANDLING ================= */
+$error        = $_SESSION['error'] ?? "";
+$success      = $_SESSION['success'] ?? "";
+$whatsappLink = $_SESSION['whatsapp'] ?? "";
 
+unset($_SESSION['error'], $_SESSION['success'], $_SESSION['whatsapp']);
+
+/* ================= FORM SUBMISSION ================= */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $course_name   = $_POST['course_name'] ?? '';
     $course_amount = $_POST['course_amount'] ?? '';
     $phone         = trim($_POST['phone'] ?? '');
 
-    if(empty($course_name) || empty($course_amount) || empty($phone)){
-        $error = "All fields are required!";
+    if (empty($course_name) || empty($course_amount) || empty($phone)) {
+        $_SESSION['error'] = "All fields are required!";
     }
-    else if(!is_numeric($course_amount)){
-        $error = "Amount must be numeric!";
+    else if (!is_numeric($course_amount)) {
+        $_SESSION['error'] = "Amount must be numeric!";
     }
-    else if(!preg_match('/^[0-9]{10}$/', $phone)){
-        $error = "Phone number must be 10 digits!";
+    else if (!preg_match('/^[0-9]{10}$/', $phone)) {
+        $_SESSION['error'] = "Phone number must be 10 digits!";
     }
     else {
 
@@ -36,19 +39,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql = "INSERT INTO payments (course_name, course_amount, phone)
                 VALUES ('$course_name_safe','$course_amount_safe','$phone_safe')";
 
-        if(mysqli_query($conn,$sql)){
+        if (mysqli_query($conn,$sql)) {
 
             $message = "Hello! Your payment for $course_name course of ₹$course_amount is received successfully. Thank you!";
-            $whatsappLink = "https://wa.me/91$phone?text=" . urlencode($message);
-
-            $success = "Payment successful! Redirecting to WhatsApp...";
+            $_SESSION['whatsapp'] = "https://wa.me/91$phone?text=" . urlencode($message);
+            $_SESSION['success']  = "Payment successful! Redirecting to WhatsApp...";
         }
-        else{
-            $error = "Database Error: " . mysqli_error($conn);
+        else {
+            $_SESSION['error'] = "Database Error: " . mysqli_error($conn);
         }
     }
+
+    /* 🔑 POST → REDIRECT → GET */
+    header("Location: ".$_SERVER['PHP_SELF']);
+    exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -79,17 +86,16 @@ body{
 .left-box{
     border:2px solid #000;
     padding:20px;
-    height: 420px;
+    height:420px;
     font-size:18px;
 }
 .right{
     width:50%;
     padding:30px;
-    margin-top:5px;
 }
 input,select{
     margin-top:10px;
-    width: 90%;
+    width:90%;
     padding:12px;
     margin-bottom:15px;
     margin-left:15px;
@@ -98,7 +104,7 @@ input,select{
     border-radius:6px;
 }
 select{
-    width: 95%;
+    width:95%;
 }
 button{
     margin-top:15px;
@@ -150,15 +156,14 @@ function onlyNumber(input){
 <div class="left">
     <h2>Course Details</h2>
     <div class="left-box">
-        <p><b>Aim:</b> <?php echo $page1['aim']; ?></p><br>
-        <p><b>Topic:</b> <?php echo $page1['topic']; ?></p><br>
-        <p><b>Duration:</b> <?php echo $page1['duration']; ?></p>
+        <p><b>Aim:</b> <?= htmlspecialchars($page1['aim'] ?? '') ?></p><br>
+        <p><b>Topic:</b> <?= htmlspecialchars($page1['topic'] ?? '') ?></p><br>
+        <p><b>Duration:</b> <?= htmlspecialchars($page1['duration'] ?? '') ?></p>
     </div>
 </div>
 
 <!-- RIGHT SIDE -->
 <div class="right">
-
 <h2>Course Payment</h2>
 
 <?php if($error){ ?>
@@ -174,26 +179,25 @@ function onlyNumber(input){
     </script>
 <?php } ?>
 
-<form method="POST">
+<form method="POST" autocomplete="off">
 
-<select name="course_name" required>
-    <option value="">Select Course</option>
-    <option value="Python">Python</option>
-    <option value="Java">Java</option>
-    <option value="PHP">PHP</option>
-    <option value="JavaScript">JavaScript</option>
-</select>
+    <select name="course_name" required>
+        <option value="">Select Course</option>
+        <option value="Python">Python</option>
+        <option value="Java">Java</option>
+        <option value="PHP">PHP</option>
+        <option value="JavaScript">JavaScript</option>
+    </select>
 
-<input type="text" name="phone" placeholder="Enter Mobile Number"
-       maxlength="10" oninput="onlyNumber(this)" required>
+    <input type="text" name="phone" placeholder="Enter Mobile Number"
+           maxlength="10" oninput="onlyNumber(this)" required>
 
-<input type="text" name="course_amount" placeholder="Enter Amount"
-       maxlength="6" oninput="onlyNumber(this)" required>
+    <input type="text" name="course_amount" placeholder="Enter Amount"
+           maxlength="6" oninput="onlyNumber(this)" required>
 
-<button type="submit">Pay & Send WhatsApp</button>
+    <button type="submit">Pay & Send WhatsApp</button>
 
 </form>
-
 </div>
 </div>
 
