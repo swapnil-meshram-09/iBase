@@ -4,84 +4,51 @@ include "db.php";
 
 /* ================= LEFT SIDE DATA ================= */
 $query1 = "SELECT * FROM page1_data ORDER BY id DESC LIMIT 1";
-$res1   = mysqli_query($conn, $query1);
-$page1  = mysqli_fetch_assoc($res1);
+$res1 = mysqli_query($conn,$query1);
+$page1 = mysqli_fetch_assoc($res1);
 
-/* ================= RIGHT SIDE : PAYMENT + WHATSAPP ================= */
-
+/* ================= RIGHT SIDE PAYMENT ================= */
 $error = "";
 $success = "";
+$whatsappLink = "";
 
-/* META WHATSAPP SETTINGS */
-$ACCESS_TOKEN   = "YOUR_META_ACCESS_TOKEN";
-$PHONE_NUMBER_ID = "YOUR_PHONE_NUMBER_ID";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-function sendWhatsAppMessage($to, $message, $token, $phoneId){
-
-    $url = "https://graph.facebook.com/v18.0/$phoneId/messages";
-
-    $data = [
-        "messaging_product" => "whatsapp",
-        "to" => $to,
-        "type" => "text",
-        "text" => ["body" => $message]
-    ];
-
-    $headers = [
-        "Authorization: Bearer $token",
-        "Content-Type: application/json"
-    ];
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-    curl_exec($ch);
-    curl_close($ch);
-}
-
-/* FORM SUBMIT */
-if(isset($_POST['pay_now'])){
-
-    $course_name   = $_POST['course_name'] ?? "";
-    $course_amount = $_POST['course_amount'] ?? "";
-    $phone         = trim($_POST['phone'] ?? "");
+    $course_name   = $_POST['course_name'] ?? '';
+    $course_amount = $_POST['course_amount'] ?? '';
+    $phone         = trim($_POST['phone'] ?? '');
 
     if(empty($course_name) || empty($course_amount) || empty($phone)){
         $error = "All fields are required!";
     }
-    elseif(!is_numeric($course_amount)){
+    else if(!is_numeric($course_amount)){
         $error = "Amount must be numeric!";
     }
-    elseif(!preg_match('/^[0-9]{10}$/', $phone)){
-        $error = "Phone must be 10 digits!";
+    else if(!preg_match('/^[0-9]{10}$/', $phone)){
+        $error = "Phone number must be 10 digits!";
     }
-    else{
+    else {
 
-        $course_name   = mysqli_real_escape_string($conn, $course_name);
-        $course_amount = mysqli_real_escape_string($conn, $course_amount);
-        $phone         = mysqli_real_escape_string($conn, $phone);
+        $course_name_safe   = mysqli_real_escape_string($conn,$course_name);
+        $course_amount_safe = mysqli_real_escape_string($conn,$course_amount);
+        $phone_safe         = mysqli_real_escape_string($conn,$phone);
 
         $sql = "INSERT INTO payments (course_name, course_amount, phone)
-                VALUES ('$course_name','$course_amount','$phone')";
+                VALUES ('$course_name_safe','$course_amount_safe','$phone_safe')";
 
-        if(mysqli_query($conn, $sql)){
+        if(mysqli_query($conn,$sql)){
 
-            $fullNumber = "91".$phone;
             $message = "Hello! Your payment for $course_name course of ₹$course_amount is received successfully. Thank you!";
+            $whatsappLink = "https://wa.me/91$phone?text=" . urlencode($message);
 
-            sendWhatsAppMessage($fullNumber, $message, $ACCESS_TOKEN, $PHONE_NUMBER_ID);
-
-            $success = "Payment saved & WhatsApp message sent!";
+            $success = "Payment successful! Redirecting to WhatsApp...";
         }
         else{
-            $error = "DB Error: " . mysqli_error($conn);
+            $error = "Database Error: " . mysqli_error($conn);
         }
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -93,62 +60,61 @@ body{
     font-family:Segoe UI;
     margin:0;
 }
-
 .container{
     width:90%;
     max-width:1300px;
+    height:600px;
     background:white;
     margin:40px auto;
     display:flex;
     border-radius:10px;
     box-shadow:0 0 15px rgba(0,0,0,0.2);
 }
-
-/* LEFT */
 .left{
     width:50%;
     padding:30px;
     background:#f9f9f9;
     border-right:2px solid #ddd;
 }
-
 .left-box{
     border:2px solid #000;
     padding:20px;
-    height:420px;
+    height: 420px;
     font-size:18px;
 }
-
-/* RIGHT */
 .right{
     width:50%;
     padding:30px;
+    margin-top:5px;
 }
-
-input, select{
-    width:100%;
+input,select{
+    margin-top:10px;
+    width: 90%;
     padding:12px;
     margin-bottom:15px;
+    margin-left:15px;
     font-size:16px;
     border:2px solid #333;
     border-radius:6px;
 }
-
+select{
+    width: 95%;
+}
 button{
+    margin-top:15px;
     padding:12px;
-    width:100%;
+    width:95%;
     font-size:16px;
     background:#25D366;
     color:white;
     border:none;
     border-radius:6px;
     cursor:pointer;
+    margin-left:15px;
 }
-
 button:hover{
     background:#128C7E;
 }
-
 .error{
     background:#ffe1e1;
     color:#c40000;
@@ -156,7 +122,6 @@ button:hover{
     border-radius:5px;
     margin-bottom:10px;
 }
-
 .success{
     background:#e1ffe9;
     color:#0a7d2b;
@@ -164,9 +129,8 @@ button:hover{
     border-radius:5px;
     margin-bottom:10px;
 }
-
 @media(max-width:900px){
-    .container{flex-direction:column;}
+    .container{flex-direction:column;height:auto;}
     .left,.right{width:100%;}
 }
 </style>
@@ -184,20 +148,31 @@ function onlyNumber(input){
 
 <!-- LEFT SIDE -->
 <div class="left">
-<h2>Course Details</h2>
-<div class="left-box">
-    <p><b>Aim:</b> <?= $page1['aim']; ?></p><br>
-    <p><b>Topic:</b> <?= $page1['topic']; ?></p><br>
-    <p><b>Duration:</b> <?= $page1['duration']; ?></p>
-</div>
+    <h2>Course Details</h2>
+    <div class="left-box">
+        <p><b>Aim:</b> <?php echo $page1['aim']; ?></p><br>
+        <p><b>Topic:</b> <?php echo $page1['topic']; ?></p><br>
+        <p><b>Duration:</b> <?php echo $page1['duration']; ?></p>
+    </div>
 </div>
 
 <!-- RIGHT SIDE -->
 <div class="right">
+
 <h2>Course Payment</h2>
 
-<?php if($error){ ?><div class="error"><?= $error ?></div><?php } ?>
-<?php if($success){ ?><div class="success"><?= $success ?></div><?php } ?>
+<?php if($error){ ?>
+    <div class="error"><?= $error ?></div>
+<?php } ?>
+
+<?php if($success){ ?>
+    <div class="success"><?= $success ?></div>
+    <script>
+        setTimeout(function(){
+            window.location.href = "<?= $whatsappLink ?>";
+        },1500);
+    </script>
+<?php } ?>
 
 <form method="POST">
 
@@ -209,15 +184,17 @@ function onlyNumber(input){
     <option value="JavaScript">JavaScript</option>
 </select>
 
-<input type="text" name="course_amount" placeholder="Enter Amount" oninput="onlyNumber(this)" required>
+<input type="text" name="phone" placeholder="Enter Mobile Number"
+       maxlength="10" oninput="onlyNumber(this)" required>
 
-<input type="text" name="phone" placeholder="WhatsApp Number" maxlength="10" oninput="onlyNumber(this)" required>
+<input type="text" name="course_amount" placeholder="Enter Amount"
+       maxlength="6" oninput="onlyNumber(this)" required>
 
-<button type="submit" name="pay_now">Submit Payment</button>
+<button type="submit">Pay & Send WhatsApp</button>
 
 </form>
-</div>
 
+</div>
 </div>
 
 </body>
