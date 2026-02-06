@@ -1,54 +1,71 @@
 <?php
+session_start();
 include "../db.php";
 
-$success = false;
+$error = "";
 
-$courses = mysqli_query($conn,"SELECT * FROM courses");
+// Fetch courses
+$courses = mysqli_query($conn, "SELECT * FROM courses");
 
-if(isset($_POST['register'])){
-    $name=$_POST['name'];
-    $email=$_POST['email'];
-    $mobile=$_POST['mobile'];
-    $address=$_POST['address'];
-    $course_id=$_POST['course_id'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $c = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * FROM courses WHERE id=$course_id"));
+    $name   = trim($_POST['name']);
+    $email  = trim($_POST['email']);
+    $mobile = trim($_POST['mobile']);
+    $course = $_POST['course_id'];
 
-    mysqli_query($conn,"INSERT INTO registrations 
-        (student_name,email,mobile,address,course_id,course_title,amount_paid)
-        VALUES ('$name','$email','$mobile','$address','$course_id','".$c['title']."','".$c['amount']."')");
+    if (empty($name) || empty($email) || empty($mobile) || empty($course)) {
+        $error = "All fields are required!";
+    }
+    elseif (!preg_match("/^[0-9]{10}$/", $mobile)) {
+        $error = "Mobile number must be 10 digits!";
+    }
+    else {
+        // Save session
+        $_SESSION['student_name']   = $name;
+        $_SESSION['student_email']  = $email;
+        $_SESSION['student_mobile'] = $mobile;
+        $_SESSION['course_id']      = $course;
 
-    $success = true;
+        // Check if student exists
+        $check = mysqli_query($conn,
+            "SELECT id FROM student_enrollment WHERE contact='$mobile'"
+        );
+
+        if (mysqli_num_rows($check) > 0) {
+            header("Location: payment.php");
+            exit;
+        } else {
+            header("Location: student_enrollment.php");
+            exit;
+        }
+    }
 }
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Student Registration</title>
+<title>Student Details</title>
 <style>
-body{font-family:Arial;background:#f4f6f8;padding:20px}
-.box{background:white;padding:20px;border-radius:10px;max-width:500px;margin:auto}
-input,select{width:100%;padding:10px;margin:8px 0}
-button{padding:12px;width:100%;background:#16a34a;color:white;border:none;border-radius:6px}
+body{background:#dde3ea;font-family:Arial}
+.box{width:400px;margin:60px auto;background:#fff;padding:25px;border-radius:12px}
+input,select{width:100%;padding:10px;margin:8px 0;background:#f2f2f2;border:none;border-radius:6px}
+button{width:100%;padding:12px;background:#16a34a;color:white;border:none;border-radius:8px}
+.error{color:red;text-align:center}
 </style>
 </head>
 <body>
 
-<a href="../index.php">⬅ Back</a>
-
 <div class="box">
-<h2>Student Registration</h2>
+<h2>Proceed to Payment</h2>
 
-<?php if($success): ?>
-<p style="color:green">Registration successful!</p>
-<?php endif; ?>
+<?php if($error){ ?><p class="error"><?= $error ?></p><?php } ?>
 
-<form method="post">
-<input name="name" placeholder="Name" required>
-<input name="email" type="email" placeholder="Email" required>
-<input name="mobile" placeholder="Mobile" required>
-<input name="address" placeholder="Address" required>
+<form method="POST">
+<input type="text" name="name" placeholder="Student Name" required>
+<input type="email" name="email" placeholder="Email" required>
+<input type="text" name="mobile" maxlength="10" placeholder="Mobile Number" required>
 
 <select name="course_id" required>
 <option value="">Select Course</option>
@@ -57,7 +74,7 @@ button{padding:12px;width:100%;background:#16a34a;color:white;border:none;border
 <?php } ?>
 </select>
 
-<button name="register">Register</button>
+<button>Proceed</button>
 </form>
 </div>
 
