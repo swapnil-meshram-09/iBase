@@ -24,89 +24,127 @@ $students = mysqli_query($conn,"SELECT * FROM registrations ORDER BY id DESC");
 <head>
 <title>Admin</title>
 <style>
-body{
-    font-family:Arial;
-    background:#f1f5f9;
-    padding:12px;
-    font-size:14px;
-    width: 70%;
-    margin-left: 200px;
+body {
+    font-family: Arial, sans-serif;
+    background: #dde3ea;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    display: inline-block;
+    margin: 12px 0;
+    margin-left: 90%;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+a:hover { text-decoration: underline; }
+
+/* Container */
+.card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    max-width: 500px;
+    margin: 20px auto;
 }
 
 /* Tabs */
-.tabs{
-    display:flex;
-    gap:8px;
-    margin-bottom:14px;
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin-left: 31%;
+    margin-bottom: 20px;
+    justify-content: center;
+    width: 38%;
 }
-.tab{
-    flex:1;
-    padding:8px;
-    border-radius:8px;
-    border:none;
-    background:#e5e7eb;
-    cursor:pointer;
-    font-size:13px;
+.tab {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #f2f2f2;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+    transition: all 0.2s;
 }
-.tab.active{
-    background:#2563eb;
-    color:white;
-    font-weight:600;
+.tab.active {
+    background: black;
+    color: white;
+    font-weight: 600;
+}
+.tab:hover:not(.active) {
+    background: #e0e7ff;
 }
 
-/* Card */
-.card{
-    background:#fff;
-    border-radius:10px;
-    padding:16px;
-    box-shadow:0 6px 14px rgba(0,0,0,.08);
-    width: 100%;
-}
-
-h2{
-    margin:0 0 10px;
-    font-size:16px;
+/* Headings */
+h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 18px;
+    color: #111827;
 }
 
 /* Form */
-label{
-    font-size:12px;
+label {
+    display: block;
+    font-weight: bold;
+    font-size: 13px;
 }
-input, textarea{
-    width:100%;
-    padding:8px;
-    margin:4px 0 10px;
-    border-radius:6px;
-    border:1px solid #ccc;
-    font-size:13px;
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #f2f2f2;
+    font-size: 14px;
+    box-sizing: border-box;
 }
-textarea{
-    height:60px;
+textarea {
+    height: 80px;
+    resize: none;
 }
-button.save{
-    background:#2563eb;
-    color:white;
-    padding:8px;
-    width:100%;
-    border:none;
-    border-radius:8px;
-    font-size:14px;
+button.save {
+    width: 100%;
+    padding: 12px;
+    background: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+button.save:hover {
+    background: #12833b;
 }
 
 /* Table */
-table{
-    width:100%;
-    border-collapse:collapse;
-    font-size:13px;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-top: 10px;
 }
-th,td{
-    padding:8px;
-    border-bottom:1px solid #eee;
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
 }
-th{
-    background:#f9fafb;
+th {
+    background: #f2f2f2;
+    font-weight: 600;
+}
+tr:hover {
+    background: #f9fafb;
 }
 </style>
+
 </head>
 <body>
 
@@ -139,9 +177,9 @@ th{
 <input name="duration" required>
 
 <label>Amount</label>
-<input type="number" name="amount" required>
+<input type="text" name="amount" required>
 
-<button class="save" name="create_course">Save</button>
+<button class="save" name="create_course">Create Course</button>
 </form>
 <?php endif; ?>
 

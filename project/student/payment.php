@@ -37,15 +37,43 @@ if (isset($_POST['pay_now'])) {
 <head>
 <title>Payment</title>
 <style>
-body{background:#dde3ea;font-family:Arial}
-.box{width:420px;margin:60px auto;background:#fff;padding:25px;border-radius:15px;box-shadow:0 0 10px #aaa}
-p{margin:8px 0}
-button{width:100%;padding:12px;background:#16a34a;border:none;color:white;border-radius:10px;font-size:16px;cursor:pointer}
-button:hover{background:#12833b}
+body{
+    background:#dde3ea;font-family:Arial
+}
+.box{
+    width:420px;
+    margin:60px auto;
+    background:#fff;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 0 10px #aaa;
+    margin-bottom:10px;
+}
+p{
+  margin:8px 0;
+  margin-top: 30px;
+  margin-bottom:20px;
+
+}
+button{
+    width:100%;padding:12px;background:#16a34a;border:none;color:white;border-radius:10px;font-size:16px;cursor:pointer; margin-top:10px;
+}
+button:hover{
+    background:#12833b
+}
+a {
+    display: inline-block;
+    margin: 12px 0;
+    margin-left: 90%;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
-
+<a href="../index.php">⬅ Back</a>
 <div class="box">
 <h2>Payment Details</h2>
 <p><b>Name:</b> <?= htmlspecialchars($student_name) ?></p>
