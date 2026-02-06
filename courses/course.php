@@ -168,17 +168,7 @@ button:hover{
 
 <div class="msg"><?php echo $msg; ?></div>
 
-<form method="POST">
 
-<input type="text" name="field1" placeholder="" required>
-<input type="text" name="field2" placeholder="" required>
-<input type="text" name="field3" placeholder="">
-<input type="text" name="field4" placeholder="">
-<input type="text" name="field5" placeholder="">
-
-<button type="submit" name="save">Save Data</button>
-
-</form>
 
 </div>
 
