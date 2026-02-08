@@ -16,13 +16,14 @@ if(isset($_POST['create_course'])){
     )");
 }
 
-$courses = mysqli_query($conn,"SELECT * FROM courses ORDER BY id DESC");
+$courses  = mysqli_query($conn,"SELECT * FROM courses ORDER BY id DESC");
 $students = mysqli_query($conn,"SELECT * FROM registrations ORDER BY id DESC");
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Admin</title>
+
 <style>
 body {
     font-family: Arial, sans-serif;
@@ -30,16 +31,6 @@ body {
     padding: 0;
     margin: 0;
 }
-
-a {
-    display: inline-block;
-    margin: 12px 0;
-    margin-left: 90%;
-    color: black;
-    text-decoration: none;
-    font-weight: bold;
-}
-a:hover { text-decoration: underline; }
 
 /* Container */
 .card {
@@ -57,7 +48,6 @@ h2 {
     margin-bottom: 15px;
     text-align: center;
     font-size: 18px;
-    color: #111827;
 }
 
 /* Form */
@@ -73,13 +63,12 @@ input, textarea, select {
     border: none;
     border-radius: 8px;
     background: #f2f2f2;
-    font-size: 14px;
-    box-sizing: border-box;
 }
 textarea {
     height: 80px;
     resize: none;
 }
+
 button.save {
     width: 100%;
     padding: 12px;
@@ -89,7 +78,6 @@ button.save {
     border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
-    transition: background 0.2s;
 }
 button.save:hover {
     background: #12833b;
@@ -104,55 +92,79 @@ table {
 }
 th, td {
     padding: 12px;
-    text-align: left;
     border-bottom: 1px solid #eee;
+    text-align: left;
 }
 th {
     background: #f2f2f2;
-    font-weight: 600;
 }
-tr:hover {
-    background: #f9fafb;
+
+/* ===== ONLY TAB CSS (AS REQUESTED) ===== */
+.tabs {
+    margin: 30px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.tab {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: none;
+    background: #f2f2f2;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.tab:hover {
+    background: black;
+    color: white;
 }
 </style>
-
 </head>
+
 <body>
 
-<a href="../index.php">⬅ Back</a>
+<!-- Tabs -->
+<div class="tabs">
+    <a href="?tab=create"><button class="tab">Create Program</button></a>
+    <a href="?tab=view"><button class="tab">Courses</button></a>
+    <a href="?tab=students"><button class="tab">Students</button></a>
+</div>
 
 <div class="card">
 
 <?php if($tab=='create'): ?>
 <h2>Create Program</h2>
 <form method="post">
-<label>Title</label>
-<input name="title" required>
+    <label>Title</label>
+    <input name="title" required>
 
-<label>Description</label>
-<textarea name="description" required></textarea>
+    <label>Description</label>
+    <textarea name="description" required></textarea>
 
-<label>Start</label>
-<input type="date" name="start_date" required>
+    <label>Start</label>
+    <input type="date" name="start_date" required>
 
-<label>End</label>
-<input type="date" name="end_date" required>
+    <label>End</label>
+    <input type="date" name="end_date" required>
 
-<label>Duration</label>
-<select name="duration" required>
-    <option value="">Select</option>
-    <option value="1 month">1 month</option>
-    <option value="3 months">3 months</option>
-    <option value="5 months">5 months</option>
-</select>
+    <label>Duration</label>
+    <select name="duration" required>
+        <option value="">Select</option>
+        <option value="1 month">1 month</option>
+        <option value="3 months">3 months</option>
+        <option value="5 months">5 months</option>
+    </select>
 
+    <label>Amount</label>
+    <input type="text" name="amount" required>
 
-<label>Amount</label>
-<input type="text" name="amount" required>
-
-<button class="save" name="create_course">Create Course</button>
+    <button class="save" name="create_course">Create Course</button>
 </form>
 <?php endif; ?>
+
 
 <?php if($tab=='view'): ?>
 <h2>Courses</h2>
@@ -160,13 +172,14 @@ tr:hover {
 <tr><th>Title</th><th>Duration</th><th>Amount</th></tr>
 <?php while($c=mysqli_fetch_assoc($courses)): ?>
 <tr>
-<td><?= $c['title'] ?></td>
-<td><?= $c['duration'] ?></td>
-<td>₹<?= $c['amount'] ?></td>
+    <td><?= $c['title'] ?></td>
+    <td><?= $c['duration'] ?></td>
+    <td>₹<?= $c['amount'] ?></td>
 </tr>
 <?php endwhile; ?>
 </table>
 <?php endif; ?>
+
 
 <?php if($tab=='students'): ?>
 <h2>Students</h2>
@@ -174,14 +187,15 @@ tr:hover {
 <tr><th>Name</th><th>Course</th><th>Mobile</th></tr>
 <?php while($s=mysqli_fetch_assoc($students)): ?>
 <tr>
-<td><?= $s['student_name'] ?></td>
-<td><?= $s['course_title'] ?></td>
-<td><?= $s['mobile'] ?></td>
+    <td><?= $s['student_name'] ?></td>
+    <td><?= $s['course_title'] ?></td>
+    <td><?= $s['mobile'] ?></td>
 </tr>
 <?php endwhile; ?>
 </table>
 <?php endif; ?>
 
 </div>
+
 </body>
 </html>

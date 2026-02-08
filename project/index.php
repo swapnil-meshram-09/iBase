@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
 <title>Select Panel</title>
@@ -97,4 +97,4 @@ body{
 </div>
 
 </body>
-</html>
+</html> -->
