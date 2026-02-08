@@ -58,8 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['student_mobile'] = $contact;
         $_SESSION['course_id']      = $course_id;
 
-        // Redirect to login page after registration
-        header("Location: login.php");
+        // Redirect to enroll page after registration
+        header("Location: setPassword.php");
         exit;
     }
 }
@@ -132,7 +132,7 @@ body {
 h2 {
     text-align: center;
     margin-bottom: 20px;
-    font-size: 23px;
+    font-size: 24px;
 }
 
 label {
@@ -170,7 +170,7 @@ button {
 }
 
 button:hover {
-    background: #0056cc;
+    background: green;
 }
 
 .error {
@@ -197,13 +197,13 @@ function onlyChar(input) {
     <a class="tab <?= $currentTab=='login.php' ? 'active' : '' ?>" href="login.php">Login</a>
     <a class="tab <?= $currentTab=='registration.php' ? 'active' : '' ?>" href="registration.php">Registration</a>
     <a class="tab <?= $currentTab=='enroll.php' ? 'active' : '' ?>" href="enroll.php">Enroll</a>
-    <a class="tab <?= $currentTab=='.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a>
+    <a class="tab <?= $currentTab=='dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a>
 </div>
 
 <!-- Registration Form -->
 <form method="POST" id="formBox">
 
-<h2>Student Registration Form</h2>
+<h2>Student Registration</h2>
 
 <?php if ($error) { ?>
     <p class="error"><?= $error ?></p>
@@ -245,7 +245,7 @@ function onlyChar(input) {
 <label>HOD Contact Number</label>
 <input type="text" name="hod_contact" oninput="onlyNumber(this)" maxlength="10" required>
 
-<button type="submit">Submit & Continue</button>
+<button type="submit">Register</button>
 
 </form>
 

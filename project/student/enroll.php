@@ -1,7 +1,11 @@
 <?php
 session_start();
 include "../db.php";
-
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    unset($_SESSION['student_name']);
+    unset($_SESSION['student_mobile']);
+    unset($_SESSION['course_id']);
+}
 $error = "";
 
 // Fetch courses
@@ -69,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($student_id) {
             header("Location: payment.php");
         } else {
-            header("Location: student_enrollment.php");
+            header("Location: enroll.php");
         }
         exit;
     }
@@ -83,7 +87,6 @@ $currentTab = basename($_SERVER['PHP_SELF']); // 'login.php'
 <!DOCTYPE html>
 <html>
 <head>
-<title>Student Login</title>
 <style>
 body {
     font-family: Arial, sans-serif;
@@ -204,14 +207,14 @@ function onlyChar(input) {
 <div class="tabs">
     <a class="tab <?= $currentTab=='login.php' ? 'active' : '' ?>" href="login.php">Login</a>
     <a class="tab <?= $currentTab=='registration.php' ? 'active' : '' ?>" href="registration.php">Registration</a>
-    <a class="tab <?= isset($_SESSION['student_name']) ? '' : 'disabled' ?>" href="student_enrollment.php">Enroll</a>
-    <a class="tab <?= isset($_SESSION['student_name']) ? '' : 'disabled' ?>" href="dashboard.php">Dashboard</a>
+    <a class="tab <?= $currentTab=='enroll.php' ? 'active' : '' ?>" href="enroll.php">Enroll</a>
+    <a class="tab <?= $currentTab=='dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a>
 </div>
 
 <!-- Login Form -->
 <form method="POST" id="formBox">
 
-<h2>Course Selection</h2>
+<h2>Student Course Enrollment</h2>
 
 <?php if($error){ ?>
     <p class="error"><?= $error ?></p>

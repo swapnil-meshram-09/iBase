@@ -1,0 +1,8 @@
+setPassword.php
+
+CREATE TABLE credentials (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    contact VARCHAR(10) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+    -- , email VARCHAR(100) UNIQUE  -- uncomment later to store email
+);
