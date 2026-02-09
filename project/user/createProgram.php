@@ -26,7 +26,7 @@ $students = mysqli_query($conn,"SELECT * FROM registrations ORDER BY id DESC");
 
 <style>
 body {
-    font-family: Arial, sans-serif;
+    /* font-family: Arial, sans-serif; */
     background: #dde3ea;
     padding: 0;
     margin: 0;

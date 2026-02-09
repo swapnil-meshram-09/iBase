@@ -7,7 +7,7 @@ session_start();
 <head>
 <style>
 body {
-    font-family: Arial, sans-serif;
+    /* font-family: Arial, sans-serif; */
     background: #dde3ea;
     margin: 0;
 }

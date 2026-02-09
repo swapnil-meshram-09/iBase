@@ -23,7 +23,8 @@ $course = mysqli_fetch_assoc(
 <title>Payment</title>
 <style>
 body{
-    background:#dde3ea;font-family:Arial;
+    background:#dde3ea;
+    /* font-family:Arial; */
     margin:0px;
 }
 h2{

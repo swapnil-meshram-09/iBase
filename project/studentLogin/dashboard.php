@@ -76,7 +76,7 @@ $currentTab = basename($_SERVER['PHP_SELF']); // 'registration.php'
 
 <style>
 body {
-    font-family: Arial, sans-serif;
+    /* font-family: Arial, sans-serif; */
     background: #dde3ea;
     margin: 0px;
 }

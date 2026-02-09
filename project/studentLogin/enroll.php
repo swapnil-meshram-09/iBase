@@ -89,7 +89,7 @@ $currentTab = basename($_SERVER['PHP_SELF']); // 'login.php'
 <head>
 <style>
 body {
-    font-family: Arial, sans-serif;
+    /* font-family: Arial, sans-serif; */
     background: #dde3ea;
     margin: 0;
 }
@@ -170,7 +170,7 @@ select {
 button {
     margin-top: 15px;
     padding: 12px;
-    background: #16a34a;
+    background-color: #16a34a;
     border: none;
     color: white;
     border-radius: 10px;
@@ -181,7 +181,7 @@ button {
 }
 
 button:hover {
-    background: #12833b;
+    background-color: green;
 }
 
 .error {

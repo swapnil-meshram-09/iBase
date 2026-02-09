@@ -76,7 +76,9 @@ $currentTab = basename($_SERVER['PHP_SELF']); // 'login.php'
 <head>
 <title>Student Login</title>
 <style>
-body { font-family: Arial, sans-serif; background: #dde3ea; margin: 0; }
+body { 
+    /* font-family: Arial, sans-serif; */
+     background: #dde3ea; margin: 0; }
 .tabs { margin: 30px 0; display: flex; gap: 10px; justify-content: center; font-size: 13.5px; }
 .tab { padding: 10px 18px; border-radius: 10px; background: #f2f2f2; font-weight: bold; text-decoration: none; color: black; }
 .tab:hover { background: black; color: white; }

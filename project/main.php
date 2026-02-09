@@ -7,7 +7,7 @@ session_start();
 <head>
 <style>
 body {
-    font-family: Arial, sans-serif;
+    /* font-family: Arial, sans-serif; */
     background: #dde3ea;
     margin: 0;
 }
@@ -43,7 +43,7 @@ body {
     <button class="tab" onclick="location.href='main.php'">Home</button>
 
     <!-- Student -->
-    <button class="tab" onclick="location.href='student/login.php'">
+    <button class="tab" onclick="location.href='studentLogin/login.php'">
         Student Login
     </button>
 
@@ -57,11 +57,11 @@ body {
         Add Student
     </button>
 
-    <button class="tab" onclick="location.href='admin/add_faculty.php'">
+    <button class="tab" onclick="location.href='admin/.php'">
         Add User
     </button>
 
-    <button class="tab" onclick="location.href='admin/add_student.php'">
+    <button class="tab" onclick="location.href='addfaculty/addFaculty.php'">
         Add Faculty
     </button>
 
