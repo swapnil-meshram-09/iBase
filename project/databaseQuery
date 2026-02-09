@@ -24,3 +24,20 @@ CREATE TABLE addFaculty (
     college_address TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+userAddFaculty.php
+
+CREATE TABLE userAddFaculty (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    faculty_name VARCHAR(100) NOT NULL,
+    designation VARCHAR(50) NOT NULL,
+    department VARCHAR(50) NOT NULL,
+    contact VARCHAR(10) NOT NULL UNIQUE,
+    state VARCHAR(50) NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    region VARCHAR(50) NOT NULL,
+    college_name VARCHAR(150) NOT NULL,
+    college_address TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

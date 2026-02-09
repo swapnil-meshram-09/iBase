@@ -81,6 +81,7 @@ body {
 }
 
 /* Tabs */
+/* 
 .tabs {
     margin: 30px 0;
     display: flex;
@@ -105,27 +106,26 @@ body {
 }
 
 /* Active tab */
-.tab.active {
+/* .tab.active {
     background: black;
     color: white;
-}
+} */
 
 /* Disabled tab if not logged in */
-.tab.disabled {
+/* .tab.disabled {
     pointer-events: none;
     opacity: 0.5;
-}
+}  */
 
 /* Form */
 #formBox {
-    width: 450px;
-    margin: auto;
-    background: white;
-    padding: 25px;
-    padding-top: 0.5px;
-    border-radius: 15px;
-    box-shadow: 0px 0px 10px #aaa;
-    font-size: 15px;
+    width:420px;
+    margin:auto;
+    margin-top: 50px;
+    background:#fff;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 0 10px #aaa;
 }
 
 h2 {
@@ -169,7 +169,7 @@ button {
 }
 
 button:hover {
-    background: green;
+    background-color: green;
 }
 
 .error {
@@ -184,12 +184,12 @@ button:hover {
 <body>
 
 <!-- Tabs -->
-<div class="tabs">
+<!-- <div class="tabs">
     <a class="tab <?= $currentTab=='login.php' ? 'active' : '' ?>" href="login.php">Login</a>
     <a class="tab <?= $currentTab=='registration.php' ? 'active' : '' ?>" href="registration.php">Registration</a>
     <a class="tab <?= $currentTab=='enroll.php' ? 'active' : '' ?>" href="enroll.php">Enroll</a>
     <a class="tab <?= $currentTab=='dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a>
-</div>
+</div> -->
 
 <!-- Registration Form -->
 <form method="POST" id="formBox">

@@ -69,7 +69,7 @@ body {
         View Student
     </button>
 
-    <button class="tab" onclick="location.href='admin/view_student.php'">
+    <button class="tab" onclick="location.href='viewFaculty/viewFaculty.php'">
         View Faculty
     </button>
 </div>

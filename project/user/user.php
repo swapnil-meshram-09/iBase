@@ -54,11 +54,11 @@ body {
         View Student
     </button>
 
-    <button class="tab" onclick="location.href='.php'">
+    <button class="tab" onclick="location.href='userAddFaculty.php'">
         Add Faculty
     </button>
 
-    <button class="tab" onclick="location.href='view_faculty.php'">
+    <button class="tab" onclick="location.href='userViewFaculty.php'">
         View Faculty
     </button>
 
