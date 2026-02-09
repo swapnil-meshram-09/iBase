@@ -42,19 +42,19 @@ body {
 <div class="tabs">
 
     <!-- User -->
-    <button class="tab" onclick="location.href='create_program.php'">
+    <button class="tab" onclick="location.href='createProgram.php'">
         Create Program
     </button>
 
-    <button class="tab" onclick="location.href='view_student.php'">
-        View Student
-    </button>
-
-    <button class="tab" onclick="location.href='add_student.php'">
+    <button class="tab" onclick="location.href='.php'">
         Add Student
     </button>
 
-    <button class="tab" onclick="location.href='add_faculty.php'">
+    <button class="tab" onclick="location.href='.php'">
+        View Student
+    </button>
+
+    <button class="tab" onclick="location.href='.php'">
         Add Faculty
     </button>
 
