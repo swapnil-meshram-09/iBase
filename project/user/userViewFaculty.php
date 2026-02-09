@@ -1,6 +1,13 @@
 <?php
 session_start();
 include "../db.php";
+// Fetch faculty data
+$facultyResult = mysqli_query(
+    $conn,
+    "SELECT faculty_name, designation, department, contact, state, city, region, college_name, college_address 
+     FROM userAddFaculty 
+     ORDER BY id DESC"
+);
 
 // $error = "";
 
@@ -118,59 +125,57 @@ body {
 }  */
 
 /* Form */
-#formBox {
+/* #formBox {
     width:420px;
     margin:auto;
     margin-top: 50px;
-    background:#fff;
     padding:25px;
+    background:#fff;
     border-radius:15px;
     box-shadow:0 0 10px #aaa;
+} */
+
+.tableBox {
+    width: 80%;
+    margin: auto;
+    margin-top: 40px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px #aaa;
+    overflow-x: auto;
 }
 
-h2 {
+h2{
+    text-align:center;
+    margin-top: 0px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
     text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
 }
 
-label {
-    font-weight: bold;
-    margin-top: 10px;
-    display: block;
-    margin-left: 10px;
+th {
+    background: #000;
+    color: #fff;
+    margin-top:0px;
 }
 
-input, select {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 6px;
+tr:nth-child(even) {
     background: #f2f2f2;
-    width: 90%;
-    margin-top: 10px;
-    margin-left: 10px;
 }
 
-select {
-    width: 95%;
-}
 
-button {
-    margin-top: 15px;
-    padding: 12px;
-    background: #16a34a;
-    border: none;
-    color: white;
-    border-radius: 10px;
-    width: 95%;
-    font-size: 16px;
-    cursor: pointer;
-    margin-left: 10px;
-}
 
-button:hover {
-    background-color: green;
-}
 
 .error {
     text-align: center;
@@ -192,11 +197,47 @@ button:hover {
 </div> -->
 
 <!-- Registration Form -->
-<form method="POST" id="formBox">
+<div class="tableBox">
+    <h2>Faculty List</h2>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Designation</th>
+            <th>Department</th>
+            <th>Contact</th>
+            <th>State</th>
+            <th>City</th>
+            <th>Region</th>
+            <th>College</th>
+            <th>Address</th>
+        </tr>
+
+        <?php if (mysqli_num_rows($facultyResult) > 0) { ?>
+            <?php while ($row = mysqli_fetch_assoc($facultyResult)) { ?>
+                <tr>
+                    <td><?= $row['faculty_name'] ?></td>
+                    <td><?= $row['designation'] ?></td>
+                    <td><?= $row['department'] ?></td>
+                    <td><?= $row['contact'] ?></td>
+                    <td><?= $row['state'] ?></td>
+                    <td><?= $row['city'] ?></td>
+                    <td><?= $row['region'] ?></td>
+                    <td><?= $row['college_name'] ?></td>
+                    <td><?= $row['college_address'] ?></td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="9">No faculty records found</td>
+            </tr>
+        <?php } ?>
+    </table>
+</div>
 
 
 
-</form>
+
 
 </body>
 </html>
