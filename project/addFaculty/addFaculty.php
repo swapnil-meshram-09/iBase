@@ -204,7 +204,7 @@ function onlyChar(input) {
 
 <form method="POST" id="formBox">
 
-<h2>Add Faculty</h2>
+<h2>Faculty Details</h2>
 
 <?php if ($error) { ?><p class="error"><?= $error ?></p><?php } ?>
 <?php if ($success) { ?><p class="success"><?= $success ?></p><?php } ?>
