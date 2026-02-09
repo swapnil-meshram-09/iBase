@@ -50,7 +50,7 @@ body {
         Add Student
     </button>
 
-    <button class="tab" onclick="location.href='.php'">
+    <button class="tab" onclick="location.href='viewStudent.php'">
         View Student
     </button>
 

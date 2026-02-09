@@ -9,69 +9,7 @@ $facultyResult = mysqli_query(
      ORDER BY id DESC"
 );
 
-// $error = "";
 
-// $name       = $_SESSION['student_name'] ?? "";
-// $contact    = $_SESSION['student_mobile'] ?? "";
-// $course_id  = $_SESSION['course_id'] ?? "";
-
-// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-//     $name        = trim($_POST['name']);
-//     $contact     = trim($_POST['contact']);
-//     $college     = trim($_POST['college']);
-//     $department  = $_POST['department'];
-//     $year        = $_POST['year'];
-//     $hod_name    = trim($_POST['hod_name']);
-//     $hod_contact = trim($_POST['hod_contact']);
-
-//     if (
-//         empty($name) || empty($contact) || empty($college) ||
-//         empty($department) || empty($year) ||
-//         empty($hod_name) || empty($hod_contact)
-//     ) {
-//         $error = "All fields are required!";
-//     }
-//     elseif (!preg_match("/^[A-Za-z ]+$/", $name)) {
-//         $error = "Student name must contain only letters!";
-//     }
-//     elseif (!preg_match("/^[0-9]{10}$/", $contact)) {
-//         $error = "Student contact must be exactly 10 digits!";
-//     }
-//     elseif (!preg_match("/^[A-Za-z ]+$/", $hod_name)) {
-//         $error = "HOD name must contain only letters!";
-//     }
-//     elseif (!preg_match("/^[0-9]{10}$/", $hod_contact)) {
-//         $error = "HOD contact must be exactly 10 digits!";
-//     }
-//     else {
-
-//         $check = mysqli_query(
-//             $conn,
-//             "SELECT id FROM student_enrollment WHERE contact='$contact'"
-//         );
-
-//         if (mysqli_num_rows($check) == 0) {
-//             mysqli_query(
-//                 $conn,
-//                 "INSERT INTO student_enrollment
-//                 (name, contact, college_name, department, year, hod_name, hod_contact)
-//                 VALUES
-//                 ('$name','$contact','$college','$department','$year','$hod_name','$hod_contact')"
-//             );
-//         }
-
-//         $_SESSION['student_name']   = $name;
-//         $_SESSION['student_mobile'] = $contact;
-//         $_SESSION['course_id']      = $course_id;
-
-//         // Redirect to enroll page after registration
-//         // header("Location: enroll.php");
-//         exit;
-    // }
-// }
-
-// Determine current page for active tab
 $currentTab = basename($_SERVER['PHP_SELF']); // 'registration.php'
 
 ?>
