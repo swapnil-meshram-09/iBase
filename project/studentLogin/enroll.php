@@ -71,7 +71,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Redirect
         if ($student_id) {
-            header("Location: payment.php");
+            // header("Location: payment.php");
+            header("Location: dashboard.php");
         } else {
             header("Location: enroll.php");
         }
@@ -143,7 +144,7 @@ body {
 h2 {
     text-align: center;
     font-size: 23px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 label {

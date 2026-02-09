@@ -1,70 +1,34 @@
 <?php
 session_start();
 include "../db.php";
+// Fetch enrolled student data using session mobile
+$studentData = null;
+$courseData  = null;
 
-// $error = "";
+if (!empty($_SESSION['student_mobile'])) {
 
-// $name       = $_SESSION['student_name'] ?? "";
-// $contact    = $_SESSION['student_mobile'] ?? "";
-// $course_id  = $_SESSION['course_id'] ?? "";
+    $mobile = $_SESSION['student_mobile'];
 
-// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $studentQ = mysqli_query(
+        $conn,
+        "SELECT * FROM student_enrollment WHERE contact='$mobile'"
+    );
 
-//     $name        = trim($_POST['name']);
-//     $contact     = trim($_POST['contact']);
-//     $college     = trim($_POST['college']);
-//     $department  = $_POST['department'];
-//     $year        = $_POST['year'];
-//     $hod_name    = trim($_POST['hod_name']);
-//     $hod_contact = trim($_POST['hod_contact']);
+    if (mysqli_num_rows($studentQ) > 0) {
+        $studentData = mysqli_fetch_assoc($studentQ);
+    }
 
-//     if (
-//         empty($name) || empty($contact) || empty($college) ||
-//         empty($department) || empty($year) ||
-//         empty($hod_name) || empty($hod_contact)
-//     ) {
-//         $error = "All fields are required!";
-//     }
-//     elseif (!preg_match("/^[A-Za-z ]+$/", $name)) {
-//         $error = "Student name must contain only letters!";
-//     }
-//     elseif (!preg_match("/^[0-9]{10}$/", $contact)) {
-//         $error = "Student contact must be exactly 10 digits!";
-//     }
-//     elseif (!preg_match("/^[A-Za-z ]+$/", $hod_name)) {
-//         $error = "HOD name must contain only letters!";
-//     }
-//     elseif (!preg_match("/^[0-9]{10}$/", $hod_contact)) {
-//         $error = "HOD contact must be exactly 10 digits!";
-//     }
-//     else {
+    if (!empty($_SESSION['course_id'])) {
+        $courseQ = mysqli_query(
+            $conn,
+            "SELECT * FROM courses WHERE id='".$_SESSION['course_id']."'"
+        );
+        $courseData = mysqli_fetch_assoc($courseQ);
+    }
+}
 
-//         $check = mysqli_query(
-//             $conn,
-//             "SELECT id FROM student_enrollment WHERE contact='$contact'"
-//         );
 
-//         if (mysqli_num_rows($check) == 0) {
-//             mysqli_query(
-//                 $conn,
-//                 "INSERT INTO student_enrollment
-//                 (name, contact, college_name, department, year, hod_name, hod_contact)
-//                 VALUES
-//                 ('$name','$contact','$college','$department','$year','$hod_name','$hod_contact')"
-//             );
-//         }
 
-//         $_SESSION['student_name']   = $name;
-//         $_SESSION['student_mobile'] = $contact;
-//         $_SESSION['course_id']      = $course_id;
-
-//         // Redirect to enroll page after registration
-//         // header("Location: enroll.php");
-//         exit;
-    // }
-// }
-
-// Determine current page for active tab
 $currentTab = basename($_SERVER['PHP_SELF']); // 'registration.php'
 
 ?>
@@ -191,12 +155,32 @@ button:hover {
     <a class="tab <?= $currentTab=='dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a>
 </div>
 
-<!-- Registration Form -->
-<form method="POST" id="formBox">
+<!-- Dashboard Box -->
+<div id="formBox">
 
+<h2>Student Dashboard</h2>
 
+<?php if ($studentData && $courseData) { ?>
 
-</form>
+    <label>Student Name</label>
+    <input type="text" value="<?= htmlspecialchars($studentData['name']) ?>" disabled>
+
+    <label>Mobile Number</label>
+    <input type="text" value="<?= htmlspecialchars($studentData['contact']) ?>" disabled>
+
+    <label>Course Name</label>
+    <input type="text" value="<?= htmlspecialchars($courseData['title']) ?>" disabled>
+
+    <label>Course Fee</label>
+    <input type="text" value="₹<?= htmlspecialchars($courseData['amount']) ?>" disabled>
+
+<?php } else { ?>
+
+    <p class="error">No enrollment data found. Please enroll first.</p>
+
+<?php } ?>
+
+</div>
 
 </body>
 </html>
