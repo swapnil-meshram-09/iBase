@@ -176,7 +176,6 @@ tr:nth-child(even) {
 
 
 
-
 .error {
     text-align: center;
     color: red;

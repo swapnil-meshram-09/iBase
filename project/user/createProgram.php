@@ -87,15 +87,23 @@ button.save:hover {
 table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
     font-size: 14px;
-    margin-top: 10px;
 }
+
 th, td {
-    padding: 12px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
 }
+
 th {
+    background: #000;
+    color: #fff;
+    margin-top:0px;
+}
+
+tr:nth-child(even) {
     background: #f2f2f2;
 }
 

@@ -113,7 +113,7 @@ body {
 
     width:420px;
     margin:auto;
-    margin-top: 50px;
+    margin-top: 40px;
     background:#fff;
     padding:25px;
     border-radius:15px;
