@@ -5,27 +5,46 @@ include "../db.php";
 $studentData = null;
 $courseData  = null;
 
-if (!empty($_SESSION['student_mobile'])) {
+if (isset($_SESSION['student_mobile'])) {
 
     $mobile = $_SESSION['student_mobile'];
 
-    $studentQ = mysqli_query(
+    // Get student_id using mobile
+    $stuQ = mysqli_query(
         $conn,
-        "SELECT * FROM student_enrollment WHERE contact='$mobile'"
+        "SELECT id FROM student_enrollment WHERE contact='$mobile' LIMIT 1"
     );
 
-    if (mysqli_num_rows($studentQ) > 0) {
-        $studentData = mysqli_fetch_assoc($studentQ);
-    }
+    if (mysqli_num_rows($stuQ) > 0) {
 
-    if (!empty($_SESSION['course_id'])) {
-        $courseQ = mysqli_query(
+        $stu = mysqli_fetch_assoc($stuQ);
+        $student_id = $stu['id'];
+
+        // Get course selection data
+        $selQ = mysqli_query(
             $conn,
-            "SELECT * FROM courses WHERE id='".$_SESSION['course_id']."'"
+            "SELECT * FROM course_selection WHERE student_id='$student_id' LIMIT 1"
         );
-        $courseData = mysqli_fetch_assoc($courseQ);
+
+        if (mysqli_num_rows($selQ) > 0) {
+
+            $studentData = mysqli_fetch_assoc($selQ);
+
+            // Get course fee
+            $feeQ = mysqli_query(
+                $conn,
+                "SELECT amount FROM courses WHERE id='".$studentData['course_id']."' LIMIT 1"
+            );
+
+            if (mysqli_num_rows($feeQ) > 0) {
+                $fee = mysqli_fetch_assoc($feeQ);
+                $courseAmount = $fee['amount'];
+            }
+        }
     }
 }
+
+
 
 
 
@@ -162,18 +181,19 @@ button:hover {
 
 <?php if ($studentData && $courseData) { ?>
 
-    <label>Student Name</label>
-    <input type="text" value="<?= htmlspecialchars($studentData['name']) ?>" disabled>
+    <!-- <label>Student Name</label>
+    <input type="text" value="<?= htmlspecialchars($studentData['name']) ?>" disabled> -->
 
-    <label>Mobile Number</label>
-    <input type="text" value="<?= htmlspecialchars($studentData['contact']) ?>" disabled>
+    <!-- <label>Mobile Number</label>
+    <input type="text" value="<?= htmlspecialchars($studentData['contact']) ?>" disabled> -->
 
-    <label>Course Name</label>
-    <input type="text" value="<?= htmlspecialchars($courseData['title']) ?>" disabled>
+    <!-- <label>Course Name</label>
+    <input type="text" value="<?= htmlspecialchars($courseData['title']) ?>" disabled> -->
 
-    <label>Course Fee</label>
-    <input type="text" value="₹<?= htmlspecialchars($courseData['amount']) ?>" disabled>
+    <!-- <label>Course Fee</label>
+    <input type="text" value="₹<?= htmlspecialchars($courseData['amount']) ?>" disabled> -->
 
+    
 <?php } else { ?>
 
     <p class="error">No enrollment data found. Please enroll first.</p>
