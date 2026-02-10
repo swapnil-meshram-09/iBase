@@ -2,28 +2,24 @@
 session_start();
 include "../db.php";
 
-$error = "";
+$error   = "";
+$success = "";
 
-
-// $name    = $_SESSION['student_name'] ?? "";
-// $contact = $_SESSION['student_mobile'] ?? "";
-// $course_id  = $_SESSION['course_id'] ?? "";
-
+/* Load old form data if exists */
 $form = $_SESSION['form_data'] ?? [];
 
 $name        = $form['name'] ?? ($_SESSION['student_name'] ?? "");
-$contact     = $form['contact'] ?? ($_SESSION['student_mobile'] ?? "");
+$contact     = $form['contact'] ?? "";
 $college     = $form['college'] ?? "";
 $department  = $form['department'] ?? "";
 $year        = $form['year'] ?? "";
 $hod_name    = $form['hod_name'] ?? "";
 $hod_contact = $form['hod_contact'] ?? "";
 
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    
+
     $_SESSION['form_data'] = $_POST;
-    // $form = $_SESSION['form_data'] ?? [];
+
     $name        = trim($_POST['name']);
     $contact     = trim($_POST['contact']);
     $college     = trim($_POST['college']);
@@ -32,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $hod_name    = trim($_POST['hod_name']);
     $hod_contact = trim($_POST['hod_contact']);
 
+    /* Validation */
     if (
         empty($name) || empty($contact) || empty($college) ||
         empty($department) || empty($year) ||
@@ -53,12 +50,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     else {
 
+        /* Check if student already exists */
         $check = mysqli_query(
             $conn,
             "SELECT id FROM student_registration WHERE contact='$contact'"
         );
 
-        if (mysqli_num_rows($check) == 0) {
+        if (mysqli_num_rows($check) > 0) {
+
+            $error = "Student already exists with this contact number!";
+
+        } else {
+
             mysqli_query(
                 $conn,
                 "INSERT INTO student_registration
@@ -66,24 +69,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 VALUES
                 ('$name','$contact','$college','$department','$year','$hod_name','$hod_contact')"
             );
+
+            $_SESSION['student_name']   = $name;
+            $_SESSION['student_mobile'] = $contact;
+
+            /* Clear temporary form data */
+           
+
+            /* Redirect to password setup */
+            header("Location: studentPassword.php");
+            // unset($_SESSION['form_data']);
+            // unset($_SESSION['student_mobile']);
+            exit;
         }
-
-        $_SESSION['student_name']   = $name;
-        $_SESSION['student_mobile'] = $contact;
-        // $_SESSION['course_id']      = $course_id;
-
-        
-
-        // Redirect to enroll page after registration
-        header("Location: setPassword.php");
-        exit;
     }
 }
 
-// Determine current page for active tab
-$currentTab = basename($_SERVER['PHP_SELF']); // 'registration.php'
-
+/* Active tab */
+$currentTab = basename($_SERVER['PHP_SELF']);
 ?>
+
 
 <!DOCTYPE html>
 <html>

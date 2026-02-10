@@ -7,56 +7,74 @@ $success = "";
 
 // Get contact from session (from registration.php)
 $contact = $_SESSION['student_mobile'] ?? '';
-// $email   = $_SESSION['student_email'] ?? ''; // optional email for future use
 
 if (!$contact) {
-    // If no contact found in session, redirect to registration
     header("Location: login.php");
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+/* Fetch email from student_registration */
+$getStudent = mysqli_query(
+    $conn,
+    "SELECT email FROM student_registration WHERE contact='$contact'"
+);
+
+if (mysqli_num_rows($getStudent) == 0) {
+    $error = "Student record not found!";
+} else {
+    $student = mysqli_fetch_assoc($getStudent);
+    $email   = $student['email'];
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && !$error) {
+
     $password = trim($_POST['password']);
     $confirm  = trim($_POST['confirm_password']);
 
     if (empty($password) || empty($confirm)) {
         $error = "All fields are required!";
     } elseif ($password !== $confirm) {
-        $error = "Passwords do not match!";
+        $error = "Passwords does not match!";
     } else {
-        // Hash the password for security
+
+        // Hash password
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // Check if contact already exists in credentials table
-        $check = mysqli_query($conn, "SELECT id FROM credentials WHERE contact='$contact'");
+        // Check if already exists in student_password table
+        $check = mysqli_query(
+            $conn,
+            "SELECT id FROM student_password WHERE contact='$contact'"
+        );
 
         if (mysqli_num_rows($check) == 0) {
-            // Insert new credential
+
+            // Insert new password record
             mysqli_query(
                 $conn,
-                "INSERT INTO credentials (contact, password /* , email */)
-                 VALUES ('$contact', '$hashedPassword')"
-                //  VALUES ('$contact', '$hashedPassword' /* , '$email' */)"
+                "INSERT INTO student_password (contact, email, password)
+                 VALUES ('$contact', '$email', '$hashedPassword')"
             );
+
         } else {
-            // Update existing credential
+
+            // Update password
             mysqli_query(
                 $conn,
-                "UPDATE credentials 
+                "UPDATE student_password
                  SET password='$hashedPassword'
                  WHERE contact='$contact'"
             );
-                            // SET password='$hashedPassword' /* , email='$email' */
-
         }
 
         $success = "Password set successfully! You can now login.";
-        // Clear session variables after password set
+
+        // Clear session
         unset($_SESSION['student_mobile']);
-        // unset($_SESSION['student_email']); // optional
+        unset($_SESSION['form_data']);
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -184,5 +202,13 @@ button:hover {
     <button type="submit">Set Password</button>
 </form>
 
+<?php if (!empty($success)) : ?>
+<script>
+    // Page is already rendered, now wait and redirect
+    setTimeout(() => {
+        window.location.href = "registration.php"; // change to your target page
+    }, 3000); // 3 seconds
+</script>
+<?php endif; ?>
 </body>
 </html>
