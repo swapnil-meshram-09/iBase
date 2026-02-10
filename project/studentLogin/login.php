@@ -36,28 +36,62 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $error = "Password cannot exceed 15 characters!";
         }
 
-        // If no errors, check database
+        /* ================= LOGIN USING student_password ================= */
         if (!$error) {
+
             if ($isEmail) {
-                $stmt = $conn->prepare("SELECT id, name, contact, email FROM student_enrollment WHERE email=? AND password=? LIMIT 1");
+                $stmt = $conn->prepare("
+                    SELECT 
+                        sp.password,
+                        sr.id,
+                        sr.name,
+                        sr.contact,
+                        sr.email
+                    FROM student_password sp
+                    JOIN student_registration sr ON sr.contact = sp.contact
+                    WHERE sp.email = ?
+                    LIMIT 1
+                ");
+                $stmt->bind_param("s", $username);
             } else {
-                $stmt = $conn->prepare("SELECT id, name, contact, email FROM student_enrollment WHERE contact=? AND password=? LIMIT 1");
+                $stmt = $conn->prepare("
+                    SELECT 
+                        sp.password,
+                        sr.id,
+                        sr.name,
+                        sr.contact,
+                        sr.email
+                    FROM student_password sp
+                    JOIN student_registration sr ON sr.contact = sp.contact
+                    WHERE sp.contact = ?
+                    LIMIT 1
+                ");
+                $stmt->bind_param("s", $username);
             }
 
-            $stmt->bind_param("ss", $username, $password);
             $stmt->execute();
             $result = $stmt->get_result();
 
-            if ($result && $result->num_rows > 0) {
-                $student = $result->fetch_assoc();
-                $_SESSION['student_id']     = $student['id'];
-                $_SESSION['student_name']   = $student['name'];
-                $_SESSION['student_mobile'] = $student['contact'];
-                $_SESSION['student_email']  = $student['email'];
+            if ($result && $result->num_rows === 1) {
 
-                // Redirect to dashboard
-                header("Location: dashboard.php");
-                exit;
+                $student = $result->fetch_assoc();
+
+                // Verify hashed password
+                if (password_verify($password, $student['password'])) {
+
+                    $_SESSION['student_id']     = $student['id'];
+                    $_SESSION['student_name']   = $student['name'];
+                    $_SESSION['student_mobile'] = $student['contact'];
+                    $_SESSION['student_email']  = $student['email'];
+
+                    // Redirect after successful login
+                    header("Location: enroll.php"); // change if needed
+                    exit;
+
+                } else {
+                    $error = "Invalid username or password!";
+                }
+
             } else {
                 $error = "Invalid username or password!";
             }
@@ -68,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 // Current tab for highlighting
-$currentTab = basename($_SERVER['PHP_SELF']); // 'login.php'
+$currentTab = basename($_SERVER['PHP_SELF']);
 ?>
 
 <!DOCTYPE html>
@@ -185,8 +219,8 @@ function validatePassword(input) {
 <div class="tabs">
     <a class="tab <?= $currentTab=='login.php' ? 'active' : '' ?>" href="login.php">Login</a>
     <a class="tab <?= $currentTab=='registration.php' ? 'active' : '' ?>" href="registration.php">Registration</a>
-    <a class="tab <?= $currentTab=='enroll.php' ? 'active' : '' ?>" href="enroll.php">Enroll</a>
-    <a class="tab <?= $currentTab=='dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a>
+    <!-- <a class="tab <?= $currentTab=='enroll.php' ? 'active' : '' ?>" href="enroll.php">Enroll</a>
+    <a class="tab <?= $currentTab=='dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a> -->
 </div>
 
 <form method="POST" id="formBox">

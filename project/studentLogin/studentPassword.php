@@ -206,8 +206,8 @@ button:hover {
 <script>
     // Page is already rendered, now wait and redirect
     setTimeout(() => {
-        window.location.href = "registration.php"; // change to your target page
-    }, 3000); // 3 seconds
+        window.location.href = "login.php"; // change to your target page
+    }, 1500); // 3 seconds
 </script>
 <?php endif; ?>
 </body>
