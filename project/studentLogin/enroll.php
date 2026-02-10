@@ -40,20 +40,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $course_name  = $courseData['title'];
         $course_price = $courseData['amount'];
 
-        // Check duplicate enrollment
-        $check = mysqli_query($conn,
-            "SELECT id FROM student_course_enrollment
-             WHERE contact='$mobile' AND course_name='$course_name'"
-        );
+        // // Check duplicate enrollment
+        // $check = mysqli_query($conn,
+        //     "SELECT id FROM student_course_enrollment
+        //      WHERE contact='$mobile' AND course_name='$course_name'"
+        // );
 
-        if (mysqli_num_rows($check) == 0) {
-            mysqli_query($conn,
-                "INSERT INTO student_course_enrollment
-                (name, contact, course_name, course_price)
-                VALUES
-                ('$name','$mobile','$course_name','$course_price')"
-            );
-        }
+        // if (mysqli_num_rows($check) == 0) {
+        //     mysqli_query($conn,
+        //         "INSERT INTO student_course_enrollment
+        //         (name, contact, course_name, course_price)
+        //         VALUES
+        //         ('$name','$mobile','$course_name','$course_price')"
+        //     );
+        // }
 
         // Redirect
         header("Location: payment.php");
