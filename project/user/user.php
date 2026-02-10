@@ -24,16 +24,13 @@ body {
 
 <div class="tabs">
 
-    <a class="tab <?= $currentTab=='main.php' ? 'active' : '' ?>" href="main.php">Home</a>
-
-
+    <a class="tab <?= $currentTab=='userCreateProgram.php' ? 'active' : '' ?>" href="userCreateProgram.php">Create Program</a>
+    <a class="tab <?= $currentTab=='userViewProgram.php' ? 'active' : '' ?>" href="userViewProgram.php">View Program</a>
+    <a class="tab <?= $currentTab=='userViewProgram.php' ? 'active' : '' ?>" href="userViewProgram.php">View Program</a>
     <!-- User -->
-    <button class="tab" onclick="location.href='userCreateProgram.php'">
-        Create Program
-    </button>
 
     <button class="tab" onclick="location.href='userViewProgram.php'">
-        View Program
+        
     </button>
 
     <button class="tab" onclick="location.href='userAddStudent.php'">
