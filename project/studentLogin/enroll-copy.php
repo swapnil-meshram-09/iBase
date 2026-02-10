@@ -43,6 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $course_name  = $courseData['title'];
         $course_price = $courseData['amount'];
 
+        /* ALWAYS INSERT — NO CONDITIONS */
+        mysqli_query($conn,
+            "INSERT INTO student_course_enrollment
+             (name, contact, course_name, course_price)
+             VALUES
+             ('$name','$mobile','$course_name','$course_price')"
+        );
+
         header("Location: payment.php");
         exit;
     }
