@@ -63,16 +63,6 @@ body {
     opacity: 0.5;
 }
 
-/* Form */
-/* #formBox {
-    width:420px;
-    margin:auto;
-    margin-top: 50px;
-    padding:25px;
-    background:#fff;
-    border-radius:15px;
-    box-shadow:0 0 10px #aaa;
-} */
 
 .tableBox {
     width: 80%;

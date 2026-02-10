@@ -107,17 +107,6 @@ body {
 
 /* Form */
 #formBox {
-    /* width: 480px;
-    margin: auto;
-    margin-top: 20px;
-    background: white;
-    padding-left: 25px;
-    padding-right: 25px;
-    padding-top: 0px;
-    border-radius: 15px;
-    box-shadow: 0px 0px 10px #aaa;
-    font-size: 15px; */
-
     width:420px;
     margin:auto;
     margin-top: 40px;

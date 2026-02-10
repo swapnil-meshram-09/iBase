@@ -79,17 +79,79 @@ $currentTab = basename($_SERVER['PHP_SELF']); // 'login.php'
 body { 
     /* font-family: Arial, sans-serif; */
      background: #dde3ea; margin: 0; }
-.tabs { margin: 30px 0; display: flex; gap: 10px; justify-content: center; font-size: 13.5px; }
-.tab { padding: 10px 18px; border-radius: 10px; background: #f2f2f2; font-weight: bold; text-decoration: none; color: black; }
-.tab:hover { background: black; color: white; }
-.tab.active { background: black; color: white; }
-#formBox { width: 420px; margin: auto; background: white; padding: 25px; padding-top: 5px; border-radius: 15px; box-shadow: 0px 0px 10px #aaa; }
-h2 { text-align: center; font-size: 23px; margin-bottom: 20px; }
-label { font-weight: bold; margin-top: 10px; display: block; margin-left: 10px; }
-input { padding: 10px; border: none; border-radius: 6px; background: #f2f2f2; width: 90%; margin-top: 8px; margin-left: 10px; }
-button { margin-top: 15px; padding: 12px; background: #16a34a; border: none; color: white; border-radius: 10px; width: 95%; font-size: 16px; cursor: pointer; margin-left: 10px; }
-button:hover { background: #12833b; }
-.error { text-align: center; color: red; font-weight: bold; }
+.tabs { 
+    margin: 30px 0; 
+    display: flex; 
+    gap: 10px; 
+    justify-content: center; 
+    font-size: 13.5px; 
+}
+.tab { 
+    padding: 10px 18px; 
+    border-radius: 10px; 
+    background: #f2f2f2; 
+    font-weight: bold; 
+    text-decoration: none; 
+    color: black; 
+}
+.tab:hover { 
+    background: black; 
+    color: white; 
+}
+.tab.active { 
+    background: black; 
+    color: white; 
+}
+#formBox { 
+    width: 420px; 
+    margin: auto; 
+    margin-top: 40px;
+    background: white; 
+    padding: 25px; 
+    padding-top: 5px; 
+    border-radius: 15px; 
+    box-shadow: 0px 0px 10px #aaa; 
+}
+h2 { 
+    text-align: center; 
+    font-size: 23px; 
+    margin-bottom: 20px; 
+}
+label { 
+    font-weight: bold; 
+    margin-top: 10px; 
+    display: block; 
+    margin-left: 10px; 
+}
+input {
+     padding: 10px;
+      border: none; 
+      border-radius: 6px; 
+      background: #f2f2f2; 
+      width: 90%; 
+      margin-top: 8px; 
+      margin-left: 10px; 
+    }
+button { 
+    margin-top: 15px;
+    padding: 12px;
+    background: #16a34a; 
+    border: none;
+    color: white; 
+    border-radius: 10px;
+    width: 95%; 
+    font-size: 16px; 
+    cursor: pointer; 
+    margin-left: 10px; 
+    }
+button:hover {
+     background: #12833b; 
+    }
+.error { 
+    text-align: center; 
+    color: red; 
+    font-weight: bold; 
+    }
 </style>
 
 <script>

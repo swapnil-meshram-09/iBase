@@ -134,6 +134,7 @@ body {
 #formBox {
     width: 420px;
     margin: auto;
+    margin-top: 40px;
     background: white;
     padding: 25px;
     padding-top: 5px;

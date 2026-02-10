@@ -35,7 +35,7 @@ h2{
 .box{
     width:420px;
     margin:auto;
-    margin-top: 20px;
+    margin-top: 40px;    
     background:#fff;
     padding:25px;
     border-radius:15px;

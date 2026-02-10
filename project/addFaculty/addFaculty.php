@@ -68,48 +68,7 @@ body {
     margin: 0px;
 }
 
-/* Tabs */
-/* .tabs {
-    margin: 30px 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    font-size: 13.5px;
-    justify-content: center;
-    } */
-/* 
-
-.tab {
-    padding: 10px 18px;
-    border-radius: 10px;
-    background: #f2f2f2;
-    font-weight: bold;
-    text-decoration: none;
-    color: black;
-}
-
-.tab:hover {
-    background: black;
-    color: white;
-}
-
-.tab.active {
-    background: black;
-    color: white;
-} */
-
-/* Form */
 #formBox {
-    /* width: 480px;
-    margin: auto;
-    margin-top: 20px;
-    background: white;
-    padding-left: 25px;
-    padding-right: 25px;
-    padding-top: 0px;
-    border-radius: 15px;
-    box-shadow: 0px 0px 10px #aaa;
-    font-size: 15px; */
 
     width:420px;
     margin:auto;

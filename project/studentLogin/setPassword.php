@@ -72,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         #formBox {
             width: 400px;
             margin: auto;
+            margin-top: 40px;
             background: white;
             padding: 25px;
             margin-top: 60px;

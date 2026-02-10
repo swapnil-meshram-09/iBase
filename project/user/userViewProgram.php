@@ -42,7 +42,7 @@ body {
 .card {
     width: 450px;
     margin: auto;
-    margin-top: 30px;
+    margin-top: 40px;
     background: white;
     padding: 25px;
     padding-top: 0.5px;

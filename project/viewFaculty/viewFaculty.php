@@ -87,54 +87,6 @@ body {
     margin: 0px;
 }
 
-/* Tabs */
-/* 
-.tabs {
-    margin: 30px 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    font-size: 13.5px;
-    justify-content: center;
-}
-
-.tab {
-    padding: 10px 18px;
-    border-radius: 10px;
-    background: #f2f2f2;
-    font-weight: bold;
-    text-decoration: none;
-    color: black;
-}
-
-.tab:hover {
-    background: black;
-    color: white;
-}
-
-/* Active tab */
-/* .tab.active {
-    background: black;
-    color: white;
-} */
-
-/* Disabled tab if not logged in */
-/* .tab.disabled {
-    pointer-events: none;
-    opacity: 0.5;
-}  */
-
-/* Form */
-/* #formBox {
-    width:420px;
-    margin:auto;
-    margin-top: 50px;
-    padding:25px;
-    background:#fff;
-    border-radius:15px;
-    box-shadow:0 0 10px #aaa;
-} */
-
 .tableBox {
     width: 80%;
     margin: auto;
