@@ -1,6 +1,8 @@
 <?php
 session_start();
 include "../db.php";
+$currentTab = basename($_SERVER['PHP_SELF']);
+
 
 $error = "";
 $success = "";
@@ -54,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$currentTab = basename($_SERVER['PHP_SELF']);
 ?>
 
 <!DOCTYPE html>
@@ -69,15 +70,14 @@ body {
 }
 
 /* Tabs */
-/* .tabs {
+.tabs {
     margin: 30px 0;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     font-size: 13.5px;
     justify-content: center;
-    } */
-/* 
+}
 
 .tab {
     padding: 10px 18px;
@@ -93,10 +93,17 @@ body {
     color: white;
 }
 
+/* Active tab */
 .tab.active {
     background: black;
     color: white;
-} */
+}
+
+/* Disabled tab if not logged in */
+.tab.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
 
 /* Form */
 #formBox {
@@ -194,13 +201,17 @@ function onlyChar(input) {
 
 <body>
 
-<!-- Tabs -->
-<!-- <div class="tabs">
-    <a class="tab <?= $currentTab=='login.php' ? 'active' : '' ?>" href="login.php">Login</a>
-    <a class="tab <?= $currentTab=='registration.php' ? 'active' : '' ?>" href="registration.php">Registration</a>
+<div class="tabs">
+
+    <a class="tab <?= $currentTab=='userCreateProgram.php' ? 'active' : '' ?>" href="userCreateProgram.php">Create Program</a>
+    <a class="tab <?= $currentTab=='userViewProgram.php' ? 'active' : '' ?>" href="userViewProgram.php">View Program</a>
+    <a class="tab <?= $currentTab=='userAddStudent.php' ? 'active' : '' ?>" href="userAddStudent.php">Add Student</a>
+    <a class="tab <?= $currentTab=='userViewStudent.php' ? 'active' : '' ?>" href="userViewStudent.php">View Student</a>
     <a class="tab <?= $currentTab=='userAddFaculty.php' ? 'active' : '' ?>" href="userAddFaculty.php">Add Faculty</a>
-    <a class="tab <?= $currentTab=='dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a>
-</div> -->
+    <a class="tab <?= $currentTab=='userViewFaculty.php' ? 'active' : '' ?>" href="userViewFaculty.php"> View Faculty</a>
+
+</div>
+
 
 <form method="POST" id="formBox">
 

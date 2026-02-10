@@ -246,7 +246,7 @@ function onlyChar(input) {
 <label>HOD Contact Number</label>
 <input type="text" name="hod_contact" oninput="onlyNumber(this)" maxlength="10" required>
 
-<button type="submit">Register</button>
+<button type="submit">Add Student</button>
 
 </form>
 

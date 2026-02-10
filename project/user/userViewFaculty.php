@@ -1,6 +1,9 @@
 <?php
 session_start();
 include "../db.php";
+$currentTab = basename($_SERVER['PHP_SELF']); // 'registration.php'
+
+
 // Fetch faculty data
 $facultyResult = mysqli_query(
     $conn,
@@ -10,7 +13,6 @@ $facultyResult = mysqli_query(
 );
 
 
-$currentTab = basename($_SERVER['PHP_SELF']); // 'registration.php'
 
 ?>
 
@@ -26,7 +28,6 @@ body {
 }
 
 /* Tabs */
-/* 
 .tabs {
     margin: 30px 0;
     display: flex;
@@ -51,16 +52,16 @@ body {
 }
 
 /* Active tab */
-/* .tab.active {
+.tab.active {
     background: black;
     color: white;
-} */
+}
 
 /* Disabled tab if not logged in */
-/* .tab.disabled {
+.tab.disabled {
     pointer-events: none;
     opacity: 0.5;
-}  */
+}
 
 /* Form */
 /* #formBox {
@@ -126,13 +127,16 @@ tr:nth-child(even) {
 
 <body>
 
-<!-- Tabs -->
-<!-- <div class="tabs">
-    <a class="tab <?= $currentTab=='login.php' ? 'active' : '' ?>" href="login.php">Login</a>
-    <a class="tab <?= $currentTab=='registration.php' ? 'active' : '' ?>" href="registration.php">Registration</a>
-    <a class="tab <?= $currentTab=='enroll.php' ? 'active' : '' ?>" href="enroll.php">Enroll</a>
-    <a class="tab <?= $currentTab=='dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a>
-</div> -->
+<div class="tabs">
+
+    <a class="tab <?= $currentTab=='userCreateProgram.php' ? 'active' : '' ?>" href="userCreateProgram.php">Create Program</a>
+    <a class="tab <?= $currentTab=='userViewProgram.php' ? 'active' : '' ?>" href="userViewProgram.php">View Program</a>
+    <a class="tab <?= $currentTab=='userAddStudent.php' ? 'active' : '' ?>" href="userAddStudent.php">Add Student</a>
+    <a class="tab <?= $currentTab=='userViewStudent.php' ? 'active' : '' ?>" href="userViewStudent.php">View Student</a>
+    <a class="tab <?= $currentTab=='userAddFaculty.php' ? 'active' : '' ?>" href="userAddFaculty.php">Add Faculty</a>
+    <a class="tab <?= $currentTab=='userViewFaculty.php' ? 'active' : '' ?>" href="userViewFaculty.php"> View Faculty</a>
+
+</div>
 
 <!-- Registration Form -->
 <div class="tableBox">

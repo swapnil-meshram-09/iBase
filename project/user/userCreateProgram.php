@@ -42,7 +42,7 @@ body {
 .card {
     width: 450px;
     margin: auto;
-    margin-top: 30px;
+    margin-top: 40px;
     background: white;
     padding: 25px;
     padding-top: 0.5px;
@@ -127,11 +127,30 @@ tr:nth-child(even) {
     background: #f2f2f2;
 }
 
-/* ===== ONLY TAB CSS (AS REQUESTED) ===== */
-.tabs { margin: 30px 0; display: flex; gap: 10px; justify-content: center; font-size: 13.5px; }
-.tab { padding: 10px 18px; border-radius: 10px; background: #f2f2f2; font-weight: bold; text-decoration: none; color: black; }
-.tab:hover { background: black; color: white; }
+.tabs {
+    margin: 30px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 13.5px;
+    justify-content: center;
+}
 
+.tab {
+    padding: 10px 18px;
+    border-radius: 10px;
+    background: #f2f2f2;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+}
+
+.tab:hover {
+    background: black;
+    color: white;
+}
+
+/* Active tab */
 .tab.active {
     background: black;
     color: white;
@@ -147,18 +166,16 @@ tr:nth-child(even) {
 
 <body>
 
-<!-- Tabs -->
-<!-- Tabs -->
 <div class="tabs">
-    <a class="tab <?= $currentTab=='create' ? 'active' : '' ?>" href="?tab=create">
-        Create Program
-    </a>
 
-    <a class="tab <?= $currentTab=='view' ? 'active' : '' ?>" href="?tab=view">
-        View Program
-    </a>
+    <a class="tab <?= $currentTab=='userCreateProgram.php' ? 'active' : '' ?>" href="userCreateProgram.php">Create Program</a>
+    <a class="tab <?= $currentTab=='userViewProgram.php' ? 'active' : '' ?>" href="userViewProgram.php">View Program</a>
+    <a class="tab <?= $currentTab=='userAddStudent.php' ? 'active' : '' ?>" href="userAddStudent.php">Add Student</a>
+    <a class="tab <?= $currentTab=='userViewStudent.php' ? 'active' : '' ?>" href="userViewStudent.php">View Student</a>
+    <a class="tab <?= $currentTab=='userAddFaculty.php' ? 'active' : '' ?>" href="userAddFaculty.php">Add Faculty</a>
+    <a class="tab <?= $currentTab=='userViewFaculty.php' ? 'active' : '' ?>" href="userViewFaculty.php"> View Faculty</a>
+
 </div>
-
 
 <div class="card">
 
@@ -188,23 +205,8 @@ tr:nth-child(even) {
     <label>Amount</label>
     <input type="text" name="amount" required>
 
-    <button class="save" name="create_course">Create Course</button>
+    <button class="save" name="create_course">Create Program</button>
 </form>
-<?php endif; ?>
-
-
-<?php if($tab=='view'): ?>
-<h2>View Program</h2>
-<table>
-<tr><th>Title</th><th>Duration</th><th>Amount</th></tr>
-<?php while($c=mysqli_fetch_assoc($courses)): ?>
-<tr>
-    <td><?= $c['title'] ?></td>
-    <td><?= $c['duration'] ?></td>
-    <td>₹<?= $c['amount'] ?></td>
-</tr>
-<?php endwhile; ?>
-</table>
 <?php endif; ?>
 
 

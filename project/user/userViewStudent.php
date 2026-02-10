@@ -1,6 +1,6 @@
 <?php
 include "../db.php";
-$tab = $_GET['tab'] ?? 'create';
+$currentTab = basename($_SERVER['PHP_SELF']);
 
 /* CREATE COURSE */
 if(isset($_POST['create_course'])){
@@ -108,38 +108,56 @@ tr:nth-child(even) {
     background: #f2f2f2;
 }
 
-/* ===== ONLY TAB CSS (AS REQUESTED) ===== */
 .tabs {
     margin: 30px 0;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    font-size: 13.5px;
     justify-content: center;
 }
 
 .tab {
     padding: 10px 18px;
     border-radius: 10px;
-    border: none;
     background: #f2f2f2;
-    cursor: pointer;
     font-weight: bold;
+    text-decoration: none;
+    color: black;
 }
 
 .tab:hover {
     background: black;
     color: white;
 }
+
+/* Active tab */
+.tab.active {
+    background: black;
+    color: white;
+}
+
+/* Disabled tab if not logged in */
+.tab.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- Tabs -->
-<!-- <div class="tabs">
-    <a href="?tab=create"><button class="tab">Create Program</button></a>
-    <a href="?tab=view"><button class="tab">Courses</button></a>
-</div> -->
+<div class="tabs">
+
+    <a class="tab <?= $currentTab=='userCreateProgram.php' ? 'active' : '' ?>" href="userCreateProgram.php">Create Program</a>
+    <a class="tab <?= $currentTab=='userViewProgram.php' ? 'active' : '' ?>" href="userViewProgram.php">View Program</a>
+    <a class="tab <?= $currentTab=='userAddStudent.php' ? 'active' : '' ?>" href="userAddStudent.php">Add Student</a>
+    <a class="tab <?= $currentTab=='userViewStudent.php' ? 'active' : '' ?>" href="userViewStudent.php">View Student</a>
+    <a class="tab <?= $currentTab=='userAddFaculty.php' ? 'active' : '' ?>" href="userAddFaculty.php">Add Faculty</a>
+    <a class="tab <?= $currentTab=='userViewFaculty.php' ? 'active' : '' ?>" href="userViewFaculty.php"> View Faculty</a>
+
+</div>
 
 <div class="card">
 <h2>View Student Details</h2>

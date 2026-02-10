@@ -1,6 +1,8 @@
 <?php
 session_start();
 include "../db.php";
+$currentTab = basename($_SERVER['PHP_SELF']);
+
 
 $error = "";
 
@@ -65,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 // Determine current page for active tab
-$currentTab = basename($_SERVER['PHP_SELF']); // 'registration.php'
 
 ?>
 
@@ -193,13 +194,16 @@ function onlyChar(input) {
 
 <body>
 
-<!-- Tabs -->
-<!-- <div class="tabs">
-    <a class="tab <?= $currentTab=='login.php' ? 'active' : '' ?>" href="login.php">Login</a>
-    <a class="tab <?= $currentTab=='registration.php' ? 'active' : '' ?>" href="registration.php">Registration</a>
-    <a class="tab <?= $currentTab=='enroll.php' ? 'active' : '' ?>" href="enroll.php">Enroll</a>
-    <a class="tab <?= $currentTab=='dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a>
-</div> -->
+<div class="tabs">
+
+    <a class="tab <?= $currentTab=='userCreateProgram.php' ? 'active' : '' ?>" href="userCreateProgram.php">Create Program</a>
+    <a class="tab <?= $currentTab=='userViewProgram.php' ? 'active' : '' ?>" href="userViewProgram.php">View Program</a>
+    <a class="tab <?= $currentTab=='userAddStudent.php' ? 'active' : '' ?>" href="userAddStudent.php">Add Student</a>
+    <a class="tab <?= $currentTab=='userViewStudent.php' ? 'active' : '' ?>" href="userViewStudent.php">View Student</a>
+    <a class="tab <?= $currentTab=='userAddFaculty.php' ? 'active' : '' ?>" href="userAddFaculty.php">Add Faculty</a>
+    <a class="tab <?= $currentTab=='userViewFaculty.php' ? 'active' : '' ?>" href="userViewFaculty.php"> View Faculty</a>
+
+</div>
 
 <!-- Registration Form -->
 <form method="POST" id="formBox">
@@ -246,7 +250,7 @@ function onlyChar(input) {
 <label>HOD Contact Number</label>
 <input type="text" name="hod_contact" oninput="onlyNumber(this)" maxlength="10" required>
 
-<button type="submit">Register</button>
+<button type="submit">Add Student</button>
 
 </form>
 
