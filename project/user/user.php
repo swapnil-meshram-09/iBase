@@ -13,27 +13,10 @@ body {
 }
 
 /* Navbar buttons */
-.tabs {
-    margin: 30px 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-}
-
-.tab {
-    padding: 10px 18px;
-    border-radius: 10px;
-    border: none;
-    background: #f2f2f2;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.tab:hover {
-    background: black;
-    color: white;
-}
+.tabs { margin: 30px 0; display: flex; gap: 10px; justify-content: center; font-size: 13.5px; }
+.tab { padding: 10px 18px; border-radius: 10px; background: #f2f2f2; font-weight: bold; text-decoration: none; color: black; }
+.tab:hover { background: black; color: white; }
+.tab.active { background: black; color: white; }
 </style>
 </head>
 
@@ -41,9 +24,16 @@ body {
 
 <div class="tabs">
 
+    <a class="tab <?= $currentTab=='main.php' ? 'active' : '' ?>" href="main.php">Home</a>
+
+
     <!-- User -->
     <button class="tab" onclick="location.href='userCreateProgram.php'">
         Create Program
+    </button>
+
+    <button class="tab" onclick="location.href='userViewProgram.php'">
+        View Program
     </button>
 
     <button class="tab" onclick="location.href='userAddStudent.php'">
