@@ -197,7 +197,7 @@ tr:nth-child(even) {
 
 <!-- Registration Form -->
 <div class="tableBox">
-    <h2>Faculty List</h2>
+    <h2>View Faculty Details</h2>
 
     <table>
         <tr>

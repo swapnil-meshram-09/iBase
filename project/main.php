@@ -28,42 +28,14 @@ body {
     <a class="tab <?= $currentTab=='main.php' ? 'active' : '' ?>" href="main.php">Home</a>
     <a class="tab <?= $currentTab=='studentLogin/login.php' ? 'active' : '' ?>" href="studentLogin/login.php">Student Login</a>
     <a class="tab <?= $currentTab=='user/user.php' ? 'active' : '' ?>" href="user/user.php">User Login</a>
-    <a class="tab <?= $currentTab=='admin/add_user.php' ? 'active' : '' ?>" href="admin/add_user.php"> Add Student</a>
+    <a class="tab <?= $currentTab=='admin/add_user.php' ? 'active' : '' ?>" href="addStudent/addStudent.php"> Add Student</a>
     <a class="tab <?= $currentTab=='admin/add_user.php' ? 'active' : '' ?>" href="admin/add_user.php"> Add User</a>
     <a class="tab <?= $currentTab=='ddfaculty/addFaculty.php' ? 'active' : '' ?>" href="addfaculty/addFaculty.php"> Add Faculty</a>
     <a class="tab <?= $currentTab=='admin/add_user.php' ? 'active' : '' ?>" href="viewStudent/viewStudent.php"> View Student</a>
     <a class="tab <?= $currentTab=='viewFaculty/viewFaculty.php' ? 'active' : '' ?>" href="viewFaculty/viewFaculty.php"> View Faculty</a>
 
-    <!-- Student -->
-    <!-- <button class="tab" onclick="location.href=''">
-        
-    </button> -->
+    
 
-    <!-- User -->
-    <!-- <button class="tab" onclick="location.href='user/user.php'">
-        
-    </button> -->
-
-    <!-- Admin -->
-    <!-- <button class="tab" onclick="location.href='admin/add_user.php'">
-       
-    </button> -->
-
-    <!-- <button class="tab" onclick="location.href='admin/.php'">
-        Add User
-    </button> -->
-
-    <!-- <button class="tab" onclick="location.href='addfaculty/addFaculty.php'">
-        Add Faculty
-    </button> -->
-
-    <!-- <button class="tab" onclick="location.href='admin/view_faculty.php'">
-        View Student
-    </button>
-
-    <button class="tab" onclick="location.href='viewFaculty/viewFaculty.php'">
-        View Faculty
-    </button> -->
 </div>
 
 </body>

@@ -141,7 +141,7 @@ tr:nth-child(even) {
 </div> -->
 
 <div class="card">
-<h2>View Students</h2>
+<h2>View Student Details</h2>
 
 <table>
 <tr>
