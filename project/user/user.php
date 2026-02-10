@@ -26,28 +26,10 @@ body {
 
     <a class="tab <?= $currentTab=='userCreateProgram.php' ? 'active' : '' ?>" href="userCreateProgram.php">Create Program</a>
     <a class="tab <?= $currentTab=='userViewProgram.php' ? 'active' : '' ?>" href="userViewProgram.php">View Program</a>
-    <a class="tab <?= $currentTab=='userViewProgram.php' ? 'active' : '' ?>" href="userViewProgram.php">View Program</a>
-    <!-- User -->
-
-    <button class="tab" onclick="location.href='userViewProgram.php'">
-        
-    </button>
-
-    <button class="tab" onclick="location.href='userAddStudent.php'">
-        Add Student
-    </button>
-
-    <button class="tab" onclick="location.href='userViewStudent.php'">
-        View Student
-    </button>
-
-    <button class="tab" onclick="location.href='userAddFaculty.php'">
-        Add Faculty
-    </button>
-
-    <button class="tab" onclick="location.href='userViewFaculty.php'">
-        View Faculty
-    </button>
+    <a class="tab <?= $currentTab=='userAddStudent.php' ? 'active' : '' ?>" href="userAddStudent.php">Add Student</a>
+    <a class="tab <?= $currentTab=='userViewStudent.php' ? 'active' : '' ?>" href="userViewStudent.php">View Student</a>
+    <a class="tab <?= $currentTab=='userAddFaculty.php' ? 'active' : '' ?>" href="userAddFaculty.php">Add Faculty</a>
+    <a class="tab <?= $currentTab=='userViewFaculty.php' ? 'active' : '' ?>" href="userViewFaculty.php"> View Faculty</a>
 
 </div>
 
