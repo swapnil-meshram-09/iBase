@@ -8,7 +8,7 @@ if (!isset($_SESSION['student_mobile']) || !isset($_SESSION['course_id'])) {
 }
 
 $student_mobile = $_SESSION['student_mobile'];
-$student_name   = $_SESSION['student_name'];
+$student_name   = $_SESSION['name'];
 $course_id      = $_SESSION['course_id'];
 
 // Fetch course

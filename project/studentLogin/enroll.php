@@ -1,11 +1,13 @@
 <?php
 session_start();
 include "../db.php";
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     unset($_SESSION['student_name']);
     unset($_SESSION['student_mobile']);
     unset($_SESSION['course_id']);
 }
+
 $error = "";
 
 // Fetch courses
@@ -25,65 +27,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error = "Mobile number must be 10 digits!";
     }
     else {
-        $_SESSION['student_name']   = $name;
+
+        $_SESSION['name']   = $name;
         $_SESSION['student_mobile'] = $mobile;
         $_SESSION['course_id']      = $course;
 
-        $check = mysqli_query($conn,
-            "SELECT id FROM student_enrollment WHERE contact='$mobile'"
+        // Get course details
+        $courseData = mysqli_fetch_assoc(
+            mysqli_query($conn, "SELECT title, amount FROM courses WHERE id='$course'")
         );
 
-        if(mysqli_num_rows($check) > 0){
-            $student = mysqli_fetch_assoc($check);
-            $student_id = $student['id'];
-        } else {
-            $student_id = null;
-        }
+        $course_name  = $courseData['title'];
+        $course_price = $courseData['amount'];
 
-        if($student_id){
-            $courseData = mysqli_fetch_assoc(
-                mysqli_query($conn, "SELECT title FROM courses WHERE id='$course'")
+        // Check duplicate enrollment
+        $check = mysqli_query($conn,
+            "SELECT id FROM student_course_enrollment
+             WHERE contact='$mobile' AND course_name='$course_name'"
+        );
+
+        if (mysqli_num_rows($check) == 0) {
+            mysqli_query($conn,
+                "INSERT INTO student_course_enrollment
+                (name, contact, course_name, course_price)
+                VALUES
+                ('$name','$mobile','$course_name','$course_price')"
             );
-            $course_name = $courseData['title'];
-
-            $selCheck = mysqli_query($conn,
-                "SELECT id FROM course_selection WHERE student_id='$student_id'"
-            );
-
-            if(mysqli_num_rows($selCheck) > 0){
-                mysqli_query($conn,
-                    "UPDATE course_selection 
-                     SET course_id='$course',
-                         course_name='$course_name',
-                         student_name='$name',
-                         updated_at=NOW()
-                     WHERE student_id='$student_id'"
-                );
-            } else {
-                mysqli_query($conn,
-                    "INSERT INTO course_selection
-                    (student_id, student_name, course_id, course_name, created_at)
-                    VALUES
-                    ('$student_id','$name','$course','$course_name',NOW())"
-                );
-            }
         }
 
         // Redirect
-        if ($student_id) {
-            header("Location: payment.php");
-            // header("Location: dashboard.php");
-        } else {
-            header("Location: enroll.php");
-        }
+        header("Location: payment.php");
         exit;
     }
 }
 
-// Determine current page for active tab
-$currentTab = basename($_SERVER['PHP_SELF']); // 'login.php'
-
+// Active tab
+$currentTab = basename($_SERVER['PHP_SELF']);
 ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -225,7 +206,7 @@ function onlyChar(input) {
        name="name"
        oninput="onlyChar(this)"
        required
-       value="<?= $_SESSION['student_name'] ?? '' ?>">
+       value="<?= $_SESSION['name'] ?? '' ?>">
 
 <label>Mobile Number</label>
 <input type="text"

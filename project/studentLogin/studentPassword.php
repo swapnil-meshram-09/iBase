@@ -150,11 +150,11 @@ button:hover {
     color: red;
     font-weight: bold;
 }
-        .success {
-            color: green;
-            text-align: center;
-            font-weight: bold;
-        }
+.success {
+    color: green;
+    text-align: center;
+    font-weight: bold;
+}
     </style>
 <script>
         function validatePassword(input) {
