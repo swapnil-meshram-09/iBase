@@ -4,12 +4,26 @@ include "../db.php";
 
 $error = "";
 
-$name       = $_SESSION['student_name'] ?? "";
-$contact    = $_SESSION['student_mobile'] ?? "";
-$course_id  = $_SESSION['course_id'] ?? "";
+
+// $name    = $_SESSION['student_name'] ?? "";
+// $contact = $_SESSION['student_mobile'] ?? "";
+// $course_id  = $_SESSION['course_id'] ?? "";
+
+$form = $_SESSION['form_data'] ?? [];
+
+$name        = $form['name'] ?? ($_SESSION['student_name'] ?? "");
+$contact     = $form['contact'] ?? ($_SESSION['student_mobile'] ?? "");
+$college     = $form['college'] ?? "";
+$department  = $form['department'] ?? "";
+$year        = $form['year'] ?? "";
+$hod_name    = $form['hod_name'] ?? "";
+$hod_contact = $form['hod_contact'] ?? "";
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
+    
+    $_SESSION['form_data'] = $_POST;
+    // $form = $_SESSION['form_data'] ?? [];
     $name        = trim($_POST['name']);
     $contact     = trim($_POST['contact']);
     $college     = trim($_POST['college']);
@@ -41,13 +55,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $check = mysqli_query(
             $conn,
-            "SELECT id FROM student_enrollment WHERE contact='$contact'"
+            "SELECT id FROM student_registration WHERE contact='$contact'"
         );
 
         if (mysqli_num_rows($check) == 0) {
             mysqli_query(
                 $conn,
-                "INSERT INTO student_enrollment
+                "INSERT INTO student_registration
                 (name, contact, college_name, department, year, hod_name, hod_contact)
                 VALUES
                 ('$name','$contact','$college','$department','$year','$hod_name','$hod_contact')"
@@ -56,7 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $_SESSION['student_name']   = $name;
         $_SESSION['student_mobile'] = $contact;
-        $_SESSION['course_id']      = $course_id;
+        // $_SESSION['course_id']      = $course_id;
+
+        
 
         // Redirect to enroll page after registration
         header("Location: setPassword.php");
