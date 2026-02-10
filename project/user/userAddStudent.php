@@ -194,17 +194,17 @@ function onlyChar(input) {
 <body>
 
 <!-- Tabs -->
-<div class="tabs">
+<!-- <div class="tabs">
     <a class="tab <?= $currentTab=='login.php' ? 'active' : '' ?>" href="login.php">Login</a>
     <a class="tab <?= $currentTab=='registration.php' ? 'active' : '' ?>" href="registration.php">Registration</a>
     <a class="tab <?= $currentTab=='enroll.php' ? 'active' : '' ?>" href="enroll.php">Enroll</a>
     <a class="tab <?= $currentTab=='dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a>
-</div>
+</div> -->
 
 <!-- Registration Form -->
 <form method="POST" id="formBox">
 
-<h2>Student Registration</h2>
+<h2>Add Student Details</h2>
 
 <?php if ($error) { ?>
     <p class="error"><?= $error ?></p>

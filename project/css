@@ -154,3 +154,22 @@ tr:hover {
     background: #f9fafb;
 }
 </style>
+
+
+
+// table best light css
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-top: 10px;
+}
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+th {
+    background: #f2f2f2;
+}

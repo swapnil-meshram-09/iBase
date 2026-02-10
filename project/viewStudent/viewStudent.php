@@ -22,7 +22,6 @@ $students = mysqli_query($conn,"SELECT * FROM registrations ORDER BY id DESC");
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin</title>
 
 <style>
 body {
@@ -40,6 +39,7 @@ body {
     box-shadow: 0 6px 16px rgba(0,0,0,0.1);
     max-width: 500px;
     margin: 20px auto;
+    margin-top: 40px;
 }
 
 /* Headings */
@@ -87,15 +87,23 @@ button.save:hover {
 table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
     font-size: 14px;
-    margin-top: 10px;
 }
+
 th, td {
-    padding: 12px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
 }
+
 th {
+    background: #000;
+    color: #fff;
+    margin-top:0px;
+}
+
+tr:nth-child(even) {
     background: #f2f2f2;
 }
 

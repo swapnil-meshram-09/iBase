@@ -1,5 +1,7 @@
 <?php
 session_start();
+$currentTab = basename($_SERVER['PHP_SELF']); // 'login.php'
+
 ?>
 
 <!DOCTYPE html>
@@ -13,65 +15,55 @@ body {
 }
 
 /* Navbar buttons */
-.tabs {
-    margin: 30px 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-}
-
-.tab {
-    padding: 10px 16px;
-    border-radius: 10px;
-    border: none;
-    background: #f2f2f2;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.tab:hover {
-    background: black;
-    color: white;
-}
+.tabs { margin: 30px 0; display: flex; gap: 10px; justify-content: center; font-size: 13.5px; }
+.tab { padding: 10px 18px; border-radius: 10px; background: #f2f2f2; font-weight: bold; text-decoration: none; color: black; }
+.tab:hover { background: black; color: white; }
+.tab.active { background: black; color: white; }
 </style>
 </head>
 
 <body>
 
 <div class="tabs">
-    <button class="tab" onclick="location.href='main.php'">Home</button>
+    <a class="tab <?= $currentTab=='main.php' ? 'active' : '' ?>" href="main.php">Home</a>
+    <a class="tab <?= $currentTab=='studentLogin/login.php' ? 'active' : '' ?>" href="studentLogin/login.php">Student Login</a>
+    <a class="tab <?= $currentTab=='user/user.php' ? 'active' : '' ?>" href="user/user.php">User Login</a>
+    <a class="tab <?= $currentTab=='admin/add_user.php' ? 'active' : '' ?>" href="admin/add_user.php"> Add Student</a>
+    <a class="tab <?= $currentTab=='admin/add_user.php' ? 'active' : '' ?>" href="admin/add_user.php"> Add User</a>
+    <a class="tab <?= $currentTab=='ddfaculty/addFaculty.php' ? 'active' : '' ?>" href="addfaculty/addFaculty.php"> Add Faculty</a>
+    <a class="tab <?= $currentTab=='admin/add_user.php' ? 'active' : '' ?>" href="viewStudent/viewStudent.php"> View Student</a>
+    <a class="tab <?= $currentTab=='viewFaculty/viewFaculty.php' ? 'active' : '' ?>" href="viewFaculty/viewFaculty.php"> View Faculty</a>
 
     <!-- Student -->
-    <button class="tab" onclick="location.href='studentLogin/login.php'">
-        Student Login
-    </button>
+    <!-- <button class="tab" onclick="location.href=''">
+        
+    </button> -->
 
     <!-- User -->
-    <button class="tab" onclick="location.href='user/user.php'">
-        User Login
-    </button>
+    <!-- <button class="tab" onclick="location.href='user/user.php'">
+        
+    </button> -->
 
     <!-- Admin -->
-    <button class="tab" onclick="location.href='admin/add_user.php'">
-        Add Student
-    </button>
+    <!-- <button class="tab" onclick="location.href='admin/add_user.php'">
+       
+    </button> -->
 
-    <button class="tab" onclick="location.href='admin/.php'">
+    <!-- <button class="tab" onclick="location.href='admin/.php'">
         Add User
-    </button>
+    </button> -->
 
-    <button class="tab" onclick="location.href='addfaculty/addFaculty.php'">
+    <!-- <button class="tab" onclick="location.href='addfaculty/addFaculty.php'">
         Add Faculty
-    </button>
+    </button> -->
 
-    <button class="tab" onclick="location.href='admin/view_faculty.php'">
+    <!-- <button class="tab" onclick="location.href='admin/view_faculty.php'">
         View Student
     </button>
 
     <button class="tab" onclick="location.href='viewFaculty/viewFaculty.php'">
         View Faculty
-    </button>
+    </button> -->
 </div>
 
 </body>

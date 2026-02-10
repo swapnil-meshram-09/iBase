@@ -215,7 +215,7 @@ function onlyChar(input) {
 <!-- Login Form -->
 <form method="POST" id="formBox">
 
-<h2>Student Course Enrollment</h2>
+<h2>Student Enrollment</h2>
 
 <?php if($error){ ?>
     <p class="error"><?= $error ?></p>

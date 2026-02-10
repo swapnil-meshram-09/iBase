@@ -40,6 +40,7 @@ body {
     box-shadow: 0 6px 16px rgba(0,0,0,0.1);
     max-width: 500px;
     margin: 20px auto;
+    margin-top: 40px;
 }
 
 /* Headings */
@@ -135,57 +136,32 @@ tr:nth-child(even) {
 <body>
 
 <!-- Tabs -->
-<div class="tabs">
+<!-- <div class="tabs">
     <a href="?tab=create"><button class="tab">Create Program</button></a>
     <a href="?tab=view"><button class="tab">Courses</button></a>
-</div>
+</div> -->
 
 <div class="card">
+<h2>Students</h2>
 
-<?php if($tab=='create'): ?>
-<h2>Create Program</h2>
-<form method="post">
-    <label>Title</label>
-    <input name="title" required>
-
-    <label>Description</label>
-    <textarea name="description" required></textarea>
-
-    <label>Start</label>
-    <input type="date" name="start_date" required>
-
-    <label>End</label>
-    <input type="date" name="end_date" required>
-
-    <label>Duration</label>
-    <select name="duration" required>
-        <option value="">Select</option>
-        <option value="1 month">1 month</option>
-        <option value="3 months">3 months</option>
-        <option value="5 months">5 months</option>
-    </select>
-
-    <label>Amount</label>
-    <input type="text" name="amount" required>
-
-    <button class="save" name="create_course">Create Course</button>
-</form>
-<?php endif; ?>
-
-
-<?php if($tab=='view'): ?>
-<h2>Courses</h2>
 <table>
-<tr><th>Title</th><th>Duration</th><th>Amount</th></tr>
-<?php while($c=mysqli_fetch_assoc($courses)): ?>
 <tr>
-    <td><?= $c['title'] ?></td>
-    <td><?= $c['duration'] ?></td>
-    <td>₹<?= $c['amount'] ?></td>
+    <th>Name</th>
+    
+    <th>Mobile</th>
+    <th>Course</th>
+</tr>
+
+<?php while($s = mysqli_fetch_assoc($students)): ?>
+<tr>
+    <td><?= $s['student_name'] ?></td>
+    <td><?= $s['mobile'] ?></td>
+    <td><?= $s['course_title'] ?></td>
 </tr>
 <?php endwhile; ?>
+
 </table>
-<?php endif; ?>
+
 
 
 </div>
