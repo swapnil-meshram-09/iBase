@@ -2,6 +2,30 @@
 session_start();
 include "../db.php";
 
+/* ---------- AJAX COURSE FETCH ---------- */
+if(isset($_POST['ajax_course_id'])){
+
+    $course_id = $_POST['ajax_course_id'];
+
+    $query = mysqli_query($conn,
+        "SELECT title, description, start_date, end_date, duration, amount 
+         FROM courses 
+         WHERE id='$course_id'"
+    );
+
+    $course = mysqli_fetch_assoc($query);
+
+    if($course){
+        // Format dates to dd/mm/yyyy
+        $course['start_date'] = date("d/m/Y", strtotime($course['start_date']));
+        $course['end_date']   = date("d/m/Y", strtotime($course['end_date']));
+    }
+
+    echo json_encode($course);
+    exit;
+}
+
+
 /* Clear session on fresh GET */
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     unset($_SESSION['name']);
@@ -15,7 +39,7 @@ $error = "";
 $courses = mysqli_query($conn, "SELECT * FROM courses");
 
 /* Handle form submission */
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['ajax_course_id'])) {
 
     $name   = trim($_POST['name']);
     $mobile = trim($_POST['mobile']);
@@ -33,16 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['student_mobile'] = $mobile;
         $_SESSION['course_id']      = $course;
 
-        /* Get course details */
-        $courseData = mysqli_fetch_assoc(
-            mysqli_query($conn,
-                "SELECT title, amount FROM courses WHERE id='$course'"
-            )
-        );
-
-        $course_name  = $courseData['title'];
-        $course_price = $courseData['amount'];
-
         header("Location: payment.php");
         exit;
     }
@@ -51,18 +65,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $currentTab = basename($_SERVER['PHP_SELF']);
 ?>
 
-
 <!DOCTYPE html>
 <html>
 <head>
 <style>
-body {
-    /* font-family: Arial, sans-serif; */
-    background: #dde3ea;
-    margin: 0;
-}
+body { background: #dde3ea; margin: 0; }
 
-/* Tabs */
 .tabs {
     margin: 30px 0;
     display: flex;
@@ -80,24 +88,9 @@ body {
     color: black;
 }
 
-.tab:hover {
-    background: black;
-    color: white;
-}
+.tab:hover { background: black; color: white; }
+.tab.active { background: black; color: white; }
 
-/* Active tab */
-.tab.active {
-    background: black;
-    color: white;
-}
-
-/* Disabled tab if not logged in */
-.tab.disabled {
-    pointer-events: none;
-    opacity: 0.5;
-}
-
-/* Form */
 #formBox {
     width: 420px;
     margin: auto;
@@ -109,11 +102,7 @@ body {
     box-shadow: 0px 0px 10px #aaa;
 }
 
-h2 {
-    text-align: center;
-    font-size: 23px;
-    margin-bottom: 30px;
-}
+h2 { text-align: center; font-size: 23px; margin-bottom: 30px; }
 
 label {
     font-weight: bold;
@@ -132,9 +121,7 @@ input, select {
     margin-left: 10px;
 }
 
-select {
-    width: 95%;
-}
+select { width: 95%; }
 
 button {
     margin-top: 15px;
@@ -149,14 +136,20 @@ button {
     margin-left: 10px;
 }
 
-button:hover {
-    background-color: green;
-}
+button:hover { background-color: green; }
 
 .error {
     text-align: center;
     color: red;
     font-weight: bold;
+}
+
+.courseBox{
+    margin-top:15px;
+    background:#f9f9f9;
+    padding:15px;
+    border-radius:10px;
+    display:none;
 }
 </style>
 
@@ -164,27 +157,58 @@ button:hover {
 function onlyNumber(input) {
     input.value = input.value.replace(/[^0-9]/g, '');
 }
+
 function onlyChar(input) {
     input.value = input.value.replace(/[^A-Za-z ]/g, '');
+}
+
+function loadCourseDetails(course_id){
+
+    if(course_id === ""){
+        document.getElementById("courseDetails").style.display = "none";
+        return;
+    }
+
+    let xhr = new XMLHttpRequest();
+
+    xhr.open("POST", "", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhr.onload = function(){
+
+        if(this.status === 200){
+
+            let data = JSON.parse(this.responseText);
+
+            document.getElementById("courseDetails").style.display = "block";
+
+            document.getElementById("d_title").innerText = data.title;
+            document.getElementById("d_description").innerText = data.description;
+            document.getElementById("d_start").innerText = data.start_date;
+            document.getElementById("d_end").innerText = data.end_date;
+            document.getElementById("d_duration").innerText = data.duration;
+            document.getElementById("d_amount").innerText = data.amount;
+        }
+    };
+
+    xhr.send("ajax_course_id=" + course_id);
 }
 </script>
 </head>
 
 <body>
 
-<!-- Tabs -->
 <div class="tabs">
     <a class="tab <?= $currentTab=='enroll.php' ? 'active' : '' ?>" href="enroll.php">Enroll</a>
     <a class="tab <?= $currentTab=='dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a>
 </div>
 
-<!-- Login Form -->
 <form method="POST" id="formBox">
 
 <h2>Student Enrollment</h2>
 
 <?php if($error){ ?>
-    <p class="error"><?= $error ?></p>
+<p class="error"><?= $error ?></p>
 <?php } ?>
 
 <label>Student Name</label>
@@ -203,8 +227,9 @@ function onlyChar(input) {
        value="<?= $_SESSION['student_mobile'] ?? '' ?>">
 
 <label>Select Course</label>
-<select name="course_id" required>
+<select name="course_id" required onchange="loadCourseDetails(this.value)">
     <option value="">Select Course</option>
+
     <?php while($c = mysqli_fetch_assoc($courses)) {
         $selected = (isset($_SESSION['course_id']) && $_SESSION['course_id'] == $c['id']) ? 'selected' : '';
     ?>
@@ -213,6 +238,16 @@ function onlyChar(input) {
         </option>
     <?php } ?>
 </select>
+
+<div class="courseBox" id="courseDetails">
+    <h3>Course Details</h3>
+    <p><b>Title:</b> <span id="d_title"></span></p>
+    <p><b>Description:</b> <span id="d_description"></span></p>
+    <p><b>Start Date:</b> <span id="d_start"></span></p>
+    <p><b>End Date:</b> <span id="d_end"></span></p>
+    <p><b>Duration:</b> <span id="d_duration"></span></p>
+    <p><b>Amount:</b> ₹<span id="d_amount"></span></p>
+</div>
 
 <button type="submit">Proceed</button>
 
