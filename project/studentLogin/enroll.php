@@ -145,9 +145,14 @@ button:hover { background-color: green; }
 }
 
 .courseBox{
-    padding-left:30px;
+    padding-top:1px;
+    padding-bottom:1px;
+    padding-left:10px;
     padding-right:30px;
-    margin-top:10px;
+    margin-top: 20px;
+    margin-right:10px;
+    margin-left:5px;
+    margin-bottom: 5px;
     background:#f9f9f9;
     border-radius:10px;
     display:none;
