@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_msg'])) {
         die("Missing student mobile or course ID!");
     }
 
-    // Fetch student
+    /* Fetch Student */
     $student_query = mysqli_query($conn,
         "SELECT name FROM student_registration WHERE contact='$student_mobile'"
     );
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_msg'])) {
     $student = mysqli_fetch_assoc($student_query);
     $student_name = $student['name'];
 
-    // Fetch course details (INCLUDING amount)
+    /* Fetch Course */
     $course_query = mysqli_query($conn,
         "SELECT title, description, start_date, end_date, duration, amount 
          FROM courses 
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_msg'])) {
         die("Invalid course amount");
     }
 
-    // Insert into enrollment table
+    /* Insert Enrollment */
     $sql = "INSERT INTO student_course_enrollment
             (name, contact, title, description, start_date, end_date, duration, amount, created_at)
             VALUES
@@ -59,15 +59,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_msg'])) {
         $message = "Hello $student_name! Your enrollment for $title course of ₹$amount is successful. Thank you!";
         $whatsappLink = "https://wa.me/91$student_mobile?text=" . urlencode($message);
 
-        header("Location: $whatsappLink");
-        exit;
+        echo "
+        <script>
+            window.open('$whatsappLink', '_blank');
+            alert('Enrollment Successful!');
+        </script>
+        ";
 
     } else {
         die("Database Error: " . mysqli_error($conn));
     }
 
 } else {
-    header("Location: payment.php");
-    exit;
+    echo "Invalid Request";
 }
 ?>
