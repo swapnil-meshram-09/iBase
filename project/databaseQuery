@@ -19,12 +19,24 @@ CREATE TABLE student_password (
 
 CREATE TABLE student_course_enrollment (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(30) NOT NULL,
-    contact VARCHAR(10) NOT NULL,
-    course_name VARCHAR(30) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    contact VARCHAR(20) NOT NULL,
+
+    course_name VARCHAR(150) NOT NULL,
     course_price DECIMAL(10,2) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+    title VARCHAR(150) NOT NULL,
+    description TEXT,
+    
+    start_date DATE,
+    end_date DATE,
+    duration VARCHAR(50),
+    
+    amount DECIMAL(10,2) NOT NULL,
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
 
 
 
