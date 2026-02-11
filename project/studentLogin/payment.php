@@ -1,21 +1,26 @@
+
 <?php
 session_start();
 include "../db.php";
 
-if (!isset($_SESSION['student_mobile']) || !isset($_SESSION['course_id'])) {
-    header("Location: student.php");
-    exit;
-}
+$student_mobile = $_SESSION['student_mobile'] ?? '';
+$student_name   = $_SESSION['name'] ?? '';
+$course_id      = $_SESSION['course_id'] ?? '';
 
-$student_mobile = $_SESSION['student_mobile'];
-$student_name   = $_SESSION['name'];
-$course_id      = $_SESSION['course_id'];
+if (!$student_mobile || !$course_id) {
+    die("Session expired. Please login again.");
+}
 
 // Fetch course
 $course = mysqli_fetch_assoc(
-    mysqli_query($conn,"SELECT * FROM courses WHERE id='$course_id'")
+    mysqli_query($conn, "SELECT * FROM courses WHERE id='$course_id'")
 );
+
+if (!$course) {
+    die("Course not found!");
+}
 ?>
+
 
 <!DOCTYPE html>
 <html>

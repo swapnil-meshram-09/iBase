@@ -28,8 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_msg'])) {
     $amount = $course['amount'];
 
     // Insert payment record
-    $sql = "INSERT INTO payments (student_id, course_id, amount, payment_status, payment_method, transaction_id)
-            VALUES ('$student_id', '$course_id', '$amount', 'success', 'demo', 'TXN".time()."')";
+    // $sql = "INSERT INTO payments (student_id, course_id, amount, payment_status, payment_method, transaction_id)
+    //         VALUES ('$student_id', '$course_id', '$amount', 'success', 'demo', 'TXN".time()."')";
 
     if (mysqli_query($conn,$sql)) {
 
