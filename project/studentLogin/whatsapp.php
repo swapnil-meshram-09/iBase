@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_msg'])) {
 
     // Fetch student ID
     $student = mysqli_fetch_assoc(
-        mysqli_query($conn,"SELECT id FROM student_enrollment WHERE contact='$student_mobile'")
+        mysqli_query($conn,"SELECT id FROM student_registration WHERE contact='$student_mobile'")
     );
     if (!$student) die("Student not found");
 
