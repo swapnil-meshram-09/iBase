@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_msg'])) {
     $student = mysqli_fetch_assoc($student_query);
     $student_name = $student['name'];
 
-    // Fetch course details (INCLUDING amount)
+    // Fetch course details
     $course_query = mysqli_query($conn,
         "SELECT title, description, start_date, end_date, duration, amount 
          FROM courses 
@@ -59,8 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_msg'])) {
         $message = "Hello $student_name! Your enrollment for $title course of ₹$amount is successful. Thank you!";
         $whatsappLink = "https://wa.me/91$student_mobile?text=" . urlencode($message);
 
-        header("Location: $whatsappLink");
-        exit;
+        // Open WhatsApp in new tab and keep current page
+        echo "<script>
+                window.open('$whatsappLink', '_blank');
+                alert('Enrollment Successful!');
+              </script>";
 
     } else {
         die("Database Error: " . mysqli_error($conn));
