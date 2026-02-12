@@ -19,7 +19,6 @@ if(isset($_POST['create_course'])){
 }
 
 $courses  = mysqli_query($conn,"SELECT * FROM courses ORDER BY id DESC");
-$students = mysqli_query($conn,"SELECT * FROM registrations ORDER BY id DESC");
 
 
 ?>
