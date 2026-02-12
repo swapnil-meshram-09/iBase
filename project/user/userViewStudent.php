@@ -11,49 +11,15 @@ $students = mysqli_query($conn, "SELECT * FROM useraddstudent ORDER BY id DESC")
 <head>
 <title>View Students</title>
 
+
 <style>
 body {
+    /* font-family: Arial, sans-serif; */
     background: #dde3ea;
-    padding: 0;
-    margin: 0;
+    margin: 0px;
 }
 
-.card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-    max-width: 1000px;
-    margin: 40px auto;
-}
-
-h2 {
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    font-size: 14px;
-}
-
-th, td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: center;
-}
-
-th {
-    background: #000;
-    color: #fff;
-}
-
-tr:nth-child(even) {
-    background: #f2f2f2;
-}
-
+/* Tabs */
 .tabs {
     margin: 30px 0;
     display: flex;
@@ -72,8 +38,65 @@ tr:nth-child(even) {
     color: black;
 }
 
-.tab:hover { background: black; color: white; }
-.tab.active { background: black; color: white; }
+.tab:hover {
+    background: black;
+    color: white;
+}
+
+/* Active tab */
+.tab.active {
+    background: black;
+    color: white;
+}
+
+/* Disabled tab if not logged in */
+.tab.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+
+.tableBox {
+    width: 80%;
+    margin: auto;
+    margin-top: 40px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px #aaa;
+    overflow-x: auto;
+}
+
+h2{
+    text-align:center;
+    margin-top: 0px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background: #000;
+    color: #fff;
+    margin-top:0px;
+}
+
+tr:nth-child(even) {
+    background: #f2f2f2;
+}
+
+
+
 
 </style>
 </head>
@@ -89,13 +112,12 @@ tr:nth-child(even) {
     <a class="tab <?= $currentTab=='userViewFaculty.php' ? 'active' : '' ?>" href="userViewFaculty.php">View Faculty</a>
 </div>
 
-<div class="card">
+<div class="tableBox">
 
 <h2>View Student Details</h2>
 
 <table>
 <tr>
-    <th>ID</th>
     <th>Name</th>
     <th>Mobile</th>
     <th>College</th>
@@ -108,7 +130,6 @@ tr:nth-child(even) {
 
 <?php while($s = mysqli_fetch_assoc($students)): ?>
 <tr>
-    <td><?= $s['id'] ?></td>
     <td><?= htmlspecialchars($s['name']) ?></td>
     <td><?= htmlspecialchars($s['contact']) ?></td>
     <td><?= htmlspecialchars($s['college_name']) ?></td>

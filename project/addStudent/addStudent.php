@@ -2,11 +2,10 @@
 session_start();
 include "../db.php";
 
-$error = "";
+$currentTab = basename($_SERVER['PHP_SELF']);
 
-$name       = $_SESSION['student_name'] ?? "";
-$contact    = $_SESSION['student_mobile'] ?? "";
-$course_id  = $_SESSION['course_id'] ?? "";
+$error = "";
+$success = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -18,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $hod_name    = trim($_POST['hod_name']);
     $hod_contact = trim($_POST['hod_contact']);
 
+    // Validation
     if (
         empty($name) || empty($contact) || empty($college) ||
         empty($department) || empty($year) ||
@@ -39,49 +39,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     else {
 
-        $check = mysqli_query(
-            $conn,
-            "SELECT id FROM student_enrollment WHERE contact='$contact'"
-        );
+        // Check duplicate contact
+        $check = mysqli_query($conn, "SELECT id FROM addstudent WHERE contact='$contact'");
 
-        if (mysqli_num_rows($check) == 0) {
-            mysqli_query(
-                $conn,
-                "INSERT INTO student_enrollment
+        if (mysqli_num_rows($check) > 0) {
+
+            $error = "This contact number is already registered!";
+
+        } else {
+
+            $insert = mysqli_query($conn, "
+                INSERT INTO addstudent
                 (name, contact, college_name, department, year, hod_name, hod_contact)
                 VALUES
-                ('$name','$contact','$college','$department','$year','$hod_name','$hod_contact')"
-            );
+                ('$name', '$contact', '$college', '$department', '$year', '$hod_name', '$hod_contact')
+            ");
+
+            if ($insert) {
+
+                $success = "Student added successfully!";
+
+                // Clear form after success
+                $_POST = [];
+
+            } else {
+                $error = "Database error: " . mysqli_error($conn);
+            }
         }
-
-        $_SESSION['student_name']   = $name;
-        $_SESSION['student_mobile'] = $contact;
-        $_SESSION['course_id']      = $course_id;
-
-        // Redirect to enroll page after registration
-        header("Location: setPassword.php");
-        exit;
     }
 }
-
-// Determine current page for active tab
-$currentTab = basename($_SERVER['PHP_SELF']); // 'registration.php'
-
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Student Registration</title>
+<title>Add Student</title>
 
 <style>
 body {
-    /* font-family: Arial, sans-serif; */
     background: #dde3ea;
-    margin: 0px;
+    margin: 0;
 }
 
-/* Tabs */
 .tabs {
     margin: 30px 0;
     display: flex;
@@ -100,31 +99,15 @@ body {
     color: black;
 }
 
-.tab:hover {
-    background: black;
-    color: white;
-}
+.tab:hover { background: black; color: white; }
+.tab.active { background: black; color: white; }
 
-/* Active tab */
-.tab.active {
-    background: black;
-    color: white;
-}
-
-/* Disabled tab if not logged in */
-.tab.disabled {
-    pointer-events: none;
-    opacity: 0.5;
-}
-
-/* Form */
-#formBox {
+.card {
     width: 450px;
     margin: auto;
     margin-top: 40px;
     background: white;
     padding: 25px;
-    padding-top: 0.5px;
     border-radius: 15px;
     box-shadow: 0px 0px 10px #aaa;
     font-size: 15px;
@@ -153,11 +136,9 @@ input, select {
     margin-left: 10px;
 }
 
-select {
-    width: 95%;
-}
+select { width: 95%; }
 
-button {
+button.save {
     margin-top: 15px;
     padding: 12px;
     background: #16a34a;
@@ -170,13 +151,17 @@ button {
     margin-left: 10px;
 }
 
-button:hover {
-    background: green;
-}
+button.save:hover { background: #12833b; }
 
 .error {
     text-align: center;
     color: red;
+    font-weight: bold;
+}
+
+.success {
+    text-align: center;
+    color: green;
     font-weight: bold;
 }
 </style>
@@ -189,66 +174,83 @@ function onlyChar(input) {
     input.value = input.value.replace(/[^A-Za-z ]/g, '');
 }
 </script>
+
 </head>
 
 <body>
-
-<!-- Tabs -->
-<!-- <div class="tabs">
-    <a class="tab <?= $currentTab=='login.php' ? 'active' : '' ?>" href="login.php">Login</a>
-    <a class="tab <?= $currentTab=='registration.php' ? 'active' : '' ?>" href="registration.php">Registration</a>
-    <a class="tab <?= $currentTab=='enroll.php' ? 'active' : '' ?>" href="enroll.php">Enroll</a>
-    <a class="tab <?= $currentTab=='dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a>
+<!-- 
+<div class="tabs">
+    <a class="tab <?= $currentTab=='userCreateProgram.php' ? 'active' : '' ?>" href="userCreateProgram.php">Create Program</a>
+    <a class="tab <?= $currentTab=='userViewProgram.php' ? 'active' : '' ?>" href="userViewProgram.php">View Program</a>
+    <a class="tab <?= $currentTab=='userAddStudent.php' ? 'active' : '' ?>" href="userAddStudent.php">Add Student</a>
+    <a class="tab <?= $currentTab=='userViewStudent.php' ? 'active' : '' ?>" href="userViewStudent.php">View Student</a>
+    <a class="tab <?= $currentTab=='userAddFaculty.php' ? 'active' : '' ?>" href="userAddFaculty.php">Add Faculty</a>
+    <a class="tab <?= $currentTab=='userViewFaculty.php' ? 'active' : '' ?>" href="userViewFaculty.php">View Faculty</a>
 </div> -->
 
-<!-- Registration Form -->
-<form method="POST" id="formBox">
+<div class="card">
 
 <h2>Add Student Details</h2>
 
-<?php if ($error) { ?>
-    <p class="error"><?= $error ?></p>
-<?php } ?>
+<?php if ($error) echo "<p class='error'>$error</p>"; ?>
+<?php if ($success) echo "<p class='success'>$success</p>"; ?>
+
+<form method="POST">
 
 <label>Student Name</label>
-<input type="text" name="name" value="<?= htmlspecialchars($name) ?>" oninput="onlyChar(this)" required>
+<input type="text" name="name"
+value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"
+oninput="onlyChar(this)" required>
 
 <label>Student Contact Number</label>
-<input type="text" name="contact" value="<?= htmlspecialchars($contact) ?>" oninput="onlyNumber(this)" maxlength="10" required>
+<input type="text" name="contact"
+value="<?= htmlspecialchars($_POST['contact'] ?? '') ?>"
+oninput="onlyNumber(this)" maxlength="10" required>
 
 <label>College Name</label>
-<input type="text" name="college" oninput="onlyChar(this)" required>
+<input type="text" name="college"
+value="<?= htmlspecialchars($_POST['college'] ?? '') ?>"
+oninput="onlyChar(this)" required>
 
 <label>Department</label>
 <select name="department" required>
-    <option value="">Select Department</option>
-    <option>Computer Science</option>
-    <option>AI & ML</option>
-    <option>AI & DS</option>
-    <option>ETC</option>
-    <option>Mechanical</option>
-    <option>Civil</option>
-    <option>Electrical</option>
+<option value="">Select Department</option>
+<?php
+$departments = ["Computer Science","AI & ML","AI & DS","ETC","Mechanical","Civil","Electrical"];
+foreach ($departments as $d) {
+    $selected = (($_POST['department'] ?? '') == $d) ? "selected" : "";
+    echo "<option $selected>$d</option>";
+}
+?>
 </select>
 
 <label>Year</label>
 <select name="year" required>
-    <option value="">Select Year</option>
-    <option>First Year</option>
-    <option>Second Year</option>
-    <option>Third Year</option>
-    <option>Final Year</option>
+<option value="">Select Year</option>
+<?php
+$years = ["First Year","Second Year","Third Year","Final Year"];
+foreach ($years as $y) {
+    $selected = (($_POST['year'] ?? '') == $y) ? "selected" : "";
+    echo "<option $selected>$y</option>";
+}
+?>
 </select>
 
 <label>HOD Name</label>
-<input type="text" name="hod_name" oninput="onlyChar(this)" required>
+<input type="text" name="hod_name"
+value="<?= htmlspecialchars($_POST['hod_name'] ?? '') ?>"
+oninput="onlyChar(this)" required>
 
 <label>HOD Contact Number</label>
-<input type="text" name="hod_contact" oninput="onlyNumber(this)" maxlength="10" required>
+<input type="text" name="hod_contact"
+value="<?= htmlspecialchars($_POST['hod_contact'] ?? '') ?>"
+oninput="onlyNumber(this)" maxlength="10" required>
 
-<button type="submit">Add Student</button>
+<button class="save" type="submit">Add Student</button>
 
 </form>
+
+</div>
 
 </body>
 </html>

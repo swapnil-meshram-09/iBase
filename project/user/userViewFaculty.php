@@ -106,11 +106,6 @@ tr:nth-child(even) {
 
 
 
-.error {
-    text-align: center;
-    color: red;
-    font-weight: bold;
-}
 </style>
 
 </head>
