@@ -65,3 +65,19 @@ CREATE TABLE userAddFaculty (
     college_address TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+
+
+
+CREATE TABLE `useraddstudent` (
+    `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(30) NOT NULL,
+    `contact` VARCHAR(10) NOT NULL,
+    `college_name` VARCHAR(30) NOT NULL,
+    `department` VARCHAR(30) NOT NULL,
+    `year` VARCHAR(10) NOT NULL,
+    `hod_name` VARCHAR(30) NOT NULL,
+    `hod_contact` VARCHAR(10) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
