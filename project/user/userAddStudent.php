@@ -1,14 +1,14 @@
 <?php
 session_start();
-include "../db.php";
+include "../db.php"; // Database connection
+
 $currentTab = basename($_SERVER['PHP_SELF']);
 
-
 $error = "";
+$success = "";
 
-$name       = $_SESSION['student_name'] ?? "";
-$contact    = $_SESSION['student_mobile'] ?? "";
-$course_id  = $_SESSION['course_id'] ?? "";
+$name    = $_SESSION['student_name'] ?? "";
+$contact = $_SESSION['student_mobile'] ?? "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $hod_name    = trim($_POST['hod_name']);
     $hod_contact = trim($_POST['hod_contact']);
 
+    // Validation
     if (
         empty($name) || empty($contact) || empty($college) ||
         empty($department) || empty($year) ||
@@ -40,34 +41,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error = "HOD contact must be exactly 10 digits!";
     }
     else {
-
-        $check = mysqli_query(
-            $conn,
-            "SELECT id FROM student_enrollment WHERE contact='$contact'"
-        );
-
+        // Check if contact already exists
+        $check = mysqli_query($conn, "SELECT id FROM useraddstudent WHERE contact='$contact'");
+        
         if (mysqli_num_rows($check) == 0) {
-            mysqli_query(
-                $conn,
-                "INSERT INTO student_enrollment
+            // Insert into table
+            $insert = mysqli_query($conn, "
+                INSERT INTO useraddstudent
                 (name, contact, college_name, department, year, hod_name, hod_contact)
                 VALUES
-                ('$name','$contact','$college','$department','$year','$hod_name','$hod_contact')"
-            );
+                ('$name', '$contact', '$college', '$department', '$year', '$hod_name', '$hod_contact')
+            ");
+
+            if ($insert) {
+                $_SESSION['student_name']   = $name;
+                $_SESSION['student_mobile'] = $contact;
+                $success = "Student added successfully!";
+            } else {
+                $error = "Database error: " . mysqli_error($conn);
+            }
+        } else {
+            $error = "This contact number is already registered!";
         }
-
-        $_SESSION['student_name']   = $name;
-        $_SESSION['student_mobile'] = $contact;
-        $_SESSION['course_id']      = $course_id;
-
-        // Redirect to enroll page after registration
-        header("Location: setPassword.php");
-        exit;
     }
 }
-
-// Determine current page for active tab
-
 ?>
 
 <!DOCTYPE html>
