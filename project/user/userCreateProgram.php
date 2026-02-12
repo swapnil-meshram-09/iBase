@@ -161,6 +161,19 @@ tr:nth-child(even) {
     pointer-events: none;
     opacity: 0.5;
 }
+
+.error {
+    text-align: center;
+    color: red;
+    font-weight: bold;
+}
+
+.success {
+    color: green;
+    text-align: center;
+    font-weight: bold;
+}
+
 </style>
 </head>
 
