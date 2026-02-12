@@ -177,6 +177,18 @@ button:hover {
     color: red;
     font-weight: bold;
 }
+
+.error {
+    text-align: center;
+    color: red;
+    font-weight: bold;
+}
+
+.success {
+    color: green;
+    text-align: center;
+    font-weight: bold;
+}
 </style>
 
 <script>
@@ -207,10 +219,8 @@ function onlyChar(input) {
 
 <h2>Add Student Details</h2>
 
-<?php if ($error) { ?>
-    <p class="error"><?= $error ?></p>
-<?php } ?>
-
+<?php if ($error) { echo "<p class='error'>$error</p>"; } ?>
+<?php if ($success) { echo "<p class='success'>$success</p>"; } ?>
 <label>Student Name</label>
 <input type="text" name="name" value="<?= htmlspecialchars($name) ?>" oninput="onlyChar(this)" required>
 
