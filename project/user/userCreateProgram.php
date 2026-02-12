@@ -1,28 +1,61 @@
 <?php
+session_start();
 include "../db.php";
-$currentTab = basename($_SERVER['PHP_SELF']); // 'login.php'
 
+$currentTab = basename($_SERVER['PHP_SELF']);
 $tab = $_GET['tab'] ?? 'create';
 
+$error = "";
+$success = "";
+
 /* CREATE COURSE */
-if(isset($_POST['create_course'])){
-    mysqli_query($conn,"INSERT INTO courses 
-    (title,description,start_date,end_date,duration,amount)
-    VALUES (
-        '".$_POST['title']."',
-        '".$_POST['description']."',
-        '".$_POST['start_date']."',
-        '".$_POST['end_date']."',
-        '".$_POST['duration']."',
-        '".$_POST['amount']."'
-    )");
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_course'])) {
+
+    $title       = trim($_POST['title']);
+    $description = trim($_POST['description']);
+    $start_date  = $_POST['start_date'];
+    $end_date    = $_POST['end_date'];
+    $duration    = $_POST['duration'];
+    $amount      = $_POST['amount'];
+
+    if (empty($title) || empty($description) || empty($start_date) || empty($end_date) || empty($duration) || empty($amount)) {
+
+        $error = "All fields are required!";
+
+    } else {
+
+        // Check if program already exists
+        $check = mysqli_query($conn, "SELECT id FROM courses WHERE title='$title'");
+
+        if (mysqli_num_rows($check) > 0) {
+
+            $error = "Program already exists!";
+
+        } else {
+
+            mysqli_query($conn, "INSERT INTO courses 
+            (title,description,start_date,end_date,duration,amount)
+            VALUES (
+                '$title',
+                '$description',
+                '$start_date',
+                '$end_date',
+                '$duration',
+                '$amount'
+            )");
+
+            $success = "Program added successfully!";
+        }
+    }
 }
-
-// $courses  = mysqli_query($conn,"SELECT * FROM courses ORDER BY id DESC");
-// $students = mysqli_query($conn,"SELECT * FROM registrations ORDER BY id DESC");
-
-
 ?>
+
+
+<!-- // $courses  = mysqli_query($conn,"SELECT * FROM courses ORDER BY id DESC"); -->
+<!-- // $students = mysqli_query($conn,"SELECT * FROM registrations ORDER BY id DESC"); -->
+
+
+<!-- ?> -->
 
 
 <!DOCTYPE html>
