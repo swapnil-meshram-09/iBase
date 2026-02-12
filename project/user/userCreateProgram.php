@@ -181,6 +181,12 @@ tr:nth-child(even) {
 
 <?php if($tab=='create'): ?>
 <h2>Create Program</h2>
+
+
+<?php if ($error) { echo "<p class='error'>$error</p>"; } ?>
+<?php if ($success) { echo "<p class='success'>$success</p>"; } ?>
+
+
 <form method="post">
     <label>Title</label>
     <input name="title" required>

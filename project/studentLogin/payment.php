@@ -131,6 +131,8 @@ button:hover{ background:#12833b; }
 }
 p{
     margin:8px 0;
+    margin-top:25px;
+    margin-bottom:25px;
 }
 </style>
 </head>
