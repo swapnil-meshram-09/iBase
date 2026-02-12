@@ -1,14 +1,11 @@
 <?php
 session_start();
-include "../db.php"; // Database connection
+include "../db.php";
 
 $currentTab = basename($_SERVER['PHP_SELF']);
 
 $error = "";
 $success = "";
-
-$name    = $_SESSION['student_name'] ?? "";
-$contact = $_SESSION['student_mobile'] ?? "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -41,11 +38,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error = "HOD contact must be exactly 10 digits!";
     }
     else {
-        // Check if contact already exists
+
+        // Check duplicate contact
         $check = mysqli_query($conn, "SELECT id FROM useraddstudent WHERE contact='$contact'");
-        
-        if (mysqli_num_rows($check) == 0) {
-            // Insert into table
+
+        if (mysqli_num_rows($check) > 0) {
+
+            $error = "This contact number is already registered!";
+
+        } else {
+
             $insert = mysqli_query($conn, "
                 INSERT INTO useraddstudent
                 (name, contact, college_name, department, year, hod_name, hod_contact)
@@ -54,14 +56,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ");
 
             if ($insert) {
-                $_SESSION['student_name']   = $name;
-                $_SESSION['student_mobile'] = $contact;
+
                 $success = "Student added successfully!";
+
+                // Clear form after success
+                $_POST = [];
+
             } else {
                 $error = "Database error: " . mysqli_error($conn);
             }
-        } else {
-            $error = "This contact number is already registered!";
         }
     }
 }
@@ -70,16 +73,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html>
 <head>
-<title>Student Registration</title>
+<title>Add Student</title>
 
 <style>
 body {
-    /* font-family: Arial, sans-serif; */
     background: #dde3ea;
-    margin: 0px;
+    margin: 0;
 }
 
-/* Tabs */
 .tabs {
     margin: 30px 0;
     display: flex;
@@ -98,31 +99,15 @@ body {
     color: black;
 }
 
-.tab:hover {
-    background: black;
-    color: white;
-}
+.tab:hover { background: black; color: white; }
+.tab.active { background: black; color: white; }
 
-/* Active tab */
-.tab.active {
-    background: black;
-    color: white;
-}
-
-/* Disabled tab if not logged in */
-.tab.disabled {
-    pointer-events: none;
-    opacity: 0.5;
-}
-
-/* Form */
-#formBox {
+.card {
     width: 450px;
     margin: auto;
     margin-top: 40px;
     background: white;
     padding: 25px;
-    padding-top: 0.5px;
     border-radius: 15px;
     box-shadow: 0px 0px 10px #aaa;
     font-size: 15px;
@@ -151,11 +136,9 @@ input, select {
     margin-left: 10px;
 }
 
-select {
-    width: 95%;
-}
+select { width: 95%; }
 
-button {
+button.save {
     margin-top: 15px;
     padding: 12px;
     background: #16a34a;
@@ -168,15 +151,7 @@ button {
     margin-left: 10px;
 }
 
-button:hover {
-    background: green;
-}
-
-.error {
-    text-align: center;
-    color: red;
-    font-weight: bold;
-}
+button.save:hover { background: #12833b; }
 
 .error {
     text-align: center;
@@ -185,8 +160,8 @@ button:hover {
 }
 
 .success {
-    color: green;
     text-align: center;
+    color: green;
     font-weight: bold;
 }
 </style>
@@ -199,67 +174,83 @@ function onlyChar(input) {
     input.value = input.value.replace(/[^A-Za-z ]/g, '');
 }
 </script>
+
 </head>
 
 <body>
 
 <div class="tabs">
-
     <a class="tab <?= $currentTab=='userCreateProgram.php' ? 'active' : '' ?>" href="userCreateProgram.php">Create Program</a>
     <a class="tab <?= $currentTab=='userViewProgram.php' ? 'active' : '' ?>" href="userViewProgram.php">View Program</a>
     <a class="tab <?= $currentTab=='userAddStudent.php' ? 'active' : '' ?>" href="userAddStudent.php">Add Student</a>
     <a class="tab <?= $currentTab=='userViewStudent.php' ? 'active' : '' ?>" href="userViewStudent.php">View Student</a>
     <a class="tab <?= $currentTab=='userAddFaculty.php' ? 'active' : '' ?>" href="userAddFaculty.php">Add Faculty</a>
-    <a class="tab <?= $currentTab=='userViewFaculty.php' ? 'active' : '' ?>" href="userViewFaculty.php"> View Faculty</a>
-
+    <a class="tab <?= $currentTab=='userViewFaculty.php' ? 'active' : '' ?>" href="userViewFaculty.php">View Faculty</a>
 </div>
 
-<!-- Registration Form -->
-<form method="POST" id="formBox">
+<div class="card">
 
 <h2>Add Student Details</h2>
 
-<?php if ($error) { echo "<p class='error'>$error</p>"; } ?>
-<?php if ($success) { echo "<p class='success'>$success</p>"; } ?>
+<?php if ($error) echo "<p class='error'>$error</p>"; ?>
+<?php if ($success) echo "<p class='success'>$success</p>"; ?>
+
+<form method="POST">
+
 <label>Student Name</label>
-<input type="text" name="name" value="<?= htmlspecialchars($name) ?>" oninput="onlyChar(this)" required>
+<input type="text" name="name"
+value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"
+oninput="onlyChar(this)" required>
 
 <label>Student Contact Number</label>
-<input type="text" name="contact" value="<?= htmlspecialchars($contact) ?>" oninput="onlyNumber(this)" maxlength="10" required>
+<input type="text" name="contact"
+value="<?= htmlspecialchars($_POST['contact'] ?? '') ?>"
+oninput="onlyNumber(this)" maxlength="10" required>
 
 <label>College Name</label>
-<input type="text" name="college" oninput="onlyChar(this)" required>
+<input type="text" name="college"
+value="<?= htmlspecialchars($_POST['college'] ?? '') ?>"
+oninput="onlyChar(this)" required>
 
 <label>Department</label>
 <select name="department" required>
-    <option value="">Select Department</option>
-    <option>Computer Science</option>
-    <option>AI & ML</option>
-    <option>AI & DS</option>
-    <option>ETC</option>
-    <option>Mechanical</option>
-    <option>Civil</option>
-    <option>Electrical</option>
+<option value="">Select Department</option>
+<?php
+$departments = ["Computer Science","AI & ML","AI & DS","ETC","Mechanical","Civil","Electrical"];
+foreach ($departments as $d) {
+    $selected = (($_POST['department'] ?? '') == $d) ? "selected" : "";
+    echo "<option $selected>$d</option>";
+}
+?>
 </select>
 
 <label>Year</label>
 <select name="year" required>
-    <option value="">Select Year</option>
-    <option>First Year</option>
-    <option>Second Year</option>
-    <option>Third Year</option>
-    <option>Final Year</option>
+<option value="">Select Year</option>
+<?php
+$years = ["First Year","Second Year","Third Year","Final Year"];
+foreach ($years as $y) {
+    $selected = (($_POST['year'] ?? '') == $y) ? "selected" : "";
+    echo "<option $selected>$y</option>";
+}
+?>
 </select>
 
 <label>HOD Name</label>
-<input type="text" name="hod_name" oninput="onlyChar(this)" required>
+<input type="text" name="hod_name"
+value="<?= htmlspecialchars($_POST['hod_name'] ?? '') ?>"
+oninput="onlyChar(this)" required>
 
 <label>HOD Contact Number</label>
-<input type="text" name="hod_contact" oninput="onlyNumber(this)" maxlength="10" required>
+<input type="text" name="hod_contact"
+value="<?= htmlspecialchars($_POST['hod_contact'] ?? '') ?>"
+oninput="onlyNumber(this)" maxlength="10" required>
 
-<button type="submit">Add Student</button>
+<button class="save" type="submit">Add Student</button>
 
 </form>
+
+</div>
 
 </body>
 </html>
