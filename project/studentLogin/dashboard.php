@@ -1,55 +1,16 @@
 <?php
 session_start();
 include "../db.php";
-// Fetch enrolled student data using session mobile
-$studentData = null;
-$courseData  = null;
 
-if (isset($_SESSION['student_mobile'])) {
+// Fetch student course enrollment data
+$enrollmentResult = mysqli_query(
+    $conn,
+    "SELECT title, description, start_date, end_date, duration, amount, created_at
+     FROM student_course_enrollment
+     ORDER BY created_at DESC"
+);
 
-    $mobile = $_SESSION['student_mobile'];
-
-    // Get student_id using mobile
-    $stuQ = mysqli_query(
-        $conn,
-        "SELECT id FROM student_enrollment WHERE contact='$mobile' LIMIT 1"
-    );
-
-    if (mysqli_num_rows($stuQ) > 0) {
-
-        $stu = mysqli_fetch_assoc($stuQ);
-        $student_id = $stu['id'];
-
-        // Get course selection data
-        $selQ = mysqli_query(
-            $conn,
-            "SELECT * FROM course_selection WHERE student_id='$student_id' LIMIT 1"
-        );
-
-        if (mysqli_num_rows($selQ) > 0) {
-
-            $studentData = mysqli_fetch_assoc($selQ);
-
-            // Get course fee
-            $feeQ = mysqli_query(
-                $conn,
-                "SELECT amount FROM courses WHERE id='".$studentData['course_id']."' LIMIT 1"
-            );
-
-            if (mysqli_num_rows($feeQ) > 0) {
-                $fee = mysqli_fetch_assoc($feeQ);
-                $courseAmount = $fee['amount'];
-            }
-        }
-    }
-}
-
-
-
-
-
-$currentTab = basename($_SERVER['PHP_SELF']); // 'registration.php'
-
+$currentTab = basename($_SERVER['PHP_SELF']);
 ?>
 
 <!DOCTYPE html>
@@ -58,19 +19,55 @@ $currentTab = basename($_SERVER['PHP_SELF']); // 'registration.php'
 
 <style>
 body {
-    /* font-family: Arial, sans-serif; */
     background: #dde3ea;
     margin: 0px;
 }
 
-/* Tabs */
+.tableBox {
+    width: 80%;
+    margin: auto;
+    margin-top: 40px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px #aaa;
+    overflow-x: auto;
+}
+
+h2{
+    text-align:center;
+    margin-top: 0px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background: #000;
+    color: #fff;
+}
+
+tr:nth-child(even) {
+    background: #f2f2f2;
+}
+
+
 .tabs {
     margin: 30px 0;
     display: flex;
-    flex-wrap: wrap;
     gap: 10px;
-    font-size: 13.5px;
     justify-content: center;
+    font-size: 13.5px;
 }
 
 .tab {
@@ -82,126 +79,51 @@ body {
     color: black;
 }
 
-.tab:hover {
-    background: black;
-    color: white;
-}
+.tab:hover { background: black; color: white; }
+.tab.active { background: black; color: white; }
 
-/* Active tab */
-.tab.active {
-    background: black;
-    color: white;
-}
-
-/* Disabled tab if not logged in */
-.tab.disabled {
-    pointer-events: none;
-    opacity: 0.5;
-}
-
-/* Form */
-#formBox {
-    width: 450px;
-    margin: auto;
-    margin-top: 40px;
-    background: white;
-    padding: 25px;
-    padding-top: 0.5px;
-    border-radius: 15px;
-    box-shadow: 0px 0px 10px #aaa;
-    font-size: 15px;
-}
-
-h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
-}
-
-label {
-    font-weight: bold;
-    margin-top: 10px;
-    display: block;
-    margin-left: 10px;
-}
-
-input, select {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 6px;
-    background: #f2f2f2;
-    width: 90%;
-    margin-top: 10px;
-    margin-left: 10px;
-}
-
-select {
-    width: 95%;
-}
-
-button {
-    margin-top: 15px;
-    padding: 12px;
-    background: #16a34a;
-    border: none;
-    color: white;
-    border-radius: 10px;
-    width: 95%;
-    font-size: 16px;
-    cursor: pointer;
-    margin-left: 10px;
-}
-
-button:hover {
-    background: green;
-}
-
-.error {
-    text-align: center;
-    color: red;
-    font-weight: bold;
-}
 </style>
 
 </head>
 
 <body>
 
-<!-- Tabs -->
 <div class="tabs">
     <a class="tab <?= $currentTab=='enroll.php' ? 'active' : '' ?>" href="enroll.php">Enroll</a>
     <a class="tab <?= $currentTab=='dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a>
 </div>
 
-<!-- Dashboard Box -->
-<div id="formBox">
+<div class="tableBox">
+    <h2>Student Dashboard</h2>
 
-<h2>Student Dashboard</h2>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Duration</th>
+            <th>Amount</th>
+        </tr>
 
-<?php if ($studentData && $courseData) { ?>
-
-    <!-- <label>Student Name</label>
-    <input type="text" value="<?= htmlspecialchars($studentData['name']) ?>" disabled> -->
-
-    <!-- <label>Mobile Number</label>
-    <input type="text" value="<?= htmlspecialchars($studentData['contact']) ?>" disabled> -->
-
-    <!-- <label>Course Name</label>
-    <input type="text" value="<?= htmlspecialchars($courseData['title']) ?>" disabled> -->
-
-    <!-- <label>Course Fee</label>
-    <input type="text" value="₹<?= htmlspecialchars($courseData['amount']) ?>" disabled> -->
-
-    
-<?php } else { ?>
-
-    <p class="error">No enrollment data found. Please enroll first.</p>
-
-<?php } ?>
-
+        <?php if (mysqli_num_rows($enrollmentResult) > 0) { ?>
+            <?php while ($row = mysqli_fetch_assoc($enrollmentResult)) { ?>
+                <tr>
+                    <td><?= htmlspecialchars($row['title']) ?></td>
+                    <td><?= htmlspecialchars($row['description']) ?></td>
+                    <td><?= date("d/m/Y", strtotime($row['start_date'])) ?></td>
+                    <td><?= date("d/m/Y", strtotime($row['end_date'])) ?></td>
+                    <td><?= htmlspecialchars($row['duration']) ?></td>
+                    <td>₹ <?= number_format($row['amount'], 2) ?></td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="7">No enrollment records found</td>
+            </tr>
+        <?php } ?>
+    </table>
 </div>
 
 </body>
 </html>
-
-
