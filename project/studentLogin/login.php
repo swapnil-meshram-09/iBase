@@ -190,13 +190,14 @@ function validatePassword(input) {
     <a class="tab <?= $currentTab=='dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a> -->
 </div>
 
+<form method="POST" id="formBox">
 <h2>Student Login</h2>
 
 <?php if($error){ ?>
 <p class="error"><?= $error ?></p>
 <?php } ?>
 
-<label>Phone Number</label>
+<label>Email / Phone Number</label>
 <input type="text"
        name="username"
        oninput="validateUsername(this)"
