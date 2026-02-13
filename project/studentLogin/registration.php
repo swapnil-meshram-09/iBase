@@ -76,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             /* Clear temporary form data */
            
 
+            unset($_SESSION['form_data']);
             /* Redirect to password setup */
             header("Location: studentPassword.php");
             // unset($_SESSION['form_data']);
