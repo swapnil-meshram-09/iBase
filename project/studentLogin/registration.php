@@ -1,5 +1,8 @@
 <?php
 session_start();
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    unset($_SESSION['form_data']);
+}
 include "../db.php";
 
 $error   = "";
@@ -8,7 +11,7 @@ $success = "";
 /* Load old form data if exists */
 $form = $_SESSION['form_data'] ?? [];
 
-$name        = $form['name'] ?? ($_SESSION['student_name'] ?? "");
+$name        = $form['name'] ?? "";
 $contact     = $form['contact'] ?? "";
 $college     = $form['college'] ?? "";
 $department  = $form['department'] ?? "";

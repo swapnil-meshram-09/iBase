@@ -7,101 +7,68 @@ $error = "";
 // Handle login submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $username = trim($_POST['username']); // Email / Phone
-    $password = trim($_POST['password']); // Password
+    $username = trim($_POST['username']); // Phone only
+    $password = trim($_POST['password']);
 
     // Validation
     if (empty($username) || empty($password)) {
         $error = "All fields are required!";
-    } else {
-        $isEmail = false;
-        $isPhone = false;
+    }
+    elseif (!preg_match("/^[0-9]{10}$/", $username)) {
+        $error = "Enter a valid 10-digit phone number!";
+    }
+    elseif (preg_match("/^[0-9]/", $password)) {
+        $error = "Password cannot start with a number!";
+    }
+    elseif (strlen($password) > 15) {
+        $error = "Password cannot exceed 15 characters!";
+    }
 
-        // Determine if email or phone
-        if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
-            $isEmail = true;
-        } elseif (preg_match("/^[0-9]{10}$/", $username)) {
-            $isPhone = true;
+    /* ===== LOGIN USING PHONE ONLY ===== */
+    if (!$error) {
+
+        $stmt = $conn->prepare("
+            SELECT 
+                sp.password,
+                sr.id,
+                sr.name,
+                sr.contact
+            FROM student_password sp
+            JOIN student_registration sr 
+                ON sr.contact = sp.contact
+            WHERE sp.contact = ?
+            LIMIT 1
+        ");
+
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result && $result->num_rows === 1) {
+
+            $student = $result->fetch_assoc();
+
+            if (password_verify($password, $student['password'])) {
+
+                $_SESSION['student_id']     = $student['id'];
+                $_SESSION['student_name']   = $student['name'];
+                $_SESSION['student_mobile'] = $student['contact'];
+
+                header("Location: enroll.php");
+                exit;
+
+            } else {
+                $error = "Invalid phone or password!";
+            }
+
         } else {
-            $error = "Enter a valid email or 10-digit phone number!";
+            $error = "Invalid phone or password!";
         }
 
-        // Password cannot start with number
-        if (!$error && preg_match("/^[0-9]/", $password)) {
-            $error = "Password cannot start with a number!";
-        }
-
-        // Password max length 15
-        if (!$error && strlen($password) > 15) {
-            $error = "Password cannot exceed 15 characters!";
-        }
-
-        /* ================= LOGIN USING student_password ================= */
-        if (!$error) {
-
-            if ($isEmail) {
-                $stmt = $conn->prepare("
-                    SELECT 
-                        sp.password,
-                        sr.id,
-                        sr.name,
-                        sr.contact,
-                        sr.email
-                    FROM student_password sp
-                    JOIN student_registration sr ON sr.contact = sp.contact
-                    WHERE sp.email = ?
-                    LIMIT 1
-                ");
-                $stmt->bind_param("s", $username);
-            } else {
-                $stmt = $conn->prepare("
-                    SELECT 
-                        sp.password,
-                        sr.id,
-                        sr.name,
-                        sr.contact,
-                        sr.email
-                    FROM student_password sp
-                    JOIN student_registration sr ON sr.contact = sp.contact
-                    WHERE sp.contact = ?
-                    LIMIT 1
-                ");
-                $stmt->bind_param("s", $username);
-            }
-
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            if ($result && $result->num_rows === 1) {
-
-                $student = $result->fetch_assoc();
-
-                // Verify hashed password
-                if (password_verify($password, $student['password'])) {
-
-                    $_SESSION['student_id']     = $student['id'];
-                    $_SESSION['student_name']   = $student['name'];
-                    $_SESSION['student_mobile'] = $student['contact'];
-                    $_SESSION['student_email']  = $student['email'];
-
-                    // Redirect after successful login
-                    header("Location: enroll.php"); // change if needed
-                    exit;
-
-                } else {
-                    $error = "Invalid username or password!";
-                }
-
-            } else {
-                $error = "Invalid username or password!";
-            }
-
-            $stmt->close();
-        }
+        $stmt->close();
     }
 }
 
-// Current tab for highlighting
 $currentTab = basename($_SERVER['PHP_SELF']);
 ?>
 

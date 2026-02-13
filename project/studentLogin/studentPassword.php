@@ -5,7 +5,7 @@ include "../db.php";
 $error = "";
 $success = "";
 
-// Get contact from session (from registration.php)
+// Get contact from session
 $contact = $_SESSION['student_mobile'] ?? '';
 
 if (!$contact) {
@@ -13,17 +13,14 @@ if (!$contact) {
     exit;
 }
 
-/* Fetch email from student_registration */
+/* Check if student exists */
 $getStudent = mysqli_query(
     $conn,
-    "SELECT email FROM student_registration WHERE contact='$contact'"
+    "SELECT id FROM student_registration WHERE contact='$contact'"
 );
 
 if (mysqli_num_rows($getStudent) == 0) {
     $error = "Student record not found!";
-} else {
-    $student = mysqli_fetch_assoc($getStudent);
-    $email   = $student['email'];
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !$error) {
@@ -37,10 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !$error) {
         $error = "Passwords does not match!";
     } else {
 
-        // Hash password
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // Check if already exists in student_password table
+        // Check existing password record
         $check = mysqli_query(
             $conn,
             "SELECT id FROM student_password WHERE contact='$contact'"
@@ -48,11 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !$error) {
 
         if (mysqli_num_rows($check) == 0) {
 
-            // Insert new password record
+            // Insert password (NO EMAIL)
             mysqli_query(
                 $conn,
-                "INSERT INTO student_password (contact, email, password)
-                 VALUES ('$contact', '$email', '$hashedPassword')"
+                "INSERT INTO student_password (contact, password)
+                 VALUES ('$contact', '$hashedPassword')"
             );
 
         } else {
@@ -68,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !$error) {
 
         $success = "Password set successfully! You can now login.";
 
-        // Clear session
         unset($_SESSION['student_mobile']);
         unset($_SESSION['form_data']);
     }
