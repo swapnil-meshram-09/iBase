@@ -11,14 +11,15 @@ CREATE TABLE courses (
 
 
 CREATE TABLE student_registration (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(30) NOT NULL,
-    contact VARCHAR(10) NOT NULL UNIQUE,
-    email VARCHAR(30) NOT NULL,
-    password VARCHAR(15) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY unique_contact (contact),
-    UNIQUE KEY unique_email (email)
+     `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(30) NOT NULL,
+    `contact` VARCHAR(10) NOT NULL,
+    `college_name` VARCHAR(30) NOT NULL,
+    `department` VARCHAR(30) NOT NULL,
+    `year` VARCHAR(10) NOT NULL,
+    `hod_name` VARCHAR(30) NOT NULL,
+    `hod_contact` VARCHAR(10) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE student_password (
