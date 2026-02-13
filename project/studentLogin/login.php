@@ -1,4 +1,3 @@
-```php
 <?php
 session_start();
 include "../db.php";
@@ -186,4 +185,4 @@ function validatePassword(input) {
 
 </body>
 </html>
-```
+
