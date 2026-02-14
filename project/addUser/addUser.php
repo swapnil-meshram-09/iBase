@@ -219,12 +219,7 @@ function onlyChar(input) {
 <body>
 
 <!-- Tabs -->
-<div class="tabs">
-    <a class="tab <?= $currentTab=='login.php' ? 'active' : '' ?>" href="login.php">Login</a>
-    <a class="tab <?= $currentTab=='registration.php' ? 'active' : '' ?>" href="registration.php">Registration</a>
-    <!-- <a class="tab <?= $currentTab=='enroll.php' ? 'active' : '' ?>" href="enroll.php">Enroll</a>
-    <a class="tab <?= $currentTab=='dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a> -->
-</div>
+
 
 <!-- Registration Form -->
 <form method="POST" id="formBox">
