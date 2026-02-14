@@ -97,7 +97,6 @@ $currentTab = basename($_SERVER['PHP_SELF']);
 <!DOCTYPE html>
 <html>
 <head>
-<title>Student Registration</title>
 
 <style>
 body {
@@ -218,53 +217,20 @@ function onlyChar(input) {
 
 <body>
 
-<!-- Tabs -->
-
-
 <!-- Registration Form -->
 <form method="POST" id="formBox">
 
-<h2>Student Registration</h2>
+<h2>Add User Details</h2>
 
 <?php if ($error) { ?>
     <p class="error"><?= $error ?></p>
 <?php } ?>
 
-<label>Student Name</label>
+<label>Name</label>
 <input type="text" name="name" value="<?= htmlspecialchars($name) ?>" oninput="onlyChar(this)" required>
 
-<label>Student Contact Number</label>
+<label>Contact Number</label>
 <input type="text" name="contact" value="<?= htmlspecialchars($contact) ?>" oninput="onlyNumber(this)" maxlength="10" required>
-
-<label>College Name</label>
-<input type="text" name="college" oninput="onlyChar(this)" required>
-
-<label>Department</label>
-<select name="department" required>
-    <option value="">Select Department</option>
-    <option>Computer Science</option>
-    <option>AI & ML</option>
-    <option>AI & DS</option>
-    <option>ETC</option>
-    <option>Mechanical</option>
-    <option>Civil</option>
-    <option>Electrical</option>
-</select>
-
-<label>Year</label>
-<select name="year" required>
-    <option value="">Select Year</option>
-    <option>First Year</option>
-    <option>Second Year</option>
-    <option>Third Year</option>
-    <option>Final Year</option>
-</select>
-
-<label>HOD Name</label>
-<input type="text" name="hod_name" oninput="onlyChar(this)" required>
-
-<label>HOD Contact Number</label>
-<input type="text" name="hod_contact" oninput="onlyNumber(this)" maxlength="10" required>
 
 <button type="submit">Register</button>
 
