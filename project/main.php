@@ -27,11 +27,11 @@ body {
 <div class="tabs">
     <a class="tab <?= $currentTab=='main.php' ? 'active' : '' ?>" href="main.php">Home</a>
     <a class="tab <?= $currentTab=='studentLogin/login.php' ? 'active' : '' ?>" href="studentLogin/login.php">Student Login</a>
-    <a class="tab <?= $currentTab=='user/userCreateProgram.php' ? 'active' : '' ?>" href="user/userCreateProgram.php">User Login</a>
-    <a class="tab <?= $currentTab=='admin/add_user.php' ? 'active' : '' ?>" href="addStudent/addStudent.php"> Add Student</a>
-    <a class="tab <?= $currentTab=='admin/add_user.php' ? 'active' : '' ?>" href="addUser/addUserRegistration.php"> Add User</a>
-    <a class="tab <?= $currentTab=='ddfaculty/addFaculty.php' ? 'active' : '' ?>" href="addfaculty/addFaculty.php"> Add Faculty</a>
-    <a class="tab <?= $currentTab=='admin/add_user.php' ? 'active' : '' ?>" href="viewStudent/viewStudent.php"> View Student</a>
+    <a class="tab <?= $currentTab=='user/userLogin.php' ? 'active' : '' ?>" href="user/userLogin.php">User Login</a>
+    <a class="tab <?= $currentTab=='addStudent/addStudent.php' ? 'active' : '' ?>" href="addStudent/addStudent.php"> Add Student</a>
+    <a class="tab <?= $currentTab=='addUser/addUserRegistration.php' ? 'active' : '' ?>" href="addUser/addUserRegistration.php"> Add User</a>
+    <a class="tab <?= $currentTab=='addfaculty/addFaculty.php' ? 'active' : '' ?>" href="addfaculty/addFaculty.php"> Add Faculty</a>
+    <a class="tab <?= $currentTab=='viewStudent/viewStudent.php' ? 'active' : '' ?>" href="viewStudent/viewStudent.php"> View Student</a>
     <a class="tab <?= $currentTab=='viewFaculty/viewFaculty.php' ? 'active' : '' ?>" href="viewFaculty/viewFaculty.php"> View Faculty</a>
 
     
