@@ -1,12 +1,8 @@
 <?php
-session_start();
 include "../db.php";
 
 $error = "";
 $success = "";
-
-$name = "";
-$contact = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -16,43 +12,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $confirm  = trim($_POST['confirm_password']);
 
     /* Validation */
+
     if (empty($name) || empty($contact) || empty($password) || empty($confirm)) {
         $error = "All fields are required!";
     }
-    elseif (!preg_match("/^[A-Za-z ]+$/", $name)) {
-        $error = "Name must contain only letters!";
+    elseif (!preg_match("/^[a-z][a-z0-9@_-]{4,14}$/", $name)) {
+        $error = "Username must be 5–15 characters and valid format!";
     }
     elseif (!preg_match("/^[0-9]{10}$/", $contact)) {
         $error = "Contact must be exactly 10 digits!";
+    }
+    elseif (!preg_match("/^[a-z][a-z0-9@_-]{4,14}$/", $password)) {
+        $error = "Password must be 5–15 characters and valid format!";
     }
     elseif ($password !== $confirm) {
         $error = "Passwords do not match!";
     }
     else {
 
-        /* Check existing user */
-        $check = mysqli_query(
-            $conn,
-            "SELECT id FROM addUser WHERE contact='$contact'"
-        );
+        /* Check duplicate */
 
-        if (mysqli_num_rows($check) > 0) {
-            $error = "User already exists with this contact!";
+        $stmt = $conn->prepare(
+            "SELECT id FROM addUser WHERE user_name=? OR contact=?"
+        );
+        $stmt->bind_param("ss", $name, $contact);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $error = "Username or contact already exists!";
         }
         else {
 
-            /* Hash password */
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            /* Insert user */
 
-            /* Insert user into single table */
-            mysqli_query(
-                $conn,
+            $hashed = password_hash($password, PASSWORD_DEFAULT);
+
+            $stmt = $conn->prepare(
                 "INSERT INTO addUser (user_name, contact, password)
-                 VALUES ('$name', '$contact', '$hashedPassword')"
+                 VALUES (?, ?, ?)"
             );
+            $stmt->bind_param("sss", $name, $contact, $hashed);
 
-            $success = "User added successfully!";
-            $name = $contact = "";
+            if ($stmt->execute()) {
+                $success = "User added successfully!";
+            } else {
+                $error = "Failed to add user!";
+            }
         }
     }
 }
@@ -112,23 +118,18 @@ button:hover { background:green; }
 </style>
 
 <script>
-function onlyNumber(input){
-    input.value = input.value.replace(/[^0-9]/g,'');
-}
-
-function onlyChar(input){
-    input.value = input.value.replace(/[^A-Za-z ]/g,'');
-}
-
-function validatePassword(input){
+function validateUser(input) {
     let val = input.value;
 
-    if(val.length>15) val=val.slice(0,15);
-    if(val.length>0 && !/^[A-Za-z]/.test(val[0])) val=val.slice(1);
-    if(val.length>1)
-        val = val[0] + val.slice(1).replace(/[^A-Za-z0-9@#$%&!]/g,'');
+    val = val.replace(/[^a-z0-9@_-]/g,'');
+    if (val.length > 0 && !/^[a-z]/.test(val[0])) val = val.slice(1);
+    if (val.length > 15) val = val.slice(0,15);
 
     input.value = val;
+}
+
+function onlyNumber(input) {
+    input.value = input.value.replace(/[^0-9]/g,'').slice(0,10);
 }
 </script>
 
@@ -140,20 +141,32 @@ function validatePassword(input){
 
 <h2>Add User</h2>
 
-<?php if($error) echo "<p class='error'>$error</p>"; ?>
-<?php if($success) echo "<p class='success'>$success</p>"; ?>
+<?php if ($error) echo "<p class='error'>$error</p>"; ?>
+<?php if ($success) echo "<p class='success'>$success</p>"; ?>
 
-<label>Name</label>
-<input type="text" name="name" value="<?= htmlspecialchars($name) ?>" oninput="onlyChar(this)" required>
+<label>Username</label>
+<input type="text" name="name"
+       minlength="5" maxlength="15"
+       oninput="validateUser(this)"
+       required>
 
-<label>Contact Number</label>
-<input type="text" name="contact" value="<?= htmlspecialchars($contact) ?>" oninput="onlyNumber(this)" maxlength="10" required>
+<label>Contact</label>
+<input type="text" name="contact"
+       maxlength="10"
+       oninput="onlyNumber(this)"
+       required>
 
 <label>Password</label>
-<input type="password" name="password" oninput="validatePassword(this)" maxlength="15" required>
+<input type="password" name="password"
+       minlength="5" maxlength="15"
+       oninput="validateUser(this)"
+       required>
 
 <label>Confirm Password</label>
-<input type="password" name="confirm_password" oninput="validatePassword(this)" maxlength="15" required>
+<input type="password" name="confirm_password"
+       minlength="5" maxlength="15"
+       oninput="validateUser(this)"
+       required>
 
 <button type="submit">Add User</button>
 
