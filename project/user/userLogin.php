@@ -153,10 +153,10 @@ function validatePassword(input) {
 
 <body>
 
-<div class="tabs">
+<!-- <div class="tabs">
     <a class="tab <?= $currentTab=='login.php' ? 'active' : '' ?>" href="login.php">Login</a>
     <a class="tab <?= $currentTab=='registration.php' ? 'active' : '' ?>" href="registration.php">Registration</a>
-</div>
+</div> -->
 
 <form method="POST" id="formBox" autocomplete="off">
 
