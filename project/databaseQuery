@@ -11,7 +11,7 @@ CREATE TABLE courses (
 
 
 CREATE TABLE student_registration (
-     `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `id` INT PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(30) NOT NULL,
     `contact` VARCHAR(10) NOT NULL UNIQUE,
     `email` VARCHAR(30) NOT NULL UNIQUE,
