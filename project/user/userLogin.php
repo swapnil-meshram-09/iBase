@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->close();
     }
 
-    /* 🔥 Save error and redirect (clears POST data) */
+    /* Save error and redirect (clears POST data) */
     $_SESSION['login_error'] = $error;
     header("Location: login.php");
     exit;
@@ -79,7 +79,6 @@ $currentTab = basename($_SERVER['PHP_SELF']);
 <!DOCTYPE html>
 <html>
 <head>
-<title>Student Login</title>
 
 <style>
 body { background:#dde3ea; margin:0; }
@@ -160,7 +159,7 @@ function validatePassword(input) {
 
 <form method="POST" id="formBox" autocomplete="off">
 
-<h2>Student Login</h2>
+<h2>User Login</h2>
 
 <?php if($error){ ?>
 <p class="error"><?= $error ?></p>
