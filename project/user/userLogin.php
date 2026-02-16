@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['user_contact'] = $user['contact'];
 
                 /* ✅ Redirect after login */
-                header("Location: dashboard.php"); // 👈 change page here if needed
+                header("Location: userCreateProgram.php"); // 👈 change page here if needed
                 exit;
 
             } else {
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $_SESSION['login_error'] = $error;
-    header("Location: login.php");
+    header("Location: userCreateProgram.php");
     exit;
 }
 ?>
