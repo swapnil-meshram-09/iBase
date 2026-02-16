@@ -22,8 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     elseif (!preg_match("/^[0-9]{10}$/", $contact)) {
         $error = "Contact must be exactly 10 digits!";
     }
-    elseif (!preg_match("/^[a-z][a-z0-9@_-]{4,14}$/", $password)) {
-        $error = "Password must be 5–15 characters and valid format!";
+    elseif (strlen($password) < 6) {
+        $error = "Password must be at least 6 characters!";
     }
     elseif ($password !== $confirm) {
         $error = "Passwords do not match!";
@@ -56,10 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             if ($stmt->execute()) {
                 $success = "User added successfully!";
+                $_POST = []; // clear form
             } else {
                 $error = "Failed to add user!";
             }
         }
+
+        $stmt->close();
     }
 }
 ?>
@@ -158,14 +161,12 @@ function onlyNumber(input) {
 
 <label>Password</label>
 <input type="password" name="password"
-       minlength="5" maxlength="15"
-       oninput="validateUser(this)"
+       minlength="6" maxlength="50"
        required>
 
 <label>Confirm Password</label>
 <input type="password" name="confirm_password"
-       minlength="5" maxlength="15"
-       oninput="validateUser(this)"
+       minlength="6" maxlength="50"
        required>
 
 <button type="submit">Add User</button>
