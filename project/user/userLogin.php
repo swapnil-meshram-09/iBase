@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $_SESSION['login_error'] = $error;
-    header("Location: userCreateProgram.php");
+    header("Location: login.php");
     exit;
 }
 ?>
