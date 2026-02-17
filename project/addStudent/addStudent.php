@@ -1,7 +1,6 @@
 <?php
 session_start();
 include "../db.php";
-
 $currentTab = basename($_SERVER['PHP_SELF']);
 
 $error = "";
@@ -81,27 +80,6 @@ body {
     margin: 0;
 }
 
-.tabs {
-    margin: 30px 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    font-size: 13.5px;
-    justify-content: center;
-}
-
-.tab {
-    padding: 10px 18px;
-    border-radius: 10px;
-    background: #f2f2f2;
-    font-weight: bold;
-    text-decoration: none;
-    color: black;
-}
-
-.tab:hover { background: black; color: white; }
-.tab.active { background: black; color: white; }
-
 .card {
     width: 450px;
     margin: auto;
@@ -164,6 +142,11 @@ button.save:hover { background: #12833b; }
     color: green;
     font-weight: bold;
 }
+
+.tabs { margin:30px 0; display:flex; gap:10px; justify-content:center; font-size:13.5px; }
+.tab { padding:10px 18px; border-radius:10px; background:#f2f2f2; font-weight:bold; text-decoration:none; color:black; }
+.tab:hover { background:black; color:white; }
+.tab.active { background:black; color:white; }
 </style>
 
 <script>
@@ -178,15 +161,17 @@ function onlyChar(input) {
 </head>
 
 <body>
-<!-- 
+
 <div class="tabs">
-    <a class="tab <?= $currentTab=='userCreateProgram.php' ? 'active' : '' ?>" href="userCreateProgram.php">Create Program</a>
-    <a class="tab <?= $currentTab=='userViewProgram.php' ? 'active' : '' ?>" href="userViewProgram.php">View Program</a>
-    <a class="tab <?= $currentTab=='userAddStudent.php' ? 'active' : '' ?>" href="userAddStudent.php">Add Student</a>
-    <a class="tab <?= $currentTab=='userViewStudent.php' ? 'active' : '' ?>" href="userViewStudent.php">View Student</a>
-    <a class="tab <?= $currentTab=='userAddFaculty.php' ? 'active' : '' ?>" href="userAddFaculty.php">Add Faculty</a>
-    <a class="tab <?= $currentTab=='userViewFaculty.php' ? 'active' : '' ?>" href="userViewFaculty.php">View Faculty</a>
-</div> -->
+    <a class="tab <?= $currentTab=='main.php' ? 'active' : '' ?>" href="main.php">Home</a>
+    <a class="tab <?= $currentTab=='studentLogin/login.php' ? 'active' : '' ?>" href="studentLogin/login.php">Student Login</a>
+    <a class="tab <?= $currentTab=='user/userLogin.php' ? 'active' : '' ?>" href="user/userLogin.php">User Login</a>
+    <a class="tab <?= $currentTab=='addStudent/addStudent.php' ? 'active' : '' ?>" href="addStudent/addStudent.php"> Add Student</a>
+    <a class="tab <?= $currentTab=='addUser/addUserRegistration.php' ? 'active' : '' ?>" href="addUser/addUserRegistration.php"> Add User</a>
+    <a class="tab <?= $currentTab=='addfaculty/addFaculty.php' ? 'active' : '' ?>" href="addfaculty/addFaculty.php"> Add Faculty</a>
+    <a class="tab <?= $currentTab=='viewStudent/viewStudent.php' ? 'active' : '' ?>" href="viewStudent/viewStudent.php"> View Student</a>
+    <a class="tab <?= $currentTab=='viewFaculty/viewFaculty.php' ? 'active' : '' ?>" href="viewFaculty/viewFaculty.php"> View Faculty</a>
+</div>
 
 <div class="card">
 
