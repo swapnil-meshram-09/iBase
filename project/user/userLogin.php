@@ -1,6 +1,8 @@
 <?php
 session_start();
 include "../db.php";
+$currentTab = basename($_SERVER['PHP_SELF']);
+
 
 /* Prevent browser caching */
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
@@ -110,11 +112,27 @@ button:hover { background:#12833b; }
     color:red;
     font-weight:bold;
 }
+
+.tabs { margin: 30px 0; display: flex; gap: 10px; justify-content: center; font-size: 13.5px; }
+.tab { padding: 10px 18px; border-radius: 10px; background: #f2f2f2; font-weight: bold; text-decoration: none; color: black; }
+.tab:hover { background: black; color: white; }
+.tab.active { background: black; color: white; }
 </style>
 
 </head>
 
 <body>
+
+<div class="tabs">
+    <a class="tab <?= $currentTab=='main.php' ? 'active' : '' ?>" href="main.php">Home</a>
+    <a class="tab <?= $currentTab=='studentLogin/login.php' ? 'active' : '' ?>" href="studentLogin/login.php">Student Login</a>
+    <a class="tab <?= $currentTab=='user/userLogin.php' ? 'active' : '' ?>" href="user/userLogin.php">User Login</a>
+    <a class="tab <?= $currentTab=='addStudent/addStudent.php' ? 'active' : '' ?>" href="addStudent/addStudent.php"> Add Student</a>
+    <a class="tab <?= $currentTab=='addUser/addUserRegistration.php' ? 'active' : '' ?>" href="addUser/addUserRegistration.php"> Add User</a>
+    <a class="tab <?= $currentTab=='addfaculty/addFaculty.php' ? 'active' : '' ?>" href="addfaculty/addFaculty.php"> Add Faculty</a>
+    <a class="tab <?= $currentTab=='viewStudent/viewStudent.php' ? 'active' : '' ?>" href="viewStudent/viewStudent.php"> View Student</a>
+    <a class="tab <?= $currentTab=='viewFaculty/viewFaculty.php' ? 'active' : '' ?>" href="viewFaculty/viewFaculty.php"> View Faculty</a>
+</div>
 
 <form method="POST" id="formBox" autocomplete="off">
 
