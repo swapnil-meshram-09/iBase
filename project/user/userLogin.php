@@ -2,8 +2,13 @@
 session_start();
 include "../db.php";
 
+/* Prevent browser caching */
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Pragma: no-cache");
+
 $error = "";
 
+/* Handle login */
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $login    = trim($_POST['login']);
@@ -12,15 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($login) || empty($password)) {
         $error = "All fields are required!";
     }
-    else {
 
-        // Delay to prevent brute force
-        sleep(1);
+    if (!$error) {
+
+        sleep(1); // basic brute force protection
 
         $stmt = $conn->prepare("
             SELECT id, user_name, contact, password
             FROM addUser
-            WHERE user_name=? OR contact=?
+            WHERE user_name = ? OR contact = ?
             LIMIT 1
         ");
 
@@ -29,25 +34,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $result = $stmt->get_result();
 
         if ($result->num_rows === 0) {
-            $error = "Invalid login credentials!";
+            $error = "Invalid username/phone or password!";
         }
         else {
             $user = $result->fetch_assoc();
 
             if (password_verify($password, $user['password'])) {
 
-                // Secure session
                 session_regenerate_id(true);
 
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_name'] = $user['user_name'];
+                $_SESSION['user_id']      = $user['id'];
+                $_SESSION['user_name']    = $user['user_name'];
                 $_SESSION['user_contact'] = $user['contact'];
 
-                header("Location: userDashboard.php");
+                header("Location: userCreateProgram.php");
                 exit;
-            }
-            else {
-                $error = "Invalid login credentials!";
+
+            } else {
+                $error = "Invalid username/phone or password!";
             }
         }
 
@@ -59,28 +63,75 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html>
 <head>
-<title>User Login</title>
 
 <style>
-body { background:#dde3ea; font-family:Arial; }
-#box { width:420px; margin:60px auto; background:white; padding:25px; border-radius:15px; box-shadow:0 0 10px #aaa; }
-input,button { width:100%; padding:10px; margin-top:8px; border-radius:6px; border:none; background:#f2f2f2; }
-button { background:#16a34a; color:white; cursor:pointer; }
-.error { color:red; text-align:center; font-weight:bold; }
+body { background:#dde3ea; margin:0; }
+
+#formBox {
+    width:420px;
+    margin:auto;
+    margin-top:40px;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 0 10px #aaa;
+}
+
+h2 { text-align:center; font-size:23px; margin-bottom:20px; }
+
+label { font-weight:bold; display:block; margin-left:10px; margin-top:10px; }
+
+input {
+    padding:10px;
+    border:none;
+    border-radius:6px;
+    background:#f2f2f2;
+    width:90%;
+    margin:8px 0 0 10px;
+}
+
+button {
+    margin-top:15px;
+    padding:12px;
+    background:#16a34a;
+    border:none;
+    color:white;
+    border-radius:10px;
+    width:95%;
+    font-size:16px;
+    cursor:pointer;
+    margin-left:10px;
+}
+
+button:hover { background:#12833b; }
+
+.error {
+    text-align:center;
+    color:red;
+    font-weight:bold;
+}
 </style>
 
 </head>
 
 <body>
 
-<form method="POST" id="box">
+<form method="POST" id="formBox" autocomplete="off">
 
-<h2 align="center">User Login</h2>
+<h2>User Login</h2>
 
-<?php if ($error) echo "<p class='error'>$error</p>"; ?>
+<?php if($error){ ?>
+<p class="error"><?php echo $error; ?></p>
+<?php } ?>
 
-<input type="text" name="login" placeholder="Username or Phone" required>
-<input type="password" name="password" placeholder="Password" required>
+<label>Username or Phone</label>
+<input type="text" name="login" required>
+
+<label>Password</label>
+<input type="password" name="password"
+       maxlength="50"
+       autocomplete="new-password"
+       required>
 
 <button type="submit">Login</button>
 
