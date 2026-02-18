@@ -10,10 +10,6 @@ $facultyResult = mysqli_query(
      FROM addFaculty 
      ORDER BY id DESC"
 );
-
-// Determine current page for active tab
-$currentTab = basename($_SERVER['PHP_SELF']); // 'registration.php'
-
 ?>
 
 <!DOCTYPE html>
