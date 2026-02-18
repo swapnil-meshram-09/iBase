@@ -1,4 +1,5 @@
 <?php
+session_start();
 include "../db.php";
 $currentTab = basename($_SERVER['PHP_SELF']);
 
