@@ -15,10 +15,41 @@ body {
 }
 
 /* Navbar buttons */
-.tabs { margin: 30px 0; display: flex; gap: 10px; justify-content: center; font-size: 13.5px; }
-.tab { padding: 10px 18px; border-radius: 10px; background: #f2f2f2; font-weight: bold; text-decoration: none; color: black; }
-.tab:hover { background: black; color: white; }
-.tab.active { background: black; color: white; }
+/* Tabs */
+.tabs {
+    margin: 30px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 13.5px;
+    justify-content: center;
+}
+
+.tab {
+    padding: 10px 18px;
+    border-radius: 10px;
+    background: #f2f2f2;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+}
+
+.tab:hover {
+    background: black;
+    color: white;
+}
+
+/* Active tab */
+.tab.active {
+    background: black;
+    color: white;
+}
+
+/* Disabled tab if not logged in */
+.tab.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
 </style>
 </head>
 
