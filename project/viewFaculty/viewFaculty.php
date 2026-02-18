@@ -1,6 +1,5 @@
-<?php
-session_start();
-include "../db.php";
+
+
 // Fetch faculty data
 $facultyResult = mysqli_query(
     $conn,
