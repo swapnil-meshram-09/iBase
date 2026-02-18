@@ -80,7 +80,7 @@ body { background:#dde3ea; margin:0; }
 #formBox {
     width:420px;
     margin:auto;
-    margin-top:60px;
+    margin-top:40px;
     background:white;
     padding:25px;
     border-radius:15px;
