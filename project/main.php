@@ -51,15 +51,7 @@ body {
     opacity: 0.5;
 }
 
-body{
-    font-family: Arial, sans-serif;
-    background:#f4f6fb;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    margin:0;
-}
+
 
 /* from second code */
 .container{
