@@ -53,12 +53,6 @@ body {
 
 
 
-/* from second code */
-.container{
-    display:flex;
-    gap:40px;
-}
-
 /* from first code, adapted */
 .cards{
     display:flex;
@@ -66,6 +60,8 @@ body {
 }
 
 .card{
+    margin-left: 300px;
+    margin-top: 100px;
     width:260px;
     height:180px;
     background:#fff;
