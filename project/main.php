@@ -59,11 +59,12 @@ body {
 /* from first code, adapted */
 .cards{
     display:flex;
-    gap:40px;
+    gap:10px;
+    margin-left:300px;
 }
 
 .card{
-    margin-left: 300px;
+    margin-left: 100px;
     margin-top: 100px;
     width:260px;
     height:180px;
