@@ -12,6 +12,9 @@ body {
     /* font-family: Arial, sans-serif; */
     background: #dde3ea;
     margin: 0;
+    padding: 0;
+    display:flex;
+    flex-direction: column;
 }
 
 /* Navbar buttons */
@@ -76,7 +79,7 @@ body {
 }
 
 .card:hover{
-    transform:translateY(-8px);
+    transform:translateY(-10px);
 }
 
 /* colors */
