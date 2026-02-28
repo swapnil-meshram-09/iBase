@@ -131,7 +131,7 @@ body {
         <div class="card blue">
             <h2>Admin Module</h2>
             <p>Create courses & manage students</p>
-            <a href="admin/admin.php" class="btn">Access Dashboard</a>
+            <a href="" class="btn">Access Dashboard</a>
         </div>
 
         <div class="card purple">
