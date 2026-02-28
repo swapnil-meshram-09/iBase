@@ -137,7 +137,7 @@ body {
         <div class="card purple">
             <h2>Student Registration</h2>
             <p>Register & pay online</p>
-            <a href="student/student.php" class="btn">Register Now</a>
+            <a href="" class="btn">Register Now</a>
         </div>
 
     </div>
