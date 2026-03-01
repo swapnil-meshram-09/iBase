@@ -1,5 +1,7 @@
 <?php
 session_start();
+$currentTab = basename($_SERVER['PHP_SELF']);
+$baseURL = "/iBase/project/";
 include "../db.php";
 
 /* 🔥 Prevent browser caching */
@@ -68,13 +70,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->close();
     }
 
-    /* 🔥 Save error and redirect (clears POST data) */
+    /* Save error and redirect (clears POST data) */
     $_SESSION['login_error'] = $error;
     header("Location: login.php");
     exit;
 }
 
-$currentTab = basename($_SERVER['PHP_SELF']);
 ?>
 <!DOCTYPE html>
 <html>
