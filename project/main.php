@@ -1,7 +1,7 @@
 <?php
 session_start();
-$currentTab = basename($_SERVER['PHP_SELF']); // 'login.php'
-
+$currentTab = basename($_SERVER['PHP_SELF']);
+$baseURL = "/iBase/project/";
 ?>
 
 <!DOCTYPE html>
