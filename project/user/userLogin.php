@@ -2,7 +2,7 @@
 session_start();
 include "../db.php";
 $currentTab = basename($_SERVER['PHP_SELF']);
-
+$baseURL = "/iBase/project/";
 
 /* Prevent browser caching */
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
