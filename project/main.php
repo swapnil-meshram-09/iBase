@@ -23,7 +23,7 @@ body {
     margin: 30px 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 10px;
     font-size: 13.5px;
     justify-content: center;
 }
