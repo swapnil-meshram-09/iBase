@@ -2,6 +2,7 @@
 session_start();
 include "../db.php";
 $currentTab = basename($_SERVER['PHP_SELF']);
+$baseURL = "/iBase/project/";
 
 $error = "";
 $success = "";
