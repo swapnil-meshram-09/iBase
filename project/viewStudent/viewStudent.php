@@ -2,6 +2,7 @@
 session_start();
 include "../db.php";
 $currentTab = basename($_SERVER['PHP_SELF']);
+$baseURL = "/iBase/project/";
 
 /* Fetch students from useraddstudent table */
 $students = mysqli_query($conn, "SELECT * FROM addstudent ORDER BY id DESC");
